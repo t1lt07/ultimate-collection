@@ -1,0 +1,710 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ultimate Collection</title>
+<style>
+/* Layout concept: a pocket "marquee ticket" app — a vertical phone stage with a
+   centered logo mark above the true middle, two pill actions below, and every
+   deeper screen sliding in as its own full-height ticket panel. */
+:root{
+  --bg:#EEF0EE;
+  --surface:#FFFFFF;
+  --ink:#15191D;
+  --muted:#5B6168;
+  --line:rgba(21,25,29,0.12);
+  --accent:#B9862E;
+  --accent-ink:#2A1C06;
+  --movie:#B9862E;
+  --series:#1E7C86;
+  --games:#7A4FC2;
+  --danger:#C0433B;
+  --shadow:0 30px 60px -20px rgba(15,18,22,0.35), 0 2px 10px rgba(15,18,22,0.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0F12;
+    --surface:#17191D;
+    --ink:#ECEEEF;
+    --muted:#92989E;
+    --line:rgba(255,255,255,0.12);
+    --accent:#E0AA47;
+    --accent-ink:#20160A;
+    --movie:#E0AA47;
+    --series:#3FB6C2;
+    --games:#A383E8;
+    --danger:#E06B64;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0F12;
+  --surface:#17191D;
+  --ink:#ECEEEF;
+  --muted:#92989E;
+  --line:rgba(255,255,255,0.12);
+  --accent:#E0AA47;
+  --accent-ink:#20160A;
+  --movie:#E0AA47;
+  --series:#3FB6C2;
+  --games:#A383E8;
+  --danger:#E06B64;
+  color-scheme:dark;
+}
+
+html,body{height:100%}
+body{background:var(--bg)}
+*{box-sizing:border-box}
+#app{
+  min-height:100%;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  font-family:"Work Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink);
+}
+.phone{
+  position:relative;
+  width:100%;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  isolation:isolate;
+}
+@media (min-width:481px){
+  #app{ padding:28px 16px; }
+  .phone{
+    max-width:412px;
+    height:min(860px, 94vh);
+    margin:0 auto;
+    border-radius:44px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+  }
+}
+.screen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  padding:calc(18px + env(safe-area-inset-top,0px)) 22px calc(20px + env(safe-area-inset-bottom,0px));
+  background:var(--bg);
+}
+.screen[hidden]{display:none!important}
+
+/* ---------- Typography ---------- */
+h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.02em;font-weight:400}
+.eyebrow{
+  font-family:"Work Sans",sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.tabular{font-variant-numeric:tabular-nums}
+
+/* ---------- Home ---------- */
+.home-topbar{height:18px;flex:0 0 auto}
+.home-stage{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding-bottom:13%;
+  gap:40px;
+}
+.logo-mark{
+  width:62px;height:62px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:18px;
+  background:linear-gradient(155deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--series)));
+  box-shadow:0 14px 28px -10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.logo-mark svg{width:32px;height:32px}
+.logo-text{display:flex;flex-direction:column;gap:2px}
+.logo-text h1{font-size:38px;line-height:1.02;color:var(--ink)}
+.logo-text h1 span{display:block;color:var(--accent)}
+.logo-tagline{font-size:13.5px;color:var(--muted);max-width:240px;margin-top:8px}
+.home-actions{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
+
+/* ---------- Buttons ---------- */
+.btn{
+  appearance:none;border:none;cursor:pointer;
+  font-family:"Work Sans",sans-serif;
+  font-size:15px;font-weight:600;
+  padding:15px 20px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .15s ease, opacity .15s ease;
+  width:100%;
+}
+.btn:active{transform:scale(.97)}
+.btn svg{width:18px;height:18px;flex:0 0 auto}
+.btn-primary{background:var(--accent);color:var(--accent-ink);}
+.btn-secondary{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--ink);}
+.btn-danger-text{background:transparent;color:var(--danger);font-weight:600;font-size:14px;padding:8px 10px;}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+
+/* ---------- Header (sub-screens) ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  flex:0 0 auto;padding-bottom:18px;gap:8px;
+}
+.iconbtn{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb, var(--ink) 6%, transparent);
+  border:none;cursor:pointer;color:var(--ink);flex:0 0 auto;
+}
+.iconbtn svg{width:18px;height:18px}
+.iconbtn:active{transform:scale(.92)}
+.topbar h2{font-size:21px;flex:1;text-align:center;padding:0 4px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topbar .spacer{width:36px;flex:0 0 auto}
+
+/* ---------- New Collection ---------- */
+.section-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin:18px 0 10px;text-transform:uppercase}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.theme-card{
+  border:1.5px solid var(--line);border-radius:16px;
+  background:var(--surface);
+  padding:14px 8px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;color:var(--ink);
+  font-family:"Work Sans",sans-serif;font-size:12.5px;font-weight:600;
+}
+.theme-card svg{width:22px;height:22px}
+.theme-card.is-selected{border-color:var(--tc); background:color-mix(in srgb, var(--tc) 14%, var(--surface)); color:var(--tc)}
+.theme-card.is-selected svg{color:var(--tc)}
+.field{
+  background:var(--surface);
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:15px;
+  color:var(--ink);
+  width:100%;
+  font-family:"Work Sans",sans-serif;
+}
+.field::placeholder{color:var(--muted)}
+.field:focus{outline:2px solid var(--accent);outline-offset:1px}
+.grow{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:0 -22px;padding:0 22px}
+.new-footer{flex:0 0 auto;padding-top:16px}
+
+/* ---------- My Collections list ---------- */
+.coll-card{
+  display:flex;align-items:center;gap:12px;
+  padding:14px;border-radius:16px;
+  background:var(--surface);border:1px solid var(--line);
+  margin-bottom:10px; width:100%; text-align:left; cursor:pointer; border:1px solid var(--line);
+  font-family:"Work Sans",sans-serif; color:var(--ink);
+}
+.coll-chip{
+  width:40px;height:40px;border-radius:12px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb, var(--tc) 16%, var(--surface));color:var(--tc);
+}
+.coll-chip svg{width:19px;height:19px}
+.coll-meta{flex:1;min-width:0}
+.coll-meta .name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coll-meta .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.coll-trash{flex:0 0 auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
+.coll-trash svg{width:17px;height:17px}
+.coll-trash:active{color:var(--danger)}
+.chev{color:var(--muted);flex:0 0 auto}
+.chev svg{width:16px;height:16px}
+
+.empty-state{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:14px;color:var(--muted);padding-bottom:10%;
+}
+.empty-state .ring{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.empty-state .ring svg{width:26px;height:26px;color:var(--muted)}
+.empty-state p{max-width:220px;font-size:13.5px;margin:0}
+
+/* ---------- Collection detail ---------- */
+.detail-head{flex:0 0 auto;margin-bottom:14px}
+.detail-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:color-mix(in srgb, var(--tc) 16%, var(--surface));color:var(--tc);
+  border-radius:999px;padding:5px 11px 5px 8px;font-size:11.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;
+}
+.detail-badge svg{width:13px;height:13px}
+.detail-head h2{font-size:26px;text-align:left;margin-bottom:10px}
+.progress-row{display:flex;align-items:center;gap:10px}
+.progress-track{flex:1;height:6px;border-radius:4px;background:color-mix(in srgb, var(--ink) 10%, transparent);overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;background:var(--tc);transition:width .25s ease}
+.progress-count{font-size:12px;color:var(--muted);flex:0 0 auto}
+
+.add-row{display:flex;gap:8px;flex:0 0 auto;margin-bottom:14px}
+.add-row .field{flex:1}
+.add-btn{
+  width:48px;height:48px;border-radius:14px;flex:0 0 auto;
+  background:var(--tc);color:var(--surface);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.add-btn svg{width:20px;height:20px}
+.add-btn:active{transform:scale(.95)}
+
+.item-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:8px;padding-bottom:6px}
+.item-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:12px 10px 12px 12px;
+}
+.item-check{
+  width:24px;height:24px;border-radius:50%;flex:0 0 auto;
+  border:1.5px solid var(--line);background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;color:transparent;
+}
+.item-check svg{width:14px;height:14px}
+.item-row.is-done .item-check{background:var(--tc);border-color:var(--tc);color:var(--surface)}
+.item-text{flex:1;font-size:14.5px;min-width:0;word-break:break-word;text-align:left;background:none;border:none;color:var(--ink);font-family:"Work Sans",sans-serif;}
+.item-row.is-done .item-text{color:var(--muted);text-decoration:line-through}
+.item-del{flex:0 0 auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
+.item-del svg{width:16px;height:16px}
+.item-del:active{color:var(--danger)}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:absolute;left:22px;right:22px;
+  bottom:calc(22px + env(safe-area-inset-bottom,0px));
+  background:var(--ink);color:var(--bg);
+  border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:13.5px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);
+  z-index:20; animation:toast-in .2s ease;
+}
+.toast[hidden]{display:none}
+.toast button{background:none;border:none;color:var(--accent);font-weight:700;font-size:13.5px;cursor:pointer;flex:0 0 auto}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .btn, .add-btn, .toast{animation:none;transition:none}
+}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div id="app">
+  <div class="phone">
+
+    <!-- HOME -->
+    <section class="screen" id="screen-home">
+      <div class="home-topbar"></div>
+      <div class="home-stage">
+        <div class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-ink)">
+            <path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/>
+            <path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/>
+            <path d="M8 4.3 11.5 7.6M14 3.5l3.4 3.3"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>YOUR ULTIMATE<span>COLLECTION</span></h1>
+          <p class="logo-tagline">One pocket list for every movie, series and game you're keeping track of.</p>
+        </div>
+        <div class="home-actions">
+          <button class="btn btn-primary" id="btn-new">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            New Collection
+          </button>
+          <button class="btn btn-secondary" id="btn-mine">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            My Collections
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW COLLECTION -->
+    <section class="screen" id="screen-new" hidden>
+      <div class="topbar">
+        <button class="iconbtn" id="new-back" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <h2>New Collection</h2>
+        <span class="spacer"></span>
+      </div>
+      <div class="grow">
+        <p class="section-label">Choose a theme</p>
+        <div class="theme-grid" id="theme-grid"></div>
+        <p class="section-label">Name it</p>
+        <input class="field" id="new-name" type="text" placeholder="e.g. Sunday Marathon" maxlength="48" autocomplete="off">
+      </div>
+      <div class="new-footer">
+        <button class="btn btn-primary" id="new-create" disabled>Create Collection</button>
+      </div>
+    </section>
+
+    <!-- COLLECTION DETAIL -->
+    <section class="screen" id="screen-detail" hidden>
+      <div class="topbar">
+        <button class="iconbtn" id="detail-back" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <h2 id="detail-title">Collection</h2>
+        <button class="iconbtn" id="detail-trash" aria-label="Delete collection">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg>
+        </button>
+      </div>
+      <div class="detail-head">
+        <span class="detail-badge" id="detail-badge"></span>
+        <div class="progress-row">
+          <div class="progress-track"><div class="progress-fill" id="detail-progress-fill" style="width:0%"></div></div>
+          <span class="progress-count tabular" id="detail-progress-count">0 / 0</span>
+        </div>
+      </div>
+      <div class="add-row">
+        <input class="field" id="detail-input" type="text" placeholder="Add a title…" maxlength="80" autocomplete="off">
+        <button class="add-btn" id="detail-add" aria-label="Add item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <div class="item-list" id="item-list"></div>
+      <div class="empty-state" id="detail-empty" hidden>
+        <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4M21 12a9 9 0 1 1-9-9"/></svg></div>
+        <p>No titles yet. Add your first pick above.</p>
+      </div>
+    </section>
+
+    <!-- MY COLLECTIONS -->
+    <section class="screen" id="screen-mine" hidden>
+      <div class="topbar">
+        <button class="iconbtn" id="mine-back" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <h2>My Collections</h2>
+        <button class="iconbtn" id="mine-add" aria-label="New collection">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <div class="grow" id="mine-list-wrap">
+        <div id="mine-list"></div>
+      </div>
+      <div class="empty-state" id="mine-empty" hidden>
+        <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5 20 4l1 4.2-16.9 3.5L4 7.5Z"/><path d="M4.5 11.5h17V19a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1v-7.5Z"/></svg></div>
+        <p>No collections yet — start your first one.</p>
+        <button class="btn btn-ghost" id="mine-empty-cta" style="width:auto;padding:12px 22px">Start a collection</button>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" hidden>
+      <span id="toast-text"></span>
+      <button id="toast-undo">Undo</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var THEMES = {
+    movie:  { label: "Movie",  color: "var(--movie)",  icon: iconClapper() },
+    series: { label: "Series", color: "var(--series)", icon: iconTv() },
+    games:  { label: "Games",  color: "var(--games)",  icon: iconController() }
+  };
+
+  function iconClapper(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+      '<path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/><path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/><path d="M8 4.3 11.5 7.6M14 3.5l3.4 3.3"/></svg>';
+  }
+  function iconTv(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+      '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 21h8M9 2.5 12 6l3-3.5"/></svg>';
+  }
+  function iconController(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
+      '<path d="M7 9h10l2.4 7a2 2 0 0 1-3.8 1.3L14.5 15h-5l-1.1 2.3A2 2 0 0 1 4.6 16L7 9Z"/><path d="M8.5 11.5v2M7.5 12.5h2M15.5 11.3h.01M17.5 13.3h.01"/></svg>';
+  }
+
+  var STORAGE_KEY = "ultimateCollection:v1";
+  var state = { collections: load() };
+  var currentId = null;
+  var detailBackTarget = "mine";
+  var pendingTheme = null;
+  var pendingDelete = null; // {type:'item'|'collection', collectionId, item, index}
+  var toastTimer = null;
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(e){ return []; }
+  }
+  function save(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.collections)); }catch(e){ /* ignore */ }
+  }
+  function uid(){
+    return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+  }
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[c];
+    });
+  }
+
+  function showScreen(name){
+    ["home","new","detail","mine"].forEach(function(n){
+      document.getElementById("screen-"+n).hidden = (n !== name);
+    });
+  }
+
+  /* ---------- Home ---------- */
+  document.getElementById("btn-new").addEventListener("click", openNew);
+  document.getElementById("btn-mine").addEventListener("click", function(){
+    renderMine();
+    showScreen("mine");
+  });
+
+  /* ---------- New Collection ---------- */
+  var themeGrid = document.getElementById("theme-grid");
+  Object.keys(THEMES).forEach(function(key){
+    var t = THEMES[key];
+    var card = document.createElement("button");
+    card.type = "button";
+    card.className = "theme-card";
+    card.style.setProperty("--tc", t.color);
+    card.dataset.theme = key;
+    card.innerHTML = t.icon + "<span>" + t.label + "</span>";
+    card.addEventListener("click", function(){ selectTheme(key); });
+    themeGrid.appendChild(card);
+  });
+  var nameInput = document.getElementById("new-name");
+  var createBtn = document.getElementById("new-create");
+  nameInput.addEventListener("input", validateNewForm);
+  nameInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && !createBtn.disabled) createCollection();
+  });
+  document.getElementById("new-back").addEventListener("click", function(){ showScreen("home"); });
+  createBtn.addEventListener("click", createCollection);
+
+  function openNew(){
+    pendingTheme = null;
+    nameInput.value = "";
+    Array.prototype.forEach.call(themeGrid.children, function(c){ c.classList.remove("is-selected"); });
+    validateNewForm();
+    showScreen("new");
+    setTimeout(function(){ nameInput.focus(); }, 50);
+  }
+  function selectTheme(key){
+    pendingTheme = key;
+    Array.prototype.forEach.call(themeGrid.children, function(c){
+      c.classList.toggle("is-selected", c.dataset.theme === key);
+    });
+    validateNewForm();
+  }
+  function validateNewForm(){
+    createBtn.disabled = !(pendingTheme && nameInput.value.trim().length);
+  }
+  function createCollection(){
+    if(createBtn.disabled) return;
+    var col = {
+      id: uid(),
+      name: nameInput.value.trim(),
+      theme: pendingTheme,
+      createdAt: Date.now(),
+      items: []
+    };
+    state.collections.unshift(col);
+    save();
+    openDetail(col.id, "mine");
+  }
+
+  /* ---------- Collection detail ---------- */
+  var itemList = document.getElementById("item-list");
+  var detailInput = document.getElementById("detail-input");
+  var detailEmpty = document.getElementById("detail-empty");
+
+  document.getElementById("detail-back").addEventListener("click", function(){
+    showScreen(detailBackTarget);
+    if(detailBackTarget === "mine") renderMine();
+  });
+  document.getElementById("detail-add").addEventListener("click", addItemFromInput);
+  detailInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter") addItemFromInput();
+  });
+  document.getElementById("detail-trash").addEventListener("click", function(){
+    var col = findCollection(currentId);
+    if(!col) return;
+    requestDeleteCollection(col);
+  });
+
+  function findCollection(id){
+    for(var i=0;i<state.collections.length;i++){
+      if(state.collections[i].id === id) return state.collections[i];
+    }
+    return null;
+  }
+
+  function openDetail(id, backTo){
+    currentId = id;
+    detailBackTarget = backTo || "mine";
+    renderDetail();
+    showScreen("detail");
+  }
+
+  function renderDetail(){
+    var col = findCollection(currentId);
+    if(!col){ showScreen(detailBackTarget); return; }
+    var theme = THEMES[col.theme];
+    document.getElementById("detail-title").textContent = col.name;
+    document.querySelector("#screen-detail").style.setProperty("--tc", theme.color);
+    document.getElementById("detail-badge").innerHTML = theme.icon + " " + theme.label;
+    document.getElementById("detail-badge").style.setProperty("--tc", theme.color);
+
+    var done = col.items.filter(function(i){ return i.done; }).length;
+    var total = col.items.length;
+    var pct = total ? Math.round((done/total)*100) : 0;
+    document.getElementById("detail-progress-fill").style.width = pct + "%";
+    document.getElementById("detail-progress-count").textContent = done + " / " + total;
+
+    itemList.innerHTML = "";
+    detailEmpty.hidden = total !== 0;
+    col.items.forEach(function(item){
+      var row = document.createElement("div");
+      row.className = "item-row" + (item.done ? " is-done" : "");
+      row.innerHTML =
+        '<button class="item-check" aria-label="Toggle done">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>' +
+        '</button>' +
+        '<span class="item-text"></span>' +
+        '<button class="item-del" aria-label="Delete item">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg>' +
+        '</button>';
+      row.querySelector(".item-text").textContent = item.text;
+      row.querySelector(".item-check").addEventListener("click", function(){ toggleItem(col.id, item.id); });
+      row.querySelector(".item-del").addEventListener("click", function(){ requestDeleteItem(col.id, item.id); });
+      itemList.appendChild(row);
+    });
+  }
+
+  function addItemFromInput(){
+    var text = detailInput.value.trim();
+    if(!text) return;
+    var col = findCollection(currentId);
+    if(!col) return;
+    col.items.push({ id: uid(), text: text, done: false });
+    save();
+    detailInput.value = "";
+    renderDetail();
+    detailInput.focus();
+  }
+  function toggleItem(colId, itemId){
+    var col = findCollection(colId);
+    if(!col) return;
+    var item = col.items.find(function(i){ return i.id === itemId; });
+    if(!item) return;
+    item.done = !item.done;
+    save();
+    renderDetail();
+  }
+
+  function requestDeleteItem(colId, itemId){
+    var col = findCollection(colId);
+    if(!col) return;
+    var idx = col.items.findIndex(function(i){ return i.id === itemId; });
+    if(idx === -1) return;
+    var item = col.items[idx];
+    col.items.splice(idx, 1);
+    save();
+    renderDetail();
+    pendingDelete = { type:"item", collectionId: colId, item: item, index: idx };
+    showToast('Removed "' + item.text + '"');
+  }
+  function requestDeleteCollection(col){
+    var idx = state.collections.findIndex(function(c){ return c.id === col.id; });
+    if(idx === -1) return;
+    state.collections.splice(idx, 1);
+    save();
+    pendingDelete = { type:"collection", collection: col, index: idx };
+    showToast('Deleted "' + col.name + '"');
+    showScreen("mine");
+    renderMine();
+  }
+
+  /* ---------- My Collections ---------- */
+  var mineList = document.getElementById("mine-list");
+  var mineEmpty = document.getElementById("mine-empty");
+
+  document.getElementById("mine-back").addEventListener("click", function(){ showScreen("home"); });
+  document.getElementById("mine-add").addEventListener("click", openNew);
+  document.getElementById("mine-empty-cta").addEventListener("click", openNew);
+
+  function renderMine(){
+    mineList.innerHTML = "";
+    mineEmpty.hidden = state.collections.length !== 0;
+    state.collections.forEach(function(col){
+      var theme = THEMES[col.theme] || THEMES.movie;
+      var done = col.items.filter(function(i){ return i.done; }).length;
+      var card = document.createElement("button");
+      card.type = "button";
+      card.className = "coll-card";
+      card.innerHTML =
+        '<span class="coll-chip" style="--tc:' + theme.color + '">' + theme.icon + '</span>' +
+        '<span class="coll-meta"><span class="name"></span><span class="sub"></span></span>' +
+        '<button class="coll-trash" aria-label="Delete collection">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg>' +
+        '</button>' +
+        '<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>';
+      card.querySelector(".name").textContent = col.name;
+      card.querySelector(".sub").textContent = col.items.length + " item" + (col.items.length === 1 ? "" : "s") + " · " + done + " done";
+      card.addEventListener("click", function(ev){
+        if(ev.target.closest(".coll-trash")) return;
+        openDetail(col.id, "mine");
+      });
+      card.querySelector(".coll-trash").addEventListener("click", function(ev){
+        ev.stopPropagation();
+        requestDeleteCollection(col);
+      });
+      mineList.appendChild(card);
+    });
+  }
+
+  /* ---------- Toast / undo ---------- */
+  var toastEl = document.getElementById("toast");
+  var toastText = document.getElementById("toast-text");
+  document.getElementById("toast-undo").addEventListener("click", function(){
+    if(!pendingDelete) return hideToast();
+    if(pendingDelete.type === "item"){
+      var col = findCollection(pendingDelete.collectionId);
+      if(col){
+        col.items.splice(Math.min(pendingDelete.index, col.items.length), 0, pendingDelete.item);
+        save();
+        if(currentId === col.id) renderDetail();
+      }
+    } else if(pendingDelete.type === "collection"){
+      state.collections.splice(Math.min(pendingDelete.index, state.collections.length), 0, pendingDelete.collection);
+      save();
+      renderMine();
+    }
+    pendingDelete = null;
+    hideToast();
+  });
+  function showToast(text){
+    toastText.textContent = text;
+    toastEl.hidden = false;
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ pendingDelete = null; hideToast(); }, 4500);
+  }
+  function hideToast(){ toastEl.hidden = true; }
+
+  /* ---------- Boot ---------- */
+  showScreen("home");
+})();
+</script>
+
+</body></html>
