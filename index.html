@@ -11,7 +11,7 @@
 :root{
   --bg:#EEF0EE; --surface:#FFFFFF; --ink:#15191D; --muted:#5B6168; --line:rgba(21,25,29,0.12);
   --accent:#B9862E; --accent-ink:#2A1C06;
-  --movie:#B9862E; --series:#1E7C86; --games:#7A4FC2; --danger:#C0433B;
+  --movie:#B9862E; --series:#1E7C86; --games:#7A4FC2; --music:#2F6FD0; --books:#4A8A3B; --danger:#C0433B;
   --shadow:0 30px 60px -20px rgba(15,18,22,0.35), 0 2px 10px rgba(15,18,22,0.08);
   color-scheme: light;
 }
@@ -20,7 +20,7 @@
   :root:not([data-theme="light"]){
     --bg:#0D0F12; --surface:#17191D; --ink:#ECEEEF; --muted:#92989E; --line:rgba(255,255,255,0.12);
     --accent:#E0AA47; --accent-ink:#20160A;
-    --movie:#E0AA47; --series:#3FB6C2; --games:#A383E8; --danger:#E06B64;
+    --movie:#E0AA47; --series:#3FB6C2; --games:#A383E8; --music:#73A1F2; --books:#86C46F; --danger:#E06B64;
     color-scheme: dark;
   }
 }
@@ -28,7 +28,7 @@
 :root[data-theme="dark"]{
   --bg:#0D0F12; --surface:#17191D; --ink:#ECEEEF; --muted:#92989E; --line:rgba(255,255,255,0.12);
   --accent:#E0AA47; --accent-ink:#20160A;
-  --movie:#E0AA47; --series:#3FB6C2; --games:#A383E8; --danger:#E06B64;
+  --movie:#E0AA47; --series:#3FB6C2; --games:#A383E8; --music:#73A1F2; --books:#86C46F; --danger:#E06B64;
   color-scheme: dark;
 }
 :root[data-theme="light"]{ color-scheme: light; }
@@ -220,6 +220,33 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
 .item-detail-actions{display:flex;gap:10px;flex:0 0 auto;padding-top:14px}
 .item-detail-actions .btn{flex:1}
 
+/* Posters: the whole image always fits its tile; a blurred copy fills any empty space */
+.pf{position:relative;width:100%;height:100%;display:block;overflow:hidden}
+.pf .pf-bg{position:absolute;inset:-12%;width:124%;height:124%;max-width:none;object-fit:cover;filter:blur(14px) saturate(1.15);opacity:.55;transform:scale(1.05)}
+.pf .pf-img{position:relative;width:100%;height:100%;object-fit:contain;display:block}
+.item-thumb .pf-bg,.suggest-thumb .pf-bg{filter:blur(5px) saturate(1.15)}
+
+/* Floating add button on a collection */
+.fab{position:absolute;right:22px;bottom:calc(22px + env(safe-area-inset-bottom, 0px));width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--tc);color:var(--surface);display:flex;align-items:center;justify-content:center;z-index:12;
+  box-shadow:0 12px 24px -10px color-mix(in srgb, var(--tc) 70%, transparent)}
+.fab svg{width:24px;height:24px}
+.fab:active{transform:scale(.94)}
+.fab:focus-visible,.btn:focus-visible,.iconbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#screen-detail .item-list{padding-bottom:84px}
+
+/* Add / edit item form */
+.edit-poster{width:150px;margin:4px auto 10px;cursor:pointer;padding:0;font:inherit;position:relative}
+.edit-poster .edit-poster-hint{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--tc);padding:0 14px;text-align:center}
+.edit-poster .edit-poster-hint svg{width:30px;height:30px}
+.poster-tools{display:flex;justify-content:center;gap:8px;margin-bottom:6px}
+.btn-small{width:auto;padding:9px 16px;font-size:13px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.field-grid .wide{grid-column:1 / -1}
+.field-grid .section-label{margin-top:14px;margin-bottom:8px}
+.form-error{font-size:12.5px;color:var(--danger);margin:8px 0 0}
+
 /* Settings */
 
 /* Toast */
@@ -250,7 +277,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
         </div>
         <div class="logo-text">
           <h1>YOUR ULTIMATE<span>COLLECTION</span></h1>
-          <p class="logo-tagline">One pocket list for every movie, series and game you're keeping track of.</p>
+          <p class="logo-tagline">One pocket list for every movie, series, game, album and book you're keeping track of.</p>
         </div>
         <div class="home-actions">
           <button class="btn btn-primary" id="btn-new">
@@ -302,18 +329,19 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
           <span class="progress-count tabular" id="detail-progress-count">0 / 0</span>
         </div>
       </div>
-      <div class="add-row">
+      <div class="add-row" id="detail-add-row">
         <div class="add-field-wrap">
           <input class="field" id="detail-input" type="text" placeholder="Add a title…" maxlength="80" autocomplete="off">
           <div class="suggest-dropdown" id="suggest-dropdown" hidden></div>
         </div>
-        <button class="add-btn" id="detail-add" aria-label="Add item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="add-btn" id="detail-add" aria-label="Add and look up info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <div class="item-list" id="item-list"></div>
       <div class="empty-state" id="detail-empty" hidden>
         <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4M21 12a9 9 0 1 1-9-9"/></svg></div>
-        <p>No titles yet. Add your first pick above — we'll fetch its info automatically.</p>
+        <p id="detail-empty-text">No titles yet.</p>
       </div>
+      <button class="fab" id="detail-fab" aria-label="Add an item manually"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
     </section>
 
     <!-- ITEM DETAIL (tile) -->
@@ -325,8 +353,32 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       </div>
       <div class="item-detail-scroll" id="item-detail-body"></div>
       <div class="item-detail-actions">
+        <button class="btn btn-ghost" id="item-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Edit</button>
         <button class="btn btn-secondary" id="item-toggle">Mark done</button>
       </div>
+    </section>
+
+    <!-- ADD / EDIT ITEM -->
+    <section class="screen" id="screen-edit" hidden>
+      <div class="topbar">
+        <button class="iconbtn" id="edit-back" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <h2 id="edit-heading">Add item</h2>
+        <span class="spacer"></span>
+      </div>
+      <div class="grow">
+        <button type="button" class="item-poster edit-poster" id="edit-poster" aria-label="Choose a cover photo"></button>
+        <div class="poster-tools">
+          <button type="button" class="btn btn-ghost btn-small" id="edit-upload">Upload photo</button>
+          <button type="button" class="btn btn-ghost btn-small" id="edit-remove-photo" hidden>Remove photo</button>
+        </div>
+        <input type="file" accept="image/*" id="edit-file" class="visually-hidden" tabindex="-1" aria-hidden="true">
+        <p class="form-error" id="edit-photo-error" hidden></p>
+        <p class="section-label">Title</p>
+        <input class="field" id="edit-title" type="text" maxlength="80" autocomplete="off" placeholder="Title">
+        <div class="field-grid" id="edit-fields"></div>
+        <div style="height:12px"></div>
+      </div>
+      <div class="screen-footer"><button class="btn btn-primary" id="edit-save" disabled>Save</button></div>
     </section>
 
     <!-- MY COLLECTIONS -->
@@ -391,15 +443,150 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     person: '<circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>',
     building: '<path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-6h6v6M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/>',
     tag: '<path d="M3 11.5 11.5 3H19a2 2 0 0 1 2 2v7.5L12.5 21 3 11.5Z"/><path d="M14.5 8.5h.01"/>',
-    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'
+    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    music: '<path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
+    books: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15Z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19M9 7.5h6"/>',
+    pages: '<path d="M7 3h7l4 4v14H7V3Z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L5 20"/>'
   };
   function iconHtml(name){ return svg(ICONS[name]); }
 
   var THEMES = {
     movie:  { label:"Movie",  color:"var(--movie)",  icon:iconHtml("movie"),  kind:"movie",  personLabel:"Director" },
     series: { label:"Series", color:"var(--series)", icon:iconHtml("series"), kind:"series", personLabel:"Creator" },
-    games:  { label:"Games",  color:"var(--games)",  icon:iconHtml("games"),  kind:"games",  personLabel:"Studio" }
+    games:  { label:"Games",  color:"var(--games)",  icon:iconHtml("games"),  kind:"games",  personLabel:"Studio" },
+    music:  { label:"Music",  color:"var(--music)",  icon:iconHtml("music"),  kind:"music",  personLabel:"Artist", manual:true },
+    books:  { label:"Books",  color:"var(--books)",  icon:iconHtml("books"),  kind:"books",  personLabel:"Author", manual:true }
   };
+
+  /* Info fields per category. Keys match what the lookup returns, so fetched and hand-typed info share one shape. */
+  var FIELDS = {
+    movie: [
+      { key:"rating",  label:"Rating",   icon:"star",     placeholder:"e.g. 8.6",     numeric:true },
+      { key:"year",    label:"Year",     icon:"calendar", placeholder:"e.g. 2014",    numeric:true },
+      { key:"runtime", label:"Runtime",  icon:"clock",    placeholder:"e.g. 2h 49m" },
+      { key:"person",  label:"Director", icon:"person",   placeholder:"e.g. Christopher Nolan" },
+      { key:"genre",   label:"Genre",    icon:"tag",      placeholder:"e.g. Sci-fi, Drama", wide:true }
+    ],
+    series: [
+      { key:"rating",  label:"Rating",          icon:"star",     placeholder:"e.g. 9.0",   numeric:true },
+      { key:"year",    label:"Year",            icon:"calendar", placeholder:"e.g. 2019",  numeric:true },
+      { key:"runtime", label:"Episode runtime", icon:"clock",    placeholder:"e.g. 50m" },
+      { key:"person",  label:"Creator",         icon:"person",   placeholder:"e.g. Phoebe Waller-Bridge" },
+      { key:"genre",   label:"Genre",           icon:"tag",      placeholder:"e.g. Comedy", wide:true }
+    ],
+    games: [
+      { key:"releaseDate",   label:"Release date",     icon:"calendar", placeholder:"e.g. 2023-05-12" },
+      { key:"person",        label:"Studio",           icon:"building", placeholder:"e.g. FromSoftware" },
+      { key:"howLongToBeat", label:"How long to beat", icon:"clock",    placeholder:"e.g. 60 hours" },
+      { key:"genre",         label:"Genre",            icon:"tag",      placeholder:"e.g. RPG", wide:true }
+    ],
+    music: [
+      { key:"person", label:"Artist", icon:"person",   placeholder:"e.g. Radiohead" },
+      { key:"year",   label:"Year",   icon:"calendar", placeholder:"e.g. 1997", numeric:true },
+      { key:"genre",  label:"Genre",  icon:"tag",      placeholder:"e.g. Alt rock" },
+      { key:"length", label:"Length", icon:"clock",    placeholder:"e.g. 53 min" }
+    ],
+    books: [
+      { key:"person", label:"Author", icon:"person",   placeholder:"e.g. Ursula K. Le Guin" },
+      { key:"year",   label:"Year",   icon:"calendar", placeholder:"e.g. 1969", numeric:true },
+      { key:"pages",  label:"Pages",  icon:"pages",    placeholder:"e.g. 304",  numeric:true },
+      { key:"genre",  label:"Genre",  icon:"tag",      placeholder:"e.g. Science fiction" }
+    ]
+  };
+
+  /* ---------- Cover photos uploaded from the device (kept in IndexedDB, not localStorage) ---------- */
+  var IMG_DB_NAME = "ultimateCollection-images";
+  var imgDb = null;
+  var imageUrls = {}; // "idb:<id>" -> object URL
+
+  function openImgDb(){
+    return new Promise(function(resolve){
+      try{
+        var req = indexedDB.open(IMG_DB_NAME, 1);
+        req.onupgradeneeded = function(){ req.result.createObjectStore("images"); };
+        req.onsuccess = function(){ resolve(req.result); };
+        req.onerror = function(){ resolve(null); };
+      }catch(e){ resolve(null); }
+    });
+  }
+  function imgTx(mode){ return imgDb.transaction("images", mode).objectStore("images"); }
+  function putImage(ref, blob){
+    return new Promise(function(resolve, reject){
+      try{
+        var r = imgTx("readwrite").put(blob, ref);
+        r.onsuccess = function(){ resolve(); };
+        r.onerror = function(){ reject(r.error); };
+      }catch(e){ reject(e); }
+    });
+  }
+  function deleteImage(ref){
+    if(!ref || ref.indexOf("idb:") !== 0) return;
+    if(imageUrls[ref]){ URL.revokeObjectURL(imageUrls[ref]); delete imageUrls[ref]; }
+    if(!imgDb) return;
+    try{ imgTx("readwrite").delete(ref); }catch(e){}
+  }
+  function loadAllImages(){
+    return new Promise(function(resolve){
+      if(!imgDb) return resolve();
+      try{
+        var req = imgTx("readonly").openCursor();
+        req.onsuccess = function(){
+          var cur = req.result;
+          if(!cur) return resolve();
+          imageUrls[cur.key] = URL.createObjectURL(cur.value);
+          cur.continue();
+        };
+        req.onerror = function(){ resolve(); };
+      }catch(e){ resolve(); }
+    });
+  }
+  function cleanOrphanImages(){
+    var used = {};
+    state.collections.forEach(function(c){ c.items.forEach(function(i){ if(i.posterImg) used[i.posterImg] = true; }); });
+    Object.keys(imageUrls).forEach(function(ref){ if(!used[ref]) deleteImage(ref); });
+  }
+  /* Shrinks a photo to at most 900px on its longest side, keeping its shape (no cropping). */
+  function shrinkImage(file){
+    return new Promise(function(resolve, reject){
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function(){
+        var max = 900;
+        var scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+        var w = Math.max(1, Math.round(img.naturalWidth * scale));
+        var h = Math.max(1, Math.round(img.naturalHeight * scale));
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(function(blob){ blob ? resolve(blob) : reject(new Error("encode_failed")); }, "image/jpeg", 0.84);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("decode_failed")); };
+      img.src = url;
+    });
+  }
+  function blobToDataUrl(blob){
+    return new Promise(function(resolve, reject){
+      var fr = new FileReader();
+      fr.onload = function(){ resolve(fr.result); };
+      fr.onerror = function(){ reject(fr.error); };
+      fr.readAsDataURL(blob);
+    });
+  }
+
+  /* An uploaded photo wins over a fetched poster. */
+  function posterSrc(item){
+    if(item.posterImg){
+      if(item.posterImg.indexOf("data:") === 0) return item.posterImg;
+      if(imageUrls[item.posterImg]) return imageUrls[item.posterImg];
+    }
+    return (item.meta && item.meta.poster) || null;
+  }
+  function posterMarkup(src){
+    var safe = String(src).replace(/"/g, "&quot;");
+    return '<span class="pf"><img class="pf-bg" src="'+safe+'" alt="" aria-hidden="true"><img class="pf-img" src="'+safe+'" alt=""></span>';
+  }
 
   /* ---------- Supabase (Edge Function proxy — keeps TMDB/RAWG keys server-side) ---------- */
   var SUPABASE_URL = "https://vyshzvrsitibscjfurth.supabase.co";
@@ -424,12 +611,12 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     }catch(e){ return []; }
   }
   function saveCollections(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.collections)); }catch(e){}
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.collections)); return true; }catch(e){ return false; }
   }
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 
   function showScreen(name){
-    ["home","new","detail","item","mine","settings"].forEach(function(n){
+    ["home","new","detail","item","mine","settings","edit"].forEach(function(n){
       document.getElementById("screen-"+n).hidden = (n !== name);
     });
   }
@@ -466,7 +653,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var col = findCollection(colId);
     if(!col) return;
     var item = col.items.find(function(i){ return i.id === itemId; });
-    if(!item) return;
+    if(!item || item.edited) return;
     item.meta = result;
     saveCollections();
     refreshViews();
@@ -475,7 +662,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var col = findCollection(colId);
     if(!col) return;
     var item = col.items.find(function(i){ return i.id === itemId; });
-    if(!item) return;
+    if(!item || item.edited || (THEMES[col.theme] && THEMES[col.theme].manual)) return;
     item.meta = { status:"loading" };
     saveCollections();
     refreshViews();
@@ -483,7 +670,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       var col2 = findCollection(colId);
       if(!col2) return;
       var item2 = col2.items.find(function(i){ return i.id === itemId; });
-      if(!item2) return;
+      if(!item2 || item2.edited) return;
       item2.meta = result;
       saveCollections();
       refreshViews();
@@ -493,6 +680,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     if(!document.getElementById("screen-detail").hidden) renderDetail();
     if(!document.getElementById("screen-item").hidden) renderItemDetail();
     if(!document.getElementById("screen-mine").hidden) renderMine();
+    if(!document.getElementById("screen-edit").hidden) renderEditPoster();
   }
 
   function findCollection(id){
@@ -607,7 +795,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     results.forEach(function(hit){
       var row = document.createElement("div");
       row.className = "suggest-item";
-      var thumbInner = hit.poster ? '<img src="'+hit.poster.replace(/"/g,"&quot;")+'" alt="">' : theme.icon;
+      var thumbInner = hit.poster ? posterMarkup(hit.poster) : theme.icon;
       row.innerHTML = '<span class="suggest-thumb">'+thumbInner+'</span><span class="suggest-text"><span class="suggest-title"></span><span class="suggest-year"></span></span>';
       row.querySelector(".suggest-title").textContent = hit.title;
       row.querySelector(".suggest-year").textContent = hit.year || "";
@@ -635,9 +823,10 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     if(!meta || meta.status === "loading") return "Fetching info…";
     if(meta.status === "nokey") return "Lookup not configured yet";
     if(meta.status === "notfound") return "No match found";
-    if(meta.status === "error") return "Lookup failed — tap to retry";
+    if(meta.status === "error") return "Couldn’t fetch info — tap for options";
     if(meta.status === "found"){
-      if(theme === "games") return [meta.releaseDate ? meta.releaseDate.slice(0,4) : "", meta.person].filter(Boolean).join(" · ");
+      if(theme === "games") return [meta.releaseDate ? String(meta.releaseDate).slice(0,4) : "", meta.person].filter(Boolean).join(" · ");
+      if(theme === "music" || theme === "books") return [meta.person, meta.year].filter(Boolean).join(" · ");
       return [meta.year, meta.rating ? ("★ "+meta.rating) : ""].filter(Boolean).join(" · ");
     }
     return "";
@@ -653,6 +842,11 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     badge.innerHTML = theme.icon + " " + theme.label;
     badge.style.setProperty("--tc", theme.color);
 
+    document.getElementById("detail-add-row").hidden = !!theme.manual;
+    document.getElementById("detail-empty-text").textContent = theme.manual
+      ? "Nothing here yet. Tap + to add your first " + (col.theme === "books" ? "book" : "album or song") + "."
+      : "No titles yet. Search above to add one with its info filled in, or tap + to add it yourself.";
+
     var done = col.items.filter(function(i){ return i.done; }).length;
     var total = col.items.length;
     document.getElementById("detail-progress-fill").style.width = (total ? Math.round((done/total)*100) : 0) + "%";
@@ -664,8 +858,9 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       var row = document.createElement("div");
       row.className = "item-row" + (item.done ? " is-done" : "");
       row.style.setProperty("--tc", theme.color);
-      var thumbInner = item.meta && item.meta.status === "loading" ? '<div class="spin"></div>'
-        : (item.meta && item.meta.poster) ? '<img src="'+item.meta.poster.replace(/"/g,"&quot;")+'" alt="">'
+      var thumbSrc = posterSrc(item);
+      var thumbInner = (item.meta && item.meta.status === "loading" && !thumbSrc) ? '<div class="spin"></div>'
+        : thumbSrc ? posterMarkup(thumbSrc)
         : theme.icon;
       row.innerHTML =
         '<button class="item-check" aria-label="Toggle done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>'+
@@ -676,7 +871,6 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       row.querySelector(".item-sub").textContent = metaSubtitle(col.theme, item.meta);
       row.querySelector(".item-check").addEventListener("click", function(){ toggleItem(col.id, item.id); });
       row.querySelector(".item-main").addEventListener("click", function(){
-        if(item.meta && item.meta.status === "error"){ triggerLookup(col.id, item.id); return; }
         openItemDetail(col.id, item.id);
       });
       row.querySelector(".item-del").addEventListener("click", function(){ requestDeleteItem(col.id, item.id); });
@@ -720,7 +914,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     }
     renderDetail();
     pendingDelete = { type:"item", collectionId: colId, item: item, index: idx };
-    showToast('Removed "' + item.text + '"');
+    showToast('Removed "' + item.text + '"', true);
   }
   function requestDeleteCollection(col){
     var count = col.items.length;
@@ -734,7 +928,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       state.collections.splice(idx, 1);
       saveCollections();
       pendingDelete = { type:"collection", collection: col, index: idx };
-      showToast('Deleted "' + col.name + '"');
+      showToast('Deleted "' + col.name + '"', true);
       showScreen("mine");
       renderMine();
     });
@@ -781,9 +975,200 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     toggleItem(currentItemRef.collectionId, currentItemRef.itemId);
     renderItemDetail();
   });
+  document.getElementById("item-edit").addEventListener("click", function(){
+    if(!currentItemRef) return;
+    openEdit(currentItemRef.collectionId, currentItemRef.itemId);
+  });
+  document.getElementById("detail-fab").addEventListener("click", function(){
+    hideSuggestions();
+    if(currentId) openEdit(currentId, null);
+  });
+
+  /* ---------- Add / edit item ---------- */
+  var editState = null; // { colId, itemId|null, newBlob, newUrl, removePhoto }
+  var editTitle = document.getElementById("edit-title");
+  var editSave = document.getElementById("edit-save");
+  var editFile = document.getElementById("edit-file");
+  var editPhotoError = document.getElementById("edit-photo-error");
+
+  function openEdit(colId, itemId){
+    var col = findCollection(colId); if(!col) return;
+    var theme = THEMES[col.theme];
+    var item = itemId ? col.items.find(function(i){ return i.id === itemId; }) : null;
+    if(itemId && !item) return;
+    discardPendingPhoto();
+    editState = { colId: colId, itemId: itemId, newBlob: null, newUrl: null, removePhoto: false };
+    var screen = document.getElementById("screen-edit");
+    screen.style.setProperty("--tc", theme.color);
+    document.getElementById("edit-heading").textContent = item ? "Edit details" : "Add " + (col.theme === "books" ? "a book" : col.theme === "music" ? "music" : "a title");
+    editSave.textContent = item ? "Save changes" : "Add to collection";
+    editPhotoError.hidden = true;
+
+    var meta = (item && item.meta && item.meta.status === "found") ? item.meta : {};
+    editTitle.value = item ? ((meta.title) || item.text) : "";
+    var wrap = document.getElementById("edit-fields");
+    wrap.innerHTML = "";
+    (FIELDS[col.theme] || []).forEach(function(f){
+      var box = document.createElement("div");
+      if(f.wide) box.className = "wide";
+      var lab = document.createElement("p");
+      lab.className = "section-label"; lab.textContent = f.label;
+      var inp = document.createElement("input");
+      inp.className = "field"; inp.type = "text"; inp.maxLength = 80; inp.autocomplete = "off";
+      inp.placeholder = f.placeholder || "";
+      if(f.numeric) inp.inputMode = "decimal";
+      inp.dataset.key = f.key;
+      var v = meta[f.key];
+      inp.value = (v === undefined || v === null) ? "" : String(v);
+      inp.id = "edit-field-" + f.key;
+      lab.setAttribute("aria-hidden", "true");
+      inp.setAttribute("aria-label", f.label);
+      box.appendChild(lab); box.appendChild(inp);
+      wrap.appendChild(box);
+    });
+    validateEdit();
+    renderEditPoster();
+    showScreen("edit");
+    document.querySelector("#screen-edit .grow").scrollTop = 0;
+    if(!item) setTimeout(function(){ editTitle.focus(); }, 50);
+  }
+  function editItem(){
+    if(!editState || !editState.itemId) return null;
+    var col = findCollection(editState.colId); if(!col) return null;
+    return col.items.find(function(i){ return i.id === editState.itemId; }) || null;
+  }
+  function renderEditPoster(){
+    if(!editState) return;
+    var col = findCollection(editState.colId); if(!col) return;
+    var theme = THEMES[col.theme];
+    var item = editItem();
+    var src = null, hasOwnPhoto = false;
+    if(editState.newUrl){ src = editState.newUrl; hasOwnPhoto = true; }
+    else if(item && !editState.removePhoto && item.posterImg){ src = posterSrc(item); hasOwnPhoto = true; }
+    else if(item && item.meta && item.meta.poster){ src = item.meta.poster; }
+    var btn = document.getElementById("edit-poster");
+    btn.innerHTML = src ? posterMarkup(src)
+      : '<span class="edit-poster-hint">'+iconHtml("image")+'<span>Add a cover</span></span>';
+    document.getElementById("edit-upload").textContent = src ? "Change photo" : "Upload photo";
+    document.getElementById("edit-remove-photo").hidden = !hasOwnPhoto;
+  }
+  function discardPendingPhoto(){
+    if(editState && editState.newUrl) URL.revokeObjectURL(editState.newUrl);
+    if(editState){ editState.newUrl = null; editState.newBlob = null; }
+  }
+  function validateEdit(){ editSave.disabled = !editTitle.value.trim(); }
+  editTitle.addEventListener("input", validateEdit);
+  document.getElementById("edit-poster").addEventListener("click", function(){ editFile.click(); });
+  document.getElementById("edit-upload").addEventListener("click", function(){ editFile.click(); });
+  document.getElementById("edit-remove-photo").addEventListener("click", function(){
+    if(!editState) return;
+    discardPendingPhoto();
+    editState.removePhoto = true;
+    renderEditPoster();
+  });
+  editFile.addEventListener("change", function(){
+    var file = editFile.files && editFile.files[0];
+    editFile.value = "";
+    if(!file || !editState) return;
+    editPhotoError.hidden = true;
+    shrinkImage(file).then(function(blob){
+      if(!editState) return;
+      discardPendingPhoto();
+      editState.newBlob = blob;
+      editState.newUrl = URL.createObjectURL(blob);
+      editState.removePhoto = false;
+      renderEditPoster();
+    }).catch(function(){
+      editPhotoError.textContent = "This photo couldn't be opened. Try a JPG or PNG image.";
+      editPhotoError.hidden = false;
+    });
+  });
+  function closeEdit(){
+    var st = editState;
+    discardPendingPhoto();
+    editState = null;
+    if(st && st.itemId){ showScreen("item"); renderItemDetail(); }
+    else { showScreen("detail"); renderDetail(); }
+  }
+  document.getElementById("edit-back").addEventListener("click", closeEdit);
+  editSave.addEventListener("click", saveEdit);
+
+  async function saveEdit(){
+    if(!editState || editSave.disabled) return;
+    var col = findCollection(editState.colId); if(!col){ closeEdit(); return; }
+    var title = editTitle.value.trim(); if(!title) return;
+    editSave.disabled = true;
+
+    var item = editItem();
+    var isNew = !item;
+    if(isNew) item = { id: uid(), text: title, done: false, meta: null };
+
+    // Photo: store the new one first, then drop the old one
+    var oldRef = item.posterImg || null;
+    if(editState.newBlob){
+      var ref = null;
+      if(imgDb){
+        ref = "idb:" + uid();
+        try{ await putImage(ref, editState.newBlob); imageUrls[ref] = URL.createObjectURL(editState.newBlob); }
+        catch(e){ ref = null; }
+      }
+      if(!ref){
+        try{ ref = await blobToDataUrl(editState.newBlob); }catch(e){ ref = null; }
+      }
+      if(!ref){
+        editPhotoError.textContent = "The photo couldn't be saved on this device. Try a smaller image.";
+        editPhotoError.hidden = false;
+        validateEdit();
+        return;
+      }
+      item.posterImg = ref;
+      if(oldRef && oldRef !== ref) deleteImage(oldRef);
+    } else if(editState.removePhoto && oldRef){
+      item.posterImg = null;
+      deleteImage(oldRef);
+    }
+
+    // Details
+    var base = (item.meta && item.meta.status === "found") ? item.meta : { status:"found", manual:true };
+    var meta = {};
+    Object.keys(base).forEach(function(k){ meta[k] = base[k]; });
+    meta.status = "found";
+    meta.title = title;
+    Array.prototype.forEach.call(document.querySelectorAll("#edit-fields input"), function(inp){
+      var v = inp.value.trim();
+      if(v) meta[inp.dataset.key] = v; else delete meta[inp.dataset.key];
+    });
+    if(meta.releaseDate && !meta.year) meta.year = String(meta.releaseDate).slice(0,4);
+    item.meta = meta;
+    item.text = title;
+    item.edited = true;
+
+    if(isNew) col.items.push(item);
+    if(!saveCollections()){
+      showToast("Not enough space on this device to save. Remove some photos and try again.");
+    }
+    closeEdit();
+  }
 
   function statCard(iconName, label, value, wide){
-    return '<div class="stat-card'+(wide?" wide":"")+'"><span class="stat-label">'+iconHtml(iconName)+" "+label+'</span><span class="stat-value">'+(value || "—")+'</span></div>';
+    return '<div class="stat-card'+(wide?" wide":"")+'"><span class="stat-label">'+iconHtml(iconName)+" "+label+'</span><span class="stat-value">'+escapeHtml(value || "—")+'</span></div>';
+  }
+  /* Fetched items show every field; hand-made or edited items show only what was filled in. */
+  function infoGrid(themeKey, item){
+    var meta = item.meta || {};
+    var handMade = !!(meta.manual || item.edited);
+    var cards = "";
+    (FIELDS[themeKey] || []).forEach(function(f){
+      var v = meta[f.key];
+      var has = v !== undefined && v !== null && String(v).trim() !== "";
+      if(handMade && !has) return;
+      var label = (f.key === "rating" && !handMade) ? "TMDB Rating" : f.label;
+      var shown = has ? String(v) : (f.key === "rating" ? "—" : "Unknown");
+      if(has && f.key === "rating" && /^\d+(\.\d+)?$/.test(shown.trim())) shown = shown.trim() + " / 10";
+      cards += statCard(f.icon, label, shown, f.wide);
+    });
+    if(!cards) return '<div class="notice">No details yet. Tap Edit to add them.</div>';
+    return '<div class="stat-grid">' + cards + '</div>';
   }
   function renderItemDetail(){
     if(!currentItemRef) return;
@@ -801,39 +1186,26 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var displayTitle = (meta && meta.status === "found" && meta.title) ? meta.title : item.text;
     document.getElementById("item-toggle").textContent = item.done ? "Mark not done" : "Mark done";
 
-    var posterInner = meta && meta.status === "loading" ? '<div class="spin" style="width:28px;height:28px;border-width:3px"></div>'
-      : (meta && meta.poster) ? '<img src="'+meta.poster.replace(/"/g,"&quot;")+'" alt="">'
+    var bigSrc = posterSrc(item);
+    var posterInner = (meta && meta.status === "loading" && !bigSrc) ? '<div class="spin" style="width:28px;height:28px;border-width:3px"></div>'
+      : bigSrc ? posterMarkup(bigSrc)
       : theme.icon;
 
     var body = '<div class="item-poster" style="--tc:'+theme.color+'">'+posterInner+'</div>'+
       '<h2 class="item-detail-title">'+escapeHtml(displayTitle)+'</h2>'+
       '<span class="detail-badge" style="--tc:'+theme.color+'">'+theme.icon+' '+theme.label+'</span>';
 
-    if(!meta || meta.status === "loading"){
+    var editHint = " Tap Edit to fill in the details yourself.";
+    if(meta && meta.status === "found"){
+      body += infoGrid(col.theme, item);
+    } else if(!meta || meta.status === "loading"){
       body += '<div class="notice">Fetching official info…</div>';
     } else if(meta.status === "nokey"){
-      body += '<div class="notice">The '+(col.theme === "games" ? "RAWG" : "TMDB")+' key hasn’t been set on the server yet, so real posters and details can’t be fetched for this title.</div>';
+      body += '<div class="notice">The '+(col.theme === "games" ? "RAWG" : "TMDB")+' key hasn’t been set on the server yet, so posters and details can’t be fetched for this title.'+editHint+'</div>';
     } else if(meta.status === "notfound"){
-      body += '<div class="notice">No match found for "'+escapeHtml(item.text)+'". Check the spelling, or it may not be listed in the database.</div>';
+      body += '<div class="notice">No match found for "'+escapeHtml(item.text)+'". Check the spelling, or it may not be listed in the database.'+editHint+'</div>';
     } else if(meta.status === "error"){
-      body += '<div class="notice">Couldn’t reach the database just now. <a href="#" id="item-retry">Tap to retry</a>.</div>';
-    } else if(meta.status === "found"){
-      if(col.theme === "games"){
-        body += '<div class="stat-grid">'+
-          statCard("calendar", "Release date", meta.releaseDate || "Unknown") +
-          statCard("building", "Studio", meta.person || "Unknown") +
-          statCard("clock", "How long to beat", meta.howLongToBeat || "Unknown") +
-          statCard("tag", "Genre", meta.genre || "Unknown", true) +
-          '</div>';
-      } else {
-        body += '<div class="stat-grid">'+
-          statCard("star", "TMDB Rating", meta.rating ? (meta.rating+" / 10") : "—") +
-          statCard("calendar", "Year", meta.year || "—") +
-          statCard("clock", col.theme === "series" ? "Episode runtime" : "Runtime", meta.runtime || "Unknown") +
-          statCard("person", theme.personLabel, meta.person || "Unknown") +
-          statCard("tag", "Genre", meta.genre || "Unknown", true) +
-          '</div>';
-      }
+      body += '<div class="notice">Couldn’t reach the database just now. <a href="#" id="item-retry">Tap to retry</a>, or tap Edit to fill in the details yourself.</div>';
     }
 
     body += '<p class="section-label">Your notes</p>'+
@@ -912,8 +1284,9 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     pendingDelete = null;
     hideToast();
   });
-  function showToast(text){
+  function showToast(text, withUndo){
     toastText.textContent = text;
+    document.getElementById("toast-undo").hidden = !withUndo;
     toastEl.hidden = false;
     if(toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ pendingDelete = null; hideToast(); }, 4500);
@@ -950,6 +1323,13 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
   /* ---------- Boot ---------- */
   applyAppearance(loadAppearance());
   showScreen("home");
+  openImgDb().then(function(db){
+    imgDb = db;
+    return loadAllImages();
+  }).then(function(){
+    cleanOrphanImages();
+    refreshViews();
+  });
 })();
 </script>
 </body>
