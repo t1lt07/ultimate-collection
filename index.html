@@ -3,370 +3,520 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F5F9">
 <title>Ultimate Collection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#EEF0EE; --surface:#FFFFFF; --ink:#15191D; --muted:#5B6168; --line:rgba(21,25,29,0.12);
-  --accent:#B9862E; --accent-ink:#2A1C06;
-  --movie:#B9862E; --series:#1E7C86; --games:#7A4FC2; --music:#2F6FD0; --books:#4A8A3B; --danger:#C0433B;
-  --shadow:0 30px 60px -20px rgba(15,18,22,0.35), 0 2px 10px rgba(15,18,22,0.08);
+  --bg:#F4F5F9; --surface:#FFFFFF; --ink:#12131A; --muted:#5E6270; --line:#DADCE3; --chip:#ECEDF2;
+  --btn:#12131A; --on-btn:#FFFFFF; --shadow:0 10px 26px -18px rgba(18,19,26,0.35); --shadow-strong:0 14px 28px -12px rgba(18,19,26,0.5);
+  --drop-bg:#FBE3E1; --drop-ink:#A3322B; --scrim:rgba(18,19,26,0.45); --tab-border:#E6E8EE; --accent:#B37A10;
+  --frame-shadow:0 30px 60px -20px rgba(15,18,22,0.35), 0 2px 10px rgba(15,18,22,0.08);
+  --font-display:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color-scheme: light;
 }
-/* Follows the OS when the user hasn't picked a mode in Settings */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0D0F12; --surface:#17191D; --ink:#ECEEEF; --muted:#92989E; --line:rgba(255,255,255,0.12);
-    --accent:#E0AA47; --accent-ink:#20160A;
-    --movie:#E0AA47; --series:#3FB6C2; --games:#A383E8; --music:#73A1F2; --books:#86C46F; --danger:#E06B64;
+    --bg:#0E0F14; --surface:#1A1C24; --ink:#F1F2F5; --muted:#A3A7B4; --line:#2E313C; --chip:#262934;
+    --btn:#F1F2F5; --on-btn:#12131A; --shadow:0 10px 26px -18px rgba(0,0,0,0.7); --shadow-strong:0 14px 28px -12px rgba(0,0,0,0.75);
+    --drop-bg:#3D1B19; --drop-ink:#F08A82; --scrim:rgba(0,0,0,0.62); --tab-border:#262934; --accent:#E0AA47;
     color-scheme: dark;
   }
 }
-/* Explicit choice from Settings overrides the OS either way */
 :root[data-theme="dark"]{
-  --bg:#0D0F12; --surface:#17191D; --ink:#ECEEEF; --muted:#92989E; --line:rgba(255,255,255,0.12);
-  --accent:#E0AA47; --accent-ink:#20160A;
-  --movie:#E0AA47; --series:#3FB6C2; --games:#A383E8; --music:#73A1F2; --books:#86C46F; --danger:#E06B64;
+  --bg:#0E0F14; --surface:#1A1C24; --ink:#F1F2F5; --muted:#A3A7B4; --line:#2E313C; --chip:#262934;
+  --btn:#F1F2F5; --on-btn:#12131A; --shadow:0 10px 26px -18px rgba(0,0,0,0.7); --shadow-strong:0 14px 28px -12px rgba(0,0,0,0.75);
+  --drop-bg:#3D1B19; --drop-ink:#F08A82; --scrim:rgba(0,0,0,0.62); --tab-border:#262934; --accent:#E0AA47;
   color-scheme: dark;
 }
 :root[data-theme="light"]{ color-scheme: light; }
+
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:var(--bg);font-family:"Work Sans",-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink)}
+body{background:var(--bg);font-family:var(--font-body);color:var(--ink);-webkit-font-smoothing:antialiased}
 img{max-width:100%}
 [hidden]{display:none!important}
+button,input,textarea{font-family:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 #app{min-height:100%;display:flex;align-items:stretch;justify-content:center}
-.phone{position:relative;width:100%;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;isolation:isolate}
+.phone{position:relative;width:100%;min-height:100vh;min-height:100dvh;background:var(--bg);overflow:hidden;isolation:isolate}
 @media (min-width:481px){
   #app{padding:28px 16px}
-  .phone{max-width:412px;height:min(880px,94vh);margin:0 auto;border-radius:44px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  .phone{max-width:412px;min-height:0;height:min(880px,94vh);margin:0 auto;border-radius:44px;box-shadow:var(--frame-shadow);border:1px solid var(--line)}
 }
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;height:100%;padding:18px 22px 20px;background:var(--bg)}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);
+  padding-top:env(safe-area-inset-top, 0px)}
 .screen[hidden]{display:none!important}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 22px 28px;-webkit-overflow-scrolling:touch}
+.screen.has-tabs .scroll{padding-bottom:calc(120px + env(safe-area-inset-bottom, 0px))}
 
-h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.02em;font-weight:400}
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+/* Type */
+.display-xl{margin:0;font-family:var(--font-display);font-size:29px;font-weight:800;letter-spacing:-0.03em;line-height:1.12}
+.display-l{margin:0;font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:-0.01em}
+.h2{margin:0;font-family:var(--font-display);font-size:20px;font-weight:700}
+.greet{margin:0 0 2px;font-size:14px;font-weight:500;color:var(--muted)}
+.muted{color:var(--muted)}
+.section-label{font-size:13px;font-weight:600;color:var(--muted);margin:20px 0 8px}
 .tabular{font-variant-numeric:tabular-nums}
 
-/* Home */
-.home-topbar{height:36px;flex:0 0 auto;display:flex;justify-content:flex-end}
-.home-stage{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-bottom:12%;gap:36px}
-.logo-mark{width:62px;height:62px;display:flex;align-items:center;justify-content:center;border-radius:18px;
-  background:linear-gradient(155deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--series)));
-  box-shadow:0 14px 28px -10px color-mix(in srgb, var(--accent) 55%, transparent)}
-.logo-mark svg{width:32px;height:32px;color:var(--accent-ink)}
-.logo-text{display:flex;flex-direction:column;gap:2px}
-.logo-text h1{font-size:38px;line-height:1.02;color:var(--ink)}
-.logo-text h1 span{display:block;color:var(--accent)}
-.logo-tagline{font-size:13.5px;color:var(--muted);max-width:240px;margin-top:8px}
-.home-actions{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
-
 /* Buttons */
-.btn{appearance:none;border:none;cursor:pointer;font-family:"Work Sans",sans-serif;font-size:15px;font-weight:600;
-  padding:15px 20px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;transition:transform .15s ease}
+.btn{appearance:none;border:none;font-size:15px;font-weight:700;height:56px;padding:0 22px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;transition:transform .15s ease}
 .btn:active{transform:scale(.97)}
 .btn svg{width:18px;height:18px;flex:0 0 auto}
-.btn-primary{background:var(--accent);color:var(--accent-ink)}
-.btn-secondary{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
-.btn-ghost{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--ink)}
+.btn-primary{background:var(--btn);color:var(--on-btn)}
+.btn-secondary{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.btn-ghost{background:var(--chip);color:var(--ink)}
+.btn-danger{background:var(--drop-ink);color:#fff}
+.btn-small{width:auto;height:40px;padding:0 16px;font-size:13.5px}
 .btn[disabled]{opacity:.4;cursor:not-allowed}
+.roundbtn{width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);flex:0 0 auto}
+.roundbtn svg{width:20px;height:20px}
+.roundbtn.ink{background:var(--btn);color:var(--on-btn);box-shadow:none}
+.roundbtn:active{transform:scale(.94)}
+.linkbtn{background:none;border:none;font-size:14px;font-weight:600;color:var(--ink);padding:6px 0}
 
-/* Topbar for sub-screens */
-.topbar{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;padding-bottom:18px;gap:8px}
-.iconbtn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:color-mix(in srgb, var(--ink) 6%, transparent);border:none;cursor:pointer;color:var(--ink);flex:0 0 auto}
-.iconbtn svg{width:18px;height:18px}
-.iconbtn:active{transform:scale(.92)}
-.topbar h2{font-size:21px;flex:1;text-align:center;padding:0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.topbar .spacer{width:36px;flex:0 0 auto}
+/* Top bars */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topbar .crumb{flex:1;text-align:center;font-size:13px;font-weight:700;color:var(--deep, var(--muted));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .spacer{width:44px;flex:0 0 auto}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
 
-/* New collection */
-.section-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin:18px 0 10px;text-transform:uppercase}
-.select-wrap{position:relative}
-.select-trigger{width:100%;display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--line);
-  border-radius:16px;padding:14px 16px;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;font-family:inherit}
-.select-trigger-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--muted);flex:0 0 auto}
-.select-trigger-icon svg{width:20px;height:20px}
-.select-trigger.has-value{border-color:var(--tc)}
-.select-trigger.has-value .select-trigger-icon{color:var(--tc)}
-.select-trigger-label{flex:1;text-align:left;color:var(--muted)}
-.select-trigger.has-value .select-trigger-label{color:var(--ink)}
-.select-chevron{width:16px;height:16px;color:var(--muted);flex:0 0 auto;transition:transform .15s ease}
-.select-trigger.is-open .select-chevron{transform:rotate(180deg)}
-.select-menu{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--surface);border:1px solid var(--line);
-  border-radius:16px;box-shadow:0 14px 34px -14px rgba(0,0,0,.35);z-index:15;overflow:hidden}
-.select-menu[hidden]{display:none}
-.select-option{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
-.select-option svg{width:20px;height:20px;color:var(--tc)}
-.select-option:hover,.select-option:active{background:color-mix(in srgb, var(--tc) 12%, transparent)}
-.select-option.is-selected{background:color-mix(in srgb, var(--tc) 16%, transparent)}
+/* Tab bar */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--tab-border);
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:8px 12px calc(14px + env(safe-area-inset-bottom, 0px))}
+.tab{background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font-size:11.5px;font-weight:600;min-height:52px;border-radius:14px}
+.tab svg{width:22px;height:22px}
+.tab.is-active{color:var(--ink);font-weight:700}
 
-/* Appearance mode switch (Settings) */
-.mode-group{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
-.mode-opt{flex:1;padding:11px 0;border:none;background:transparent;border-radius:11px;font-size:13.5px;font-weight:600;
-  color:var(--muted);cursor:pointer;font-family:inherit}
-.mode-opt.is-active{background:var(--accent);color:var(--accent-ink)}
-
-/* Confirmation modal */
-.modal-overlay{position:absolute;inset:0;background:rgba(10,12,14,.5);display:flex;align-items:center;justify-content:center;
-  z-index:30;padding:22px}
-.modal-overlay[hidden]{display:none}
-.modal-card{background:var(--surface);border-radius:20px;padding:22px;width:100%;max-width:300px;border:1px solid var(--line)}
-.modal-title{font-size:19px;margin-bottom:8px;text-align:left}
-.modal-body{font-size:13.5px;color:var(--muted);margin:0 0 18px;text-align:left;line-height:1.4}
-.modal-actions{display:flex;gap:10px}
-.modal-actions .btn{flex:1}
-.btn-danger{background:var(--danger);color:#fff}
-.field{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;font-size:15px;color:var(--ink);width:100%;font-family:"Work Sans",sans-serif}
-.notes-field{resize:vertical;min-height:84px;margin-top:4px;margin-bottom:18px;line-height:1.4}
-.field::placeholder{color:var(--muted)}
-.field:focus{outline:2px solid var(--accent);outline-offset:1px}
-.grow{flex:1;overflow-y:auto;margin:0 -22px;padding:0 22px}
-.screen-footer{flex:0 0 auto;padding-top:16px}
-
-/* My collections list */
-.coll-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:var(--surface);
-  border:1px solid var(--line);margin-bottom:10px;width:100%;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)}
-.coll-chip{width:40px;height:40px;border-radius:12px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-  background:color-mix(in srgb, var(--tc) 16%, var(--surface));color:var(--tc)}
-.coll-chip svg{width:19px;height:19px}
-.coll-meta{flex:1;min-width:0}
-.coll-meta .name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.coll-count{display:flex;flex-direction:column;align-items:flex-end;gap:1px;font-size:11.5px;line-height:1.3;
-  color:var(--muted);flex:0 0 auto;white-space:nowrap;margin-right:4px}
-.coll-count .count-done{color:var(--ink);font-weight:600}
-.coll-trash{flex:0 0 auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
-.coll-trash svg{width:17px;height:17px}
-.coll-trash:active{color:var(--danger)}
-.chev{color:var(--muted);flex:0 0 auto}
-.chev svg{width:16px;height:16px}
-
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;color:var(--muted);padding-bottom:10%}
-.empty-state .ring{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--ink) 6%, transparent)}
-.empty-state .ring svg{width:26px;height:26px;color:var(--muted)}
-.empty-state p{max-width:220px;font-size:13.5px;margin:0}
-
-/* Collection detail (list of items) */
-.detail-head{flex:0 0 auto;margin-bottom:14px}
-.detail-badge{display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb, var(--tc) 16%, var(--surface));color:var(--tc);
-  border-radius:999px;padding:5px 11px 5px 8px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
-.detail-badge svg{width:13px;height:13px}
-.detail-head h2{font-size:26px;text-align:left;margin-bottom:10px}
-.progress-row{display:flex;align-items:center;gap:10px}
-.progress-track{flex:1;height:6px;border-radius:4px;background:color-mix(in srgb, var(--ink) 10%, transparent);overflow:hidden}
-.progress-fill{height:100%;border-radius:4px;background:var(--tc);transition:width .25s ease}
-.progress-count{font-size:12px;color:var(--muted);flex:0 0 auto}
-
-.add-row{display:flex;gap:8px;flex:0 0 auto;margin-bottom:14px;position:relative}
-.add-field-wrap{flex:1;position:relative;min-width:0}
-.add-field-wrap .field{width:100%}
-.add-btn{width:48px;height:48px;border-radius:14px;flex:0 0 auto;background:var(--tc);color:var(--surface);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.add-btn svg{width:20px;height:20px}
-.add-btn:active{transform:scale(.95)}
-
-.suggest-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);
-  border:1px solid var(--line);border-radius:14px;max-height:240px;overflow-y:auto;z-index:15;
-  box-shadow:0 14px 34px -14px rgba(0,0,0,.35)}
-.suggest-dropdown[hidden]{display:none}
-.suggest-item{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer}
-.suggest-item:hover,.suggest-item:active{background:color-mix(in srgb, var(--tc) 12%, transparent)}
-.suggest-thumb{width:28px;height:40px;border-radius:6px;overflow:hidden;background:color-mix(in srgb, var(--tc) 14%, var(--surface));
-  flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:var(--tc)}
-.suggest-thumb svg{width:14px;height:14px}
-.suggest-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.suggest-text{flex:1;min-width:0}
-.suggest-title{display:block;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.suggest-year{display:block;font-size:11.5px;color:var(--muted)}
-.suggest-empty{padding:12px 14px;font-size:12.5px;color:var(--muted)}
-
-.item-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:6px}
-.item-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:9px 10px}
-.item-check{width:24px;height:24px;border-radius:50%;flex:0 0 auto;border:1.5px solid var(--line);background:transparent;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;color:transparent}
-.item-check svg{width:14px;height:14px}
-.item-row.is-done .item-check{background:var(--tc);border-color:var(--tc);color:var(--surface)}
-.item-thumb{width:34px;height:48px;border-radius:7px;flex:0 0 auto;background:color-mix(in srgb, var(--tc) 14%, var(--surface));
-  display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--tc);position:relative}
-.item-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.item-thumb svg{width:16px;height:16px}
-.item-main{flex:1;min-width:0;text-align:left;background:none;border:none;font-family:inherit;color:var(--ink);cursor:pointer;padding:2px 0}
-.item-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-row.is-done .item-title{color:var(--muted);text-decoration:line-through}
-.item-sub{font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-del{flex:0 0 auto;background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
-.item-del svg{width:16px;height:16px}
-.item-del:active{color:var(--danger)}
-.spin{width:12px;height:12px;border-radius:50%;border:2px solid color-mix(in srgb, var(--tc) 40%, transparent);border-top-color:var(--tc);animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Item detail tile */
-.item-detail-scroll{flex:1;overflow-y:auto;margin:0 -22px;padding:0 22px}
-.item-poster{width:100%;aspect-ratio:2/3;border-radius:20px;background:color-mix(in srgb, var(--tc) 14%, var(--surface));
-  display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--tc);margin-bottom:18px;border:1px solid var(--line)}
-.item-poster img{width:100%;height:100%;object-fit:cover;display:block}
-.item-poster svg{width:48px;height:48px}
-.item-detail-title{font-size:28px;text-align:left;margin-bottom:8px;text-wrap:balance}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
-.stat-card.wide{grid-column:1 / -1}
-.stat-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-.stat-label svg{width:13px;height:13px}
-.stat-value{font-size:16px;font-weight:600;color:var(--ink)}
-.notice{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:16px;font-size:13.5px;color:var(--muted);text-align:left;margin-top:16px}
-.notice a{color:var(--accent);font-weight:600;text-decoration:none}
-.item-detail-actions{display:flex;gap:10px;flex:0 0 auto;padding-top:14px}
-.item-detail-actions .btn{flex:1}
-
-/* Posters: the whole image always fits its tile; a blurred copy fills any empty space */
+/* Covers: whole image fits, a blurred copy fills the rest */
 .pf{position:relative;width:100%;height:100%;display:block;overflow:hidden}
 .pf .pf-bg{position:absolute;inset:-12%;width:124%;height:124%;max-width:none;object-fit:cover;filter:blur(14px) saturate(1.15);opacity:.55;transform:scale(1.05)}
 .pf .pf-img{position:relative;width:100%;height:100%;object-fit:contain;display:block}
-.item-thumb .pf-bg,.suggest-thumb .pf-bg{filter:blur(5px) saturate(1.15)}
+.cover{position:relative;overflow:hidden;background:var(--t2, var(--chip));color:var(--deep, var(--muted));display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.cover > svg{width:40%;max-width:28px;height:auto}
+.cover.v1{background:var(--t1)} .cover.v2{background:var(--t2)} .cover.v3{background:var(--t3)}
+.thumb-s .pf-bg{filter:blur(5px) saturate(1.15)}
 
-/* Floating add button on a collection */
-.fab{position:absolute;right:22px;bottom:calc(22px + env(safe-area-inset-bottom, 0px));width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
-  background:var(--tc);color:var(--surface);display:flex;align-items:center;justify-content:center;z-index:12;
-  box-shadow:0 12px 24px -10px color-mix(in srgb, var(--tc) 70%, transparent)}
+/* Status pieces */
+.dot{width:8px;height:8px;border-radius:50%;border:1.5px solid currentColor;flex:0 0 auto;display:inline-block}
+.dot.st-progress{background:linear-gradient(90deg, currentColor 50%, transparent 50%)}
+.dot.st-dropped,.dot.st-completed{background:currentColor}
+.st-pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;font-size:12px;font-weight:700;border:1.5px solid transparent;white-space:nowrap}
+.st-pill svg{width:12px;height:12px}
+.st-pill.st-completed{background:var(--t1);color:var(--deep);border-color:var(--t1)}
+.st-pill.st-progress{background:var(--chip);color:var(--ink);border-color:var(--chip)}
+.st-pill.st-dropped{background:var(--drop-bg);color:var(--drop-ink);border-color:var(--drop-bg)}
+.st-pill.st-planned{background:var(--surface);color:var(--muted);border-color:var(--line)}
+button.st-pill{height:34px;padding:0 8px 0 10px}
+button.st-pill .chev{width:12px;height:12px;opacity:.8}
+
+/* Segmented controls */
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--surface);border-radius:999px;padding:5px;box-shadow:var(--shadow)}
+.seg.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.seg-opt{height:40px;border:none;border-radius:999px;background:transparent;color:var(--muted);font-size:13px;font-weight:600;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg-opt.is-active{background:var(--btn);color:var(--on-btn);font-weight:700}
+
+/* Fields */
+.field{background:var(--surface);border:1.5px solid transparent;border-radius:16px;padding:14px 16px;font-size:15px;color:var(--ink);width:100%;box-shadow:var(--shadow)}
+.field::placeholder{color:var(--muted)}
+.field:focus{outline:none;border-color:var(--ink)}
+textarea.field{resize:vertical;min-height:96px;line-height:1.45}
+
+/* Select (theme picker, folder picker) */
+.select-wrap{position:relative}
+.select-trigger{width:100%;height:52px;display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid transparent;border-radius:18px;
+  padding:0 16px;font-size:15px;font-weight:700;color:var(--ink);box-shadow:var(--shadow)}
+.select-trigger-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--deep, var(--muted));flex:0 0 auto}
+.select-trigger-icon svg{width:20px;height:20px}
+.select-trigger-label{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.select-trigger.placeholder .select-trigger-label{color:var(--muted);font-weight:600}
+.select-chevron{width:16px;height:16px;color:var(--muted);flex:0 0 auto;transition:transform .15s ease}
+.select-trigger.is-open .select-chevron{transform:rotate(180deg)}
+.select-count{font-size:12.5px;font-weight:700;background:var(--chip);color:var(--ink);border-radius:999px;padding:4px 10px;font-variant-numeric:tabular-nums}
+.select-menu{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.45);z-index:15;overflow:hidden;padding:6px}
+.select-option{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer}
+.select-option svg{width:20px;height:20px;color:var(--deep, var(--muted));flex:0 0 auto}
+.select-option span:nth-child(2){flex:1}
+.select-option:hover,.select-option.is-selected{background:var(--chip)}
+.select-option .select-count{background:transparent;padding:0}
+
+/* Home (start screen) */
+#screen-home .scroll{display:flex;flex-direction:column}
+.home-stage{flex:1;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:24px;padding:4px 0 8px}
+.home-title{margin:0;font-family:var(--font-display);font-size:35px;font-weight:800;letter-spacing:-0.035em;line-height:1.05}
+.home-title span{display:block;color:var(--accent)}
+.home-tagline{margin:12px auto 0;max-width:270px;font-size:15px;line-height:1.45;color:var(--muted)}
+.home-actions{display:flex;gap:10px;width:100%}
+.home-actions .btn{flex:1;padding:0 14px}
+.start-label{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.cat-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.cat-chip{height:44px;border:none;border-radius:999px;background:var(--t1);color:var(--deep);display:inline-flex;align-items:center;gap:7px;padding:0 15px 0 12px;font-size:14px;font-weight:700}
+.cat-chip svg{width:18px;height:18px}
+.cat-chip:active{transform:scale(.96)}
+.soft-card{background:var(--surface);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.cont-box{width:100%;text-align:left;padding:14px}
+.cont-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.cont-head strong{font-size:15px;font-weight:800}
+.cont-head span{font-size:12.5px;font-weight:600;color:var(--muted)}
+.cont-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cc{background:none;border:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:5px;min-width:0;color:var(--ink)}
+.cc .cover{width:100%;height:92px;border-radius:12px}
+.cc-title{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-sub{font-size:11.5px;font-weight:600;color:var(--deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* The cover fan */
+.fan{position:relative;width:300px;height:186px;flex:0 0 auto}
+.fan-card{position:absolute;left:calc(50% - 46px);top:10px;width:92px;height:138px;border-radius:16px;border:2px solid var(--surface);
+  box-shadow:0 18px 30px -16px rgba(0,0,0,.5);overflow:hidden;transform:var(--tf);padding:0}
+.fan-card > svg{width:28px;height:28px}
+.fan-card:nth-child(1){--tf:translate(-104px,22px) rotate(-18deg);z-index:1}
+.fan-card:nth-child(2){--tf:translate(-52px,8px) rotate(-9deg);z-index:2}
+.fan-card:nth-child(3){--tf:none;z-index:3}
+.fan-card:nth-child(4){--tf:translate(52px,8px) rotate(9deg);z-index:2}
+.fan-card:nth-child(5){--tf:translate(104px,22px) rotate(18deg);z-index:1}
+.fan.animate .fan-card{animation:fanOut .7s cubic-bezier(.2,.8,.2,1) both}
+.fan.animate .fan-card:nth-child(2),.fan.animate .fan-card:nth-child(4){animation-delay:.05s}
+.fan.animate .fan-card:nth-child(1),.fan.animate .fan-card:nth-child(5){animation-delay:.1s}
+@keyframes fanOut{from{transform:translateY(12px) scale(.94);opacity:0}to{transform:var(--tf);opacity:1}}
+
+/* Intro (first launch only) */
+#screen-intro{padding-bottom:env(safe-area-inset-bottom, 0px)}
+.intro-top{display:flex;justify-content:flex-end;padding:14px 18px 0}
+.intro-slides{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.intro-slides::-webkit-scrollbar{display:none}
+.intro-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:0 26px;text-align:center}
+.intro-art{width:100%;height:280px;border-radius:32px;background:var(--surface);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
+.intro-slide h1{margin:0;font-family:var(--font-display);font-size:29px;font-weight:800;letter-spacing:-0.03em;line-height:1.12;text-wrap:balance}
+.intro-slide p{margin:12px 0 0;font-size:15.5px;line-height:1.5;color:var(--muted)}
+.intro-pills{display:flex;flex-direction:column;gap:10px;align-items:center}
+.intro-pills .st-pill{height:40px;padding:0 16px;font-size:14px}
+.intro-pills .st-pill svg{width:14px;height:14px}
+.intro-pills .dot{width:10px;height:10px}
+.intro-dots{display:flex;justify-content:center;gap:6px;padding:6px 0 18px}
+.intro-dots span{width:8px;height:8px;border-radius:4px;background:var(--line);transition:width .2s ease, background .2s ease}
+.intro-dots span.is-on{width:22px;background:var(--ink)}
+.intro-foot{padding:0 26px calc(24px + env(safe-area-inset-bottom, 0px))}
+
+/* Collections */
+.coll-list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.coll-card{width:100%;border:none;text-align:left;background:var(--surface);border-radius:24px;padding:13px 14px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);color:var(--ink)}
+.stack-covers{display:flex;flex:0 0 auto;width:76px;height:68px}
+.stack-covers .cover{width:40px;height:58px;border-radius:10px;border:2px solid var(--surface)}
+.stack-covers .cover:nth-child(2){margin-left:-22px;margin-top:4px}
+.stack-covers .cover:nth-child(3){margin-left:-22px;margin-top:8px}
+.coll-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.coll-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coll-kind{font-size:12.5px;font-weight:600;color:var(--deep)}
+.bar{height:6px;border-radius:4px;background:var(--track);overflow:hidden;display:block}
+.bar > span{display:block;height:100%;border-radius:4px;background:var(--bar);transition:width .25s ease}
+.coll-progress{font-size:12.5px;color:var(--muted)}
+.coll-card > svg{width:16px;height:16px;color:var(--muted);flex:0 0 auto}
+
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:48px 20px;color:var(--muted)}
+.empty .ring-icon{width:60px;height:60px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.empty .ring-icon svg{width:26px;height:26px}
+.empty p{margin:0;max-width:240px;font-size:14px;line-height:1.45}
+
+/* Collection detail */
+.coll-title{margin-top:14px}
+.progress-row{margin-top:10px;display:flex;align-items:center;gap:12px}
+.progress-row .bar{flex:1;height:8px}
+.progress-row .count{font-size:13px;font-weight:700;color:var(--deep);white-space:nowrap}
+.tool-row{margin-top:14px;display:flex;gap:8px;align-items:center}
+.search-wrap{flex:1;min-width:0;position:relative}
+.search-field{height:48px;border-radius:16px;background:var(--surface);display:flex;align-items:center;gap:10px;padding:0 6px 0 14px;box-shadow:var(--shadow);border:1.5px solid transparent}
+.search-field:focus-within{border-color:var(--ink)}
+.search-field > svg{width:18px;height:18px;color:var(--muted);flex:0 0 auto}
+.search-field input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:15px;color:var(--ink)}
+.search-field input::placeholder{color:var(--muted)}
+.search-go{width:36px;height:36px;border-radius:12px;border:none;background:var(--btn);color:var(--on-btn);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.search-go svg{width:16px;height:16px}
+.tool-row.manual{justify-content:flex-end}
+.view-toggle{display:flex;gap:2px;background:var(--surface);border-radius:14px;padding:4px;box-shadow:var(--shadow);flex:0 0 auto}
+.view-btn{width:40px;height:40px;border-radius:11px;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.view-btn svg{width:18px;height:18px}
+.view-btn.is-active{background:var(--btn);color:var(--on-btn)}
+.chips{margin:12px -22px 0;padding:0 22px 2px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{height:36px;border:1.5px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);padding:0 14px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
+.chip.is-active{background:var(--btn);color:var(--on-btn);border-color:var(--btn);font-weight:700}
+
+.suggest-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  max-height:260px;overflow-y:auto;z-index:15;box-shadow:0 18px 40px -18px rgba(0,0,0,.45);padding:4px}
+.suggest-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;cursor:pointer}
+.suggest-item:hover,.suggest-item:active{background:var(--chip)}
+.suggest-item .cover{width:30px;height:44px;border-radius:7px}
+.suggest-text{flex:1;min-width:0}
+.suggest-title{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.suggest-year{display:block;font-size:12px;color:var(--muted)}
+
+.item-list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.item-row{background:var(--surface);border-radius:20px;padding:8px 10px 8px 8px;display:flex;align-items:center;gap:10px}
+.item-open{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:none;padding:0;text-align:left;color:var(--ink)}
+.item-open .cover{width:44px;height:62px;border-radius:11px}
+.item-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.item-title{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-sub{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-row.is-dropped .item-title{color:var(--muted)}
+.item-grid{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}
+.tile{background:none;border:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0;color:var(--ink)}
+.tile .cover{width:100%;aspect-ratio:2/3;border-radius:16px}
+.tile .st-pill{position:absolute;left:6px;bottom:6px;padding:3px 7px;font-size:10.5px;z-index:2}
+.tile .st-pill svg{width:10px;height:10px}
+.tile-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile.is-dropped .tile-title{color:var(--muted)}
+.list-note{padding:24px 8px;text-align:center;color:var(--muted);font-size:14px}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid color-mix(in srgb, currentColor 35%, transparent);border-top-color:currentColor;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.fab{position:absolute;right:22px;bottom:calc(104px + env(safe-area-inset-bottom, 0px));width:60px;height:60px;border-radius:50%;border:none;
+  background:var(--btn);color:var(--on-btn);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-strong);z-index:12}
 .fab svg{width:24px;height:24px}
 .fab:active{transform:scale(.94)}
-.fab:focus-visible,.btn:focus-visible,.iconbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-#screen-detail .item-list{padding-bottom:84px}
 
-/* Add / edit item form */
-.edit-poster{width:150px;margin:4px auto 10px;cursor:pointer;padding:0;font:inherit;position:relative}
-.edit-poster .edit-poster-hint{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--tc);padding:0 14px;text-align:center}
-.edit-poster .edit-poster-hint svg{width:30px;height:30px}
-.poster-tools{display:flex;justify-content:center;gap:8px;margin-bottom:6px}
-.btn-small{width:auto;padding:9px 16px;font-size:13px}
+/* Item detail */
+.item-band{position:absolute;left:0;right:0;top:0;height:250px;background:var(--t1);border-radius:0 0 36px 36px;pointer-events:none}
+#screen-item .scroll{position:relative;padding-bottom:110px}
+.item-hero{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
+.item-cover{margin-top:14px;width:176px;height:264px;border-radius:22px;box-shadow:0 24px 40px -18px rgba(0,0,0,.5)}
+.item-cover > svg{max-width:40px}
+.item-name{margin:20px 0 0;font-family:var(--font-display);font-size:27px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;text-wrap:balance}
+.item-subline{margin-top:4px;font-size:14px;color:var(--muted)}
+#item-status{margin-top:18px;width:100%}
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.stat-card{background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat-card.wide{grid-column:1 / -1}
+.stat-label{font-size:12px;font-weight:600;color:var(--muted)}
+.stat-value{font-size:16px;font-weight:700;overflow-wrap:anywhere}
+.notice{background:var(--surface);border-radius:18px;padding:16px;font-size:14px;line-height:1.45;color:var(--muted);margin-top:14px;text-align:left}
+.notice a{color:var(--ink);font-weight:700}
+.bottom-actions{position:absolute;left:22px;right:22px;bottom:calc(22px + env(safe-area-inset-bottom, 0px));display:flex;gap:10px;z-index:5}
+.bottom-actions .btn{flex:1}
+.footer-bar{flex:0 0 auto;padding:12px 22px calc(22px + env(safe-area-inset-bottom, 0px))}
+
+/* Edit form */
+.edit-poster{display:block;width:150px;height:225px;margin:6px auto 12px;border-radius:20px;border:none;padding:0;cursor:pointer;background:var(--t1)}
+.edit-poster-hint{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--deep);padding:0 14px}
+.edit-poster-hint svg{width:30px;height:30px}
+.poster-tools{display:flex;justify-content:center;gap:8px}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.field-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px}
 .field-grid .wide{grid-column:1 / -1}
-.field-grid .section-label{margin-top:14px;margin-bottom:8px}
-.form-error{font-size:12.5px;color:var(--danger);margin:8px 0 0}
+.form-error{font-size:13px;color:var(--drop-ink);margin:10px 0 0;text-align:center}
 
-/* Settings */
+/* Sheet + modal + toast */
+.overlay{position:absolute;inset:0;background:var(--scrim);z-index:40;display:flex;align-items:flex-end}
+.overlay.center{align-items:center;justify-content:center;padding:22px}
+.sheet{width:100%;background:var(--surface);border-radius:28px 28px 0 0;padding:10px 22px calc(26px + env(safe-area-inset-bottom, 0px));animation:sheetIn .22s ease-out}
+@keyframes sheetIn{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.sheet-handle{display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 16px}
+.sheet-head{display:flex;align-items:center;gap:12px}
+.sheet-head .cover{width:44px;height:62px;border-radius:11px}
+.sheet-title{font-family:var(--font-display);font-size:20px;font-weight:700;line-height:1.2}
+.sheet-sub{font-size:13px;color:var(--muted)}
+.sheet-opts{margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.sheet-opt{height:54px;border:none;border-radius:16px;background:transparent;color:var(--ink);display:flex;align-items:center;gap:12px;padding:0 16px;font-size:15.5px;font-weight:600;text-align:left}
+.sheet-opt .dot{width:12px;height:12px;border-width:2px}
+.sheet-opt .dot.st-completed{color:var(--bar)}
+.sheet-opt .dot.st-dropped{color:var(--drop-ink)}
+.sheet-opt .dot.st-planned{color:var(--muted)}
+.sheet-opt span:nth-child(2){flex:1}
+.sheet-opt svg{width:18px;height:18px}
+.sheet-opt.is-active{background:var(--chip)}
+.sheet .btn{margin-top:12px;height:52px}
+.modal-card{background:var(--surface);border-radius:24px;padding:22px;width:100%;max-width:320px}
+.modal-title{margin:0 0 8px;font-family:var(--font-display);font-size:20px;font-weight:700}
+.modal-body{font-size:14px;color:var(--muted);margin:0 0 18px;line-height:1.45}
+.modal-actions{display:flex;gap:10px}
+.modal-actions .btn{flex:1;height:48px}
+.toast{position:absolute;left:22px;right:22px;bottom:calc(22px + env(safe-area-inset-bottom, 0px));background:var(--btn);color:var(--on-btn);border-radius:16px;padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;box-shadow:var(--shadow-strong);z-index:50}
+.phone.tabs-on .toast{bottom:calc(100px + env(safe-area-inset-bottom, 0px))}
+.toast button{background:none;border:none;color:inherit;font-weight:800;font-size:14px;text-decoration:underline;flex:0 0 auto}
 
-/* Toast */
-.toast{position:absolute;left:22px;right:22px;bottom:22px;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);z-index:20}
-.toast[hidden]{display:none}
-.toast button{background:none;border:none;color:var(--accent);font-weight:700;font-size:13.5px;cursor:pointer;flex:0 0 auto}
-
-@media (prefers-reduced-motion:reduce){.btn,.add-btn,.toast,.spin{animation:none;transition:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="phone">
+  <div class="phone" id="phone">
+
+    <!-- INTRO (first launch) -->
+    <section class="screen" id="screen-intro" hidden>
+      <div class="intro-top"><button class="linkbtn" id="intro-skip" type="button" style="color:var(--muted);padding:10px 4px">Skip</button></div>
+      <div class="intro-slides" id="intro-slides">
+        <div class="intro-slide">
+          <div class="intro-art"><div class="fan" id="intro-fan"></div></div>
+          <div><h1>Everything you watch, play, hear and read</h1><p>Keep one list for all of it, with real covers and details filled in for you.</p></div>
+        </div>
+        <div class="intro-slide cat-movie">
+          <div class="intro-art"><div class="intro-pills">
+            <span class="st-pill st-planned"><span class="dot st-planned"></span>Planned</span>
+            <span class="st-pill st-progress"><span class="dot st-progress"></span>In progress</span>
+            <span class="st-pill st-completed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>Watched</span>
+          </div></div>
+          <div><h1>Track what you've finished</h1><p>Mark each title as planned, in progress or done, and add your own covers and notes.</p></div>
+        </div>
+      </div>
+      <div class="intro-dots" id="intro-dots" aria-hidden="true"><span class="is-on"></span><span></span></div>
+      <div class="intro-foot"><button class="btn btn-primary" id="intro-next" type="button">Continue</button></div>
+    </section>
 
     <!-- HOME -->
-    <section class="screen" id="screen-home">
-      <div class="home-topbar">
-        <button class="iconbtn" id="btn-settings" aria-label="Settings">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V20a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.56-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h0a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v0a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.56 1Z"/></svg>
-        </button>
-      </div>
-      <div class="home-stage">
-        <div class="logo-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/><path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/><path d="M8 4.3 11.5 7.6M14 3.5l3.4 3.3"/>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <h1>YOUR ULTIMATE<span>COLLECTION</span></h1>
-          <p class="logo-tagline">One pocket list for every movie, series, game, album and book you're keeping track of.</p>
-        </div>
-        <div class="home-actions">
-          <button class="btn btn-primary" id="btn-new">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            New Collection
-          </button>
-          <button class="btn btn-secondary" id="btn-mine">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
-            My Collections
-          </button>
+    <section class="screen has-tabs" id="screen-home" hidden>
+      <div class="scroll">
+        <div class="home-stage">
+          <div class="fan" id="home-fan" aria-hidden="true"></div>
+          <div>
+            <h1 class="home-title">Your ultimate <span>collection</span></h1>
+            <p class="home-tagline" id="home-tagline">One pocket list for every movie, series, game, album and book you're keeping track of.</p>
+          </div>
+          <div id="home-new" style="width:100%">
+            <p class="start-label">Start a new list</p>
+            <div class="cat-chips" id="home-chips"></div>
+          </div>
+          <div id="home-back" style="width:100%;display:flex;flex-direction:column;gap:18px">
+            <div class="home-actions">
+              <button class="btn btn-primary" id="btn-new" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New</button>
+              <button class="btn btn-secondary" id="btn-mine" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/></svg>My collections</button>
+            </div>
+            <div class="soft-card cont-box" id="home-cont">
+              <div class="cont-head"><strong id="home-cont-title">Continue</strong><span id="home-cont-stat"></span></div>
+              <div class="cont-row" id="home-cont-row"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- NEW COLLECTION -->
     <section class="screen" id="screen-new" hidden>
-      <div class="topbar">
-        <button class="iconbtn" id="new-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h2>New Collection</h2>
-        <span class="spacer"></span>
-      </div>
-      <div class="grow">
-        <p class="section-label">Choose a theme</p>
+      <div class="scroll">
+        <div class="topbar">
+          <button class="roundbtn" id="new-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="spacer"></span>
+        </div>
+        <h1 class="display-xl" style="margin-top:16px">New collection</h1>
+        <p class="section-label">Category</p>
         <div class="select-wrap" id="theme-select-wrap">
-          <button type="button" class="select-trigger" id="theme-select-trigger">
+          <button type="button" class="select-trigger placeholder" id="theme-select-trigger" aria-haspopup="listbox">
             <span class="select-trigger-icon" id="theme-select-icon"></span>
-            <span class="select-trigger-label" id="theme-select-label">Select a theme</span>
+            <span class="select-trigger-label" id="theme-select-label">Choose a category</span>
             <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="select-menu" id="theme-select-menu" hidden></div>
+          <div class="select-menu" id="theme-select-menu" role="listbox" hidden></div>
         </div>
         <p class="section-label">Name it</p>
-        <input class="field" id="new-name" type="text" placeholder="e.g. Sunday Marathon" maxlength="48" autocomplete="off">
+        <input class="field" id="new-name" type="text" placeholder="Collection name" maxlength="48" autocomplete="off">
       </div>
-      <div class="screen-footer"><button class="btn btn-primary" id="new-create" disabled>Create Collection</button></div>
+      <div class="footer-bar"><button class="btn btn-primary" id="new-create" disabled>Create collection</button></div>
     </section>
 
-    <!-- COLLECTION DETAIL (item list) -->
-    <section class="screen" id="screen-detail" hidden>
-      <div class="topbar">
-        <button class="iconbtn" id="detail-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h2 id="detail-title">Collection</h2>
-        <button class="iconbtn" id="detail-trash" aria-label="Delete collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>
+    <!-- COLLECTIONS -->
+    <section class="screen has-tabs" id="screen-mine" hidden>
+      <div class="scroll">
+        <div class="headrow">
+          <h1 class="display-xl">Collections</h1>
+          <button class="roundbtn ink" id="mine-add" aria-label="New collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+        <div class="select-wrap" id="folder-select-wrap" style="margin-top:16px">
+          <button type="button" class="select-trigger" id="folder-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="select-trigger-icon" id="folder-icon"></span>
+            <span class="select-trigger-label" id="folder-label">All collections</span>
+            <span class="select-count" id="folder-count"></span>
+            <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="select-menu" id="folder-menu" role="listbox" hidden></div>
+        </div>
+        <div class="coll-list" id="mine-list"></div>
+        <div class="empty" id="mine-empty" hidden>
+          <span class="ring-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/></svg></span>
+          <p id="mine-empty-text">No collections yet.</p>
+          <button class="btn btn-primary btn-small" id="mine-empty-cta" type="button">New collection</button>
+        </div>
       </div>
-      <div class="detail-head">
-        <span class="detail-badge" id="detail-badge"></span>
+    </section>
+
+    <!-- COLLECTION -->
+    <section class="screen has-tabs" id="screen-detail" hidden>
+      <div class="scroll" id="detail-scroll">
+        <div class="topbar">
+          <button class="roundbtn" id="detail-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="crumb" id="detail-kind"></span>
+          <button class="roundbtn" id="detail-trash" aria-label="Delete collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>
+        </div>
+        <h1 class="display-xl coll-title" id="detail-title">Collection</h1>
         <div class="progress-row">
-          <div class="progress-track"><div class="progress-fill" id="detail-progress-fill" style="width:0%"></div></div>
-          <span class="progress-count tabular" id="detail-progress-count">0 / 0</span>
+          <span class="bar"><span id="detail-progress-fill" style="width:0%"></span></span>
+          <span class="count tabular" id="detail-progress-count"></span>
         </div>
-      </div>
-      <div class="add-row" id="detail-add-row">
-        <div class="add-field-wrap">
-          <input class="field" id="detail-input" type="text" placeholder="Add a title…" maxlength="80" autocomplete="off">
-          <div class="suggest-dropdown" id="suggest-dropdown" hidden></div>
+        <div class="tool-row" id="detail-tools">
+          <div class="search-wrap" id="detail-add-row">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg>
+              <input id="detail-input" type="text" placeholder="Search a title to add" maxlength="80" autocomplete="off" enterkeyhint="go">
+              <button class="search-go" id="detail-add" type="button" aria-label="Add and look up info" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </label>
+            <div class="suggest-dropdown" id="suggest-dropdown" hidden></div>
+          </div>
+          <div class="view-toggle" role="group" aria-label="View">
+            <button class="view-btn" id="view-list" type="button" aria-label="List view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg></button>
+            <button class="view-btn" id="view-grid" type="button" aria-label="Cover grid view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
+          </div>
         </div>
-        <button class="add-btn" id="detail-add" aria-label="Add and look up info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-      <div class="item-list" id="item-list"></div>
-      <div class="empty-state" id="detail-empty" hidden>
-        <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4M21 12a9 9 0 1 1-9-9"/></svg></div>
-        <p id="detail-empty-text">No titles yet.</p>
+        <div class="chips" id="detail-chips" role="group" aria-label="Filter by status"></div>
+        <div id="item-list"></div>
+        <div class="empty" id="detail-empty" hidden>
+          <span class="ring-icon" id="detail-empty-icon"></span>
+          <p id="detail-empty-text">No titles yet.</p>
+        </div>
       </div>
       <button class="fab" id="detail-fab" aria-label="Add an item manually"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
     </section>
 
-    <!-- ITEM DETAIL (tile) -->
+    <!-- ITEM -->
     <section class="screen" id="screen-item" hidden>
-      <div class="topbar">
-        <button class="iconbtn" id="item-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h2 id="item-crumb">Title</h2>
-        <button class="iconbtn" id="item-trash" aria-label="Delete item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>
+      <div class="scroll" id="item-scroll">
+        <div class="item-band"></div>
+        <div class="item-hero">
+          <div class="topbar" style="width:100%">
+            <button class="roundbtn" id="item-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="crumb" id="item-crumb"></span>
+            <button class="roundbtn" id="item-trash" aria-label="Delete item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>
+          </div>
+          <div class="cover item-cover v3" id="item-cover"></div>
+          <h1 class="item-name" id="item-name"></h1>
+          <div class="item-subline" id="item-subline"></div>
+          <div class="seg" id="item-status" role="radiogroup" aria-label="Status"></div>
+        </div>
+        <div id="item-info"></div>
+        <p class="section-label">Your notes</p>
+        <textarea class="field" id="item-notes" rows="3" placeholder="Add a personal note…"></textarea>
       </div>
-      <div class="item-detail-scroll" id="item-detail-body"></div>
-      <div class="item-detail-actions">
-        <button class="btn btn-ghost" id="item-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Edit</button>
-        <button class="btn btn-secondary" id="item-toggle">Mark done</button>
+      <div class="bottom-actions">
+        <button class="btn btn-secondary" id="item-edit" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Edit details</button>
+        <button class="btn btn-primary" id="item-notes-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Your notes</button>
       </div>
     </section>
 
     <!-- ADD / EDIT ITEM -->
     <section class="screen" id="screen-edit" hidden>
-      <div class="topbar">
-        <button class="iconbtn" id="edit-back" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h2 id="edit-heading">Add item</h2>
-        <span class="spacer"></span>
-      </div>
-      <div class="grow">
-        <button type="button" class="item-poster edit-poster" id="edit-poster" aria-label="Choose a cover photo"></button>
+      <div class="scroll">
+        <div class="topbar">
+          <button class="roundbtn" id="edit-back" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="crumb" id="edit-heading">Add item</span>
+          <span class="spacer"></span>
+        </div>
+        <button type="button" class="cover edit-poster" id="edit-poster" aria-label="Choose a cover photo"></button>
         <div class="poster-tools">
           <button type="button" class="btn btn-ghost btn-small" id="edit-upload">Upload photo</button>
           <button type="button" class="btn btn-ghost btn-small" id="edit-remove-photo" hidden>Remove photo</button>
@@ -375,123 +525,198 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
         <p class="form-error" id="edit-photo-error" hidden></p>
         <p class="section-label">Title</p>
         <input class="field" id="edit-title" type="text" maxlength="80" autocomplete="off" placeholder="Title">
+        <p class="section-label">Status</p>
+        <div class="seg" id="edit-status" role="radiogroup" aria-label="Status"></div>
         <div class="field-grid" id="edit-fields"></div>
-        <div style="height:12px"></div>
+        <div id="edit-notes-wrap" hidden>
+          <p class="section-label">Your notes</p>
+          <textarea class="field" id="edit-notes" rows="3" placeholder="Add a personal note…"></textarea>
+        </div>
       </div>
-      <div class="screen-footer"><button class="btn btn-primary" id="edit-save" disabled>Save</button></div>
-    </section>
-
-    <!-- MY COLLECTIONS -->
-    <section class="screen" id="screen-mine" hidden>
-      <div class="topbar">
-        <button class="iconbtn" id="mine-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h2>My Collections</h2>
-        <button class="iconbtn" id="mine-add" aria-label="New collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-      </div>
-      <div class="grow"><div id="mine-list"></div></div>
-      <div class="empty-state" id="mine-empty" hidden>
-        <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5 20 4l1 4.2-16.9 3.5L4 7.5Z"/><path d="M4.5 11.5h17V19a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1v-7.5Z"/></svg></div>
-        <p>No collections yet — start your first one.</p>
-        <button class="btn btn-ghost" id="mine-empty-cta" style="width:auto;padding:12px 22px">Start a collection</button>
-      </div>
+      <div class="footer-bar"><button class="btn btn-primary" id="edit-save" disabled>Save</button></div>
     </section>
 
     <!-- SETTINGS -->
-    <section class="screen" id="screen-settings" hidden>
-      <div class="topbar">
-        <button class="iconbtn" id="settings-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h2>Settings</h2>
-        <span class="spacer"></span>
-      </div>
-      <div class="grow">
+    <section class="screen has-tabs" id="screen-settings" hidden>
+      <div class="scroll">
+        <h1 class="display-xl">Settings</h1>
         <p class="section-label">Appearance</p>
-        <div class="mode-group" id="mode-group">
-          <button class="mode-opt" type="button" data-mode="system">System</button>
-          <button class="mode-opt" type="button" data-mode="light">Light</button>
-          <button class="mode-opt" type="button" data-mode="dark">Dark</button>
+        <div class="seg three" id="mode-group" role="radiogroup" aria-label="Appearance">
+          <button class="seg-opt" type="button" data-mode="system" role="radio">System</button>
+          <button class="seg-opt" type="button" data-mode="light" role="radio">Light</button>
+          <button class="seg-opt" type="button" data-mode="dark" role="radio">Dark</button>
         </div>
+        <p class="section-label">About</p>
+        <div class="soft-card muted" style="font-size:14px;line-height:1.5">Your collections and photos are saved on this device. Movie, series and game details come from TMDB and RAWG.</div>
       </div>
     </section>
 
-    <div class="modal-overlay" id="confirm-overlay" hidden>
-      <div class="modal-card">
+    <nav class="tabbar" id="tabbar" aria-label="Main">
+      <button class="tab" type="button" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1v-8.5Z"/></svg>Home</button>
+      <button class="tab" type="button" data-tab="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/></svg>Collections</button>
+      <button class="tab" type="button" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Settings</button>
+    </nav>
+
+    <div class="overlay" id="sheet-overlay" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <span class="sheet-handle"></span>
+        <div class="sheet-head">
+          <span class="cover v3" id="sheet-cover"></span>
+          <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span class="sheet-title" id="sheet-title"></span><span class="sheet-sub" id="sheet-sub"></span></span>
+        </div>
+        <div class="sheet-opts" id="sheet-opts" role="radiogroup" aria-label="Status"></div>
+        <button class="btn btn-primary" id="sheet-open" type="button">Open details</button>
+      </div>
+    </div>
+
+    <div class="overlay center" id="confirm-overlay" hidden>
+      <div class="modal-card" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
         <h3 class="modal-title" id="confirm-title">Delete collection?</h3>
         <p class="modal-body" id="confirm-body"></p>
         <div class="modal-actions">
-          <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+          <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
           <button class="btn btn-danger" id="confirm-ok">Delete</button>
         </div>
       </div>
     </div>
 
-    <div class="toast" id="toast" hidden><span id="toast-text"></span><button id="toast-undo">Undo</button></div>
+    <div class="toast" id="toast" role="status" hidden><span id="toast-text"></span><button id="toast-undo">Undo</button></div>
   </div>
 </div>
-
 <script>
 (function(){
   "use strict";
 
   /* ---------- Icons ---------- */
-  function svg(path, extra){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>'; }
+  function svg(path){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+path+'</svg>'; }
   var ICONS = {
-    movie: '<path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/><path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/><path d="M8 4.3 11.5 7.6M14 3.5l3.4 3.3"/>',
+    movie: '<path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/><path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/>',
     series: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 21h8M9 2.5 12 6l3-3.5"/>',
     games: '<path d="M7 9h10l2.4 7a2 2 0 0 1-3.8 1.3L14.5 15h-5l-1.1 2.3A2 2 0 0 1 4.6 16L7 9Z"/><path d="M8.5 11.5v2M7.5 12.5h2M15.5 11.3h.01M17.5 13.3h.01"/>',
-    star: '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.6l-5.2 2.9 1-5.8-4.2-4.1 5.8-.8L12 3.5Z"/>',
-    calendar: '<rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/>',
-    person: '<circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>',
-    building: '<path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-6h6v6M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/>',
-    tag: '<path d="M3 11.5 11.5 3H19a2 2 0 0 1 2 2v7.5L12.5 21 3 11.5Z"/><path d="M14.5 8.5h.01"/>',
-    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
     music: '<path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
     books: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15Z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19M9 7.5h6"/>',
-    pages: '<path d="M7 3h7l4 4v14H7V3Z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
-    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L5 20"/>'
+    folder: '<path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4.5l2 2H19a1.5 1.5 0 0 1 1.5 1.5V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18V7.5Z"/>',
+    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L5 20"/>',
+    chev: '<path d="M9 18l6-6-6-6"/>',
+    down: '<path d="M6 9l6 6 6-6"/>',
+    check: '<path d="M5 13l4 4L19 7"/>'
   };
   function iconHtml(name){ return svg(ICONS[name]); }
+  function checkSvg(w){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||3)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS.check+'</svg>'; }
 
   var THEMES = {
-    movie:  { label:"Movie",  color:"var(--movie)",  icon:iconHtml("movie"),  kind:"movie",  personLabel:"Director" },
-    series: { label:"Series", color:"var(--series)", icon:iconHtml("series"), kind:"series", personLabel:"Creator" },
-    games:  { label:"Games",  color:"var(--games)",  icon:iconHtml("games"),  kind:"games",  personLabel:"Studio" },
-    music:  { label:"Music",  color:"var(--music)",  icon:iconHtml("music"),  kind:"music",  personLabel:"Artist", manual:true },
-    books:  { label:"Books",  color:"var(--books)",  icon:iconHtml("books"),  kind:"books",  personLabel:"Author", manual:true }
+    movie:  { label:"Movie",  plural:"Movies", icon:iconHtml("movie"),  personLabel:"Director", statusLabels:{ planned:"Planned", progress:"In progress", completed:"Watched", dropped:"Dropped" } },
+    series: { label:"Series", plural:"Series", icon:iconHtml("series"), personLabel:"Creator",  statusLabels:{ planned:"Planned", progress:"In progress", completed:"Watched", dropped:"Dropped" } },
+    games:  { label:"Games",  plural:"Games",  icon:iconHtml("games"),  personLabel:"Studio",   statusLabels:{ planned:"Planned", progress:"In progress", completed:"Completed", dropped:"Dropped" } },
+    music:  { label:"Music",  plural:"Music",  icon:iconHtml("music"),  personLabel:"Artist", manual:true, notesInForm:true, statusLabels:{ planned:"Planned", progress:"Listening", completed:"Listened", dropped:"Dropped" } },
+    books:  { label:"Books",  plural:"Books",  icon:iconHtml("books"),  personLabel:"Author", manual:true, notesInForm:true, statusLabels:{ planned:"Planned", progress:"Reading", completed:"Read", dropped:"Dropped" } }
   };
+
+  /* Category palettes, light and dark. Applied as CSS variables through a .cat-<key> class. */
+  var PALETTE = {
+    light: {
+      movie:{t1:"#F8E9C8",t2:"#F2D99B",t3:"#E8C473",deep:"#6B4500",bar:"#B37A10",track:"#F1EFE8"},
+      series:{t1:"#CDEDEF",t2:"#9FD8DD",t3:"#5FB8C0",deep:"#0B5560",bar:"#12808B",track:"#EAF3F4"},
+      games:{t1:"#E4DAFA",t2:"#CDBBF5",t3:"#A98DEB",deep:"#4B2A99",bar:"#6B45C4",track:"#F1EFF6"},
+      music:{t1:"#D8E6FD",t2:"#AFCBFA",t3:"#7AA6F0",deep:"#1A4A9E",bar:"#2F6FD0",track:"#ECF1FA"},
+      books:{t1:"#DCF0D3",t2:"#B9E0A8",t3:"#8CC673",deep:"#2A5F1E",bar:"#3E8A2E",track:"#EEF3EB"}
+    },
+    dark: {
+      movie:{t1:"#3A2C12",t2:"#4E3A15",t3:"#6A4E18",deep:"#F2C36B",bar:"#E0AA47",track:"#2A2618"},
+      series:{t1:"#10363A",t2:"#15484D",t3:"#1C6067",deep:"#79D6DE",bar:"#3FB6C2",track:"#1A2C2E"},
+      games:{t1:"#2B2248",t2:"#382C60",t3:"#4A3A80",deep:"#C2ADF7",bar:"#A383E8",track:"#25212F"},
+      music:{t1:"#172C4D",t2:"#1E3A66",t3:"#294E88",deep:"#9DBFF8",bar:"#73A1F2",track:"#1C2433"},
+      books:{t1:"#1D3519",t2:"#284822",t3:"#36612E",deep:"#A3DA8F",bar:"#86C46F",track:"#1E2A1C"}
+    }
+  };
+  (function injectPalette(){
+    function block(set){
+      return Object.keys(set).map(function(k){
+        var p = set[k];
+        return ".cat-"+k+"{--t1:"+p.t1+";--t2:"+p.t2+";--t3:"+p.t3+";--deep:"+p.deep+";--bar:"+p.bar+";--track:"+p.track+";--tc:"+p.bar+"}";
+      }).join("\n");
+    }
+    var darkBlock = block(PALETTE.dark);
+    var css = block(PALETTE.light) + "\n" +
+      "@media (prefers-color-scheme: dark){\n" + darkBlock.replace(/\.cat-/g, ':root:not([data-theme="light"]) .cat-') + "\n}\n" +
+      darkBlock.replace(/\.cat-/g, ':root[data-theme="dark"] .cat-');
+    var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+  })();
+  function catClass(key){ return "cat-" + (THEMES[key] ? key : "movie"); }
+  function setCat(el, key){
+    Object.keys(THEMES).forEach(function(k){ el.classList.remove("cat-"+k); });
+    el.classList.add(catClass(key));
+  }
+
+  /* ---------- Item status ---------- */
+  var STATUS_ORDER = ["planned", "progress", "completed", "dropped"];
+  function getStatus(item){ return item.status || (item.done ? "completed" : "planned"); }
+  function setStatus(item, st){
+    if(st !== "completed") item.prevStatus = st;
+    if(getStatus(item) !== st) item.statusAt = Date.now();
+    item.status = st; item.done = (st === "completed");
+  }
+  function addedAt(item){
+    if(item.addedAt) return item.addedAt;
+    var n = parseInt(String(item.id || "").slice(0, -6), 36);
+    return isFinite(n) ? n : 0;
+  }
+  function statusMark(st, size){ return st === "completed" ? checkSvg(3) : '<span class="dot st-'+st+'"'+(size?' style="width:'+size+'px;height:'+size+'px"':'')+'></span>'; }
+  function buildStatusGroup(el, themeKey, current, onPick){
+    var labels = THEMES[themeKey].statusLabels;
+    el.innerHTML = "";
+    STATUS_ORDER.forEach(function(st){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "seg-opt" + (st === current ? " is-active" : "");
+      b.setAttribute("role", "radio"); b.setAttribute("aria-checked", st === current ? "true" : "false");
+      b.textContent = labels[st];
+      b.addEventListener("click", function(){ onPick(st); });
+      el.appendChild(b);
+    });
+  }
+  /* Progress counts finished items; dropped ones leave the total. */
+  function progressOf(col){
+    var done = 0, total = 0;
+    col.items.forEach(function(i){ var st = getStatus(i); if(st === "dropped") return; total++; if(st === "completed") done++; });
+    return { done: done, total: total };
+  }
+  function progressText(col){
+    var p = progressOf(col);
+    return p.done + " of " + p.total + " " + THEMES[col.theme].statusLabels.completed.toLowerCase();
+  }
 
   /* Info fields per category. Keys match what the lookup returns, so fetched and hand-typed info share one shape. */
   var FIELDS = {
     movie: [
-      { key:"rating",  label:"Rating",   icon:"star",     placeholder:"e.g. 8.6",     numeric:true },
-      { key:"year",    label:"Year",     icon:"calendar", placeholder:"e.g. 2014",    numeric:true },
-      { key:"runtime", label:"Runtime",  icon:"clock",    placeholder:"e.g. 2h 49m" },
-      { key:"person",  label:"Director", icon:"person",   placeholder:"e.g. Christopher Nolan" },
-      { key:"genre",   label:"Genre",    icon:"tag",      placeholder:"e.g. Sci-fi, Drama", wide:true }
+      { key:"rating",  label:"Rating",   placeholder:"e.g. 8.6",     numeric:true },
+      { key:"year",    label:"Year",     placeholder:"e.g. 2014",    numeric:true },
+      { key:"runtime", label:"Runtime",  placeholder:"e.g. 2h 49m" },
+      { key:"person",  label:"Director", placeholder:"e.g. Christopher Nolan" },
+      { key:"genre",   label:"Genre",    placeholder:"e.g. Sci-fi, Drama", wide:true }
     ],
     series: [
-      { key:"rating",  label:"Rating",          icon:"star",     placeholder:"e.g. 9.0",   numeric:true },
-      { key:"year",    label:"Year",            icon:"calendar", placeholder:"e.g. 2019",  numeric:true },
-      { key:"runtime", label:"Episode runtime", icon:"clock",    placeholder:"e.g. 50m" },
-      { key:"person",  label:"Creator",         icon:"person",   placeholder:"e.g. Phoebe Waller-Bridge" },
-      { key:"genre",   label:"Genre",           icon:"tag",      placeholder:"e.g. Comedy", wide:true }
+      { key:"rating",  label:"Rating",          placeholder:"e.g. 9.0",   numeric:true },
+      { key:"year",    label:"Year",            placeholder:"e.g. 2019",  numeric:true },
+      { key:"runtime", label:"Episode runtime", placeholder:"e.g. 50m" },
+      { key:"person",  label:"Creator",         placeholder:"e.g. Phoebe Waller-Bridge" },
+      { key:"genre",   label:"Genre",           placeholder:"e.g. Comedy", wide:true }
     ],
     games: [
-      { key:"releaseDate",   label:"Release date",     icon:"calendar", placeholder:"e.g. 2023-05-12" },
-      { key:"person",        label:"Studio",           icon:"building", placeholder:"e.g. FromSoftware" },
-      { key:"howLongToBeat", label:"How long to beat", icon:"clock",    placeholder:"e.g. 60 hours" },
-      { key:"genre",         label:"Genre",            icon:"tag",      placeholder:"e.g. RPG", wide:true }
+      { key:"releaseDate",   label:"Release date",     placeholder:"e.g. 2023-05-12" },
+      { key:"person",        label:"Studio",           placeholder:"e.g. FromSoftware" },
+      { key:"howLongToBeat", label:"How long to beat", placeholder:"e.g. 60 hours" },
+      { key:"genre",         label:"Genre",            placeholder:"e.g. RPG", wide:true }
     ],
     music: [
-      { key:"person", label:"Artist", icon:"person",   placeholder:"e.g. Radiohead" },
-      { key:"year",   label:"Year",   icon:"calendar", placeholder:"e.g. 1997", numeric:true },
-      { key:"genre",  label:"Genre",  icon:"tag",      placeholder:"e.g. Alt rock" },
-      { key:"length", label:"Length", icon:"clock",    placeholder:"e.g. 53 min" }
+      { key:"person", label:"Artist", placeholder:"e.g. Radiohead" },
+      { key:"year",   label:"Year",   placeholder:"e.g. 1997", numeric:true },
+      { key:"genre",  label:"Genre",  placeholder:"e.g. Alt rock", wide:true }
     ],
     books: [
-      { key:"person", label:"Author", icon:"person",   placeholder:"e.g. Ursula K. Le Guin" },
-      { key:"year",   label:"Year",   icon:"calendar", placeholder:"e.g. 1969", numeric:true },
-      { key:"pages",  label:"Pages",  icon:"pages",    placeholder:"e.g. 304",  numeric:true },
-      { key:"genre",  label:"Genre",  icon:"tag",      placeholder:"e.g. Science fiction" }
+      { key:"person", label:"Author", placeholder:"e.g. Ursula K. Le Guin" },
+      { key:"year",   label:"Year",   placeholder:"e.g. 1969", numeric:true },
+      { key:"pages",  label:"Pages",  placeholder:"e.g. 304",  numeric:true },
+      { key:"genre",  label:"Genre",  placeholder:"e.g. Science fiction" }
     ]
   };
 
@@ -587,21 +812,35 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var safe = String(src).replace(/"/g, "&quot;");
     return '<span class="pf"><img class="pf-bg" src="'+safe+'" alt="" aria-hidden="true"><img class="pf-img" src="'+safe+'" alt=""></span>';
   }
+  /* A cover tile: the real poster, a spinner while fetching, or a tinted placeholder with the category icon. */
+  function variantFor(item){ var s = String(item.id || ""); var n = 0; for(var i=0;i<s.length;i++) n = (n + s.charCodeAt(i)) % 3; return "v" + (n + 1); }
+  function coverHtml(item, themeKey, extraClass){
+    var src = posterSrc(item);
+    var inner = src ? posterMarkup(src)
+      : (item.meta && item.meta.status === "loading") ? '<span class="spin"></span>'
+      : THEMES[themeKey].icon;
+    return '<span class="cover '+variantFor(item)+' '+(extraClass||"")+'">'+inner+'</span>';
+  }
 
   /* ---------- Supabase (Edge Function proxy — keeps TMDB/RAWG keys server-side) ---------- */
   var SUPABASE_URL = "https://vyshzvrsitibscjfurth.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5c2h6dnJzaXRpYnNjamZ1cnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwMjg1MzYsImV4cCI6MjEwNjYwNDUzNn0.JoTBZ1_433Vx3rVKfcaMiq36g2G7LK1WZj_YKQw1GDw";
   var LOOKUP_FN_URL = SUPABASE_URL + "/functions/v1/lookup-title";
 
-  /* ---------- Storage (collections stay local on this PC for now) ---------- */
+  /* ---------- Storage (collections stay on this device for now) ---------- */
   var STORAGE_KEY = "ultimateCollection:v1";
   var state = { collections: loadCollections() };
   var currentId = null;
   var detailBackTarget = "mine";
+  var itemBackTarget = "detail";
+  var newBackTarget = "mine";
   var pendingTheme = null;
   var pendingDelete = null;
   var toastTimer = null;
   var currentItemRef = null; // {collectionId, itemId}
+  var statusFilter = "all";
+  var VIEW_KEY = "ultimateCollection:view";
+  var viewMode = (function(){ try{ return localStorage.getItem(VIEW_KEY) === "grid" ? "grid" : "list"; }catch(e){ return "list"; } })();
 
   function loadCollections(){
     try{
@@ -614,22 +853,51 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.collections)); return true; }catch(e){ return false; }
   }
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-
-  function showScreen(name){
-    ["home","new","detail","item","mine","settings","edit"].forEach(function(n){
-      document.getElementById("screen-"+n).hidden = (n !== name);
-    });
+  function findCollection(id){
+    for(var i=0;i<state.collections.length;i++){ if(state.collections[i].id === id) return state.collections[i]; }
+    return null;
+  }
+  function findItem(colId, itemId){
+    var col = findCollection(colId); if(!col) return null;
+    return col.items.find(function(i){ return i.id === itemId; }) || null;
   }
 
+  /* ---------- Screens + tab bar ---------- */
+  var SCREENS = ["intro","home","new","detail","item","mine","settings","edit"];
+  var TAB_FOR = { home:"home", mine:"mine", detail:"mine", settings:"settings" };
+  var phoneEl = document.getElementById("phone");
+  var tabbar = document.getElementById("tabbar");
+  function currentScreen(){
+    for(var i=0;i<SCREENS.length;i++){ if(!document.getElementById("screen-"+SCREENS[i]).hidden) return SCREENS[i]; }
+    return null;
+  }
+  function showScreen(name){
+    SCREENS.forEach(function(n){ document.getElementById("screen-"+n).hidden = (n !== name); });
+    var tab = TAB_FOR[name];
+    tabbar.hidden = !tab;
+    phoneEl.classList.toggle("tabs-on", !!tab);
+    Array.prototype.forEach.call(tabbar.children, function(b){
+      var on = b.dataset.tab === tab;
+      b.classList.toggle("is-active", on);
+      if(on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    var sc = document.querySelector("#screen-"+name+" .scroll");
+    if(sc && name !== "detail") sc.scrollTop = 0;
+  }
+  Array.prototype.forEach.call(tabbar.children, function(b){
+    b.addEventListener("click", function(){
+      hideSuggestions();
+      if(b.dataset.tab === "home") goHome();
+      else if(b.dataset.tab === "mine") goCollections();
+      else showScreen("settings");
+    });
+  });
+  function goHome(){ renderHome(); showScreen("home"); }
+  function goCollections(){ renderMine(); showScreen("mine"); }
+
   /* ---------- Lookups — proxied through the Supabase Edge Function ---------- */
-  /* The real TMDB/RAWG keys live only as server-side secrets on the Edge Function;
-     this page never sees them. */
   function fnHeaders(){
-    return {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-      "apikey": SUPABASE_ANON_KEY
-    };
+    return { "Content-Type": "application/json", "Authorization": "Bearer " + SUPABASE_ANON_KEY, "apikey": SUPABASE_ANON_KEY };
   }
   async function callLookupFn(payload){
     var r = await fetch(LOOKUP_FN_URL, { method:"POST", headers: fnHeaders(), body: JSON.stringify(payload) });
@@ -650,26 +918,21 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var result;
     try{ result = await callLookupFn({ theme: theme, id: externalId, mode: "resolve" }); }
     catch(e){ result = { status:"error" }; }
-    var col = findCollection(colId);
-    if(!col) return;
-    var item = col.items.find(function(i){ return i.id === itemId; });
+    var item = findItem(colId, itemId);
     if(!item || item.edited) return;
     item.meta = result;
     saveCollections();
     refreshViews();
   }
   function triggerLookup(colId, itemId){
-    var col = findCollection(colId);
-    if(!col) return;
-    var item = col.items.find(function(i){ return i.id === itemId; });
-    if(!item || item.edited || (THEMES[col.theme] && THEMES[col.theme].manual)) return;
+    var col = findCollection(colId); if(!col) return;
+    var item = findItem(colId, itemId);
+    if(!item || item.edited || THEMES[col.theme].manual) return;
     item.meta = { status:"loading" };
     saveCollections();
     refreshViews();
     runLookup(col.theme, item.text).then(function(result){
-      var col2 = findCollection(colId);
-      if(!col2) return;
-      var item2 = col2.items.find(function(i){ return i.id === itemId; });
+      var item2 = findItem(colId, itemId);
       if(!item2 || item2.edited) return;
       item2.meta = result;
       saveCollections();
@@ -677,23 +940,134 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     });
   }
   function refreshViews(){
-    if(!document.getElementById("screen-detail").hidden) renderDetail();
-    if(!document.getElementById("screen-item").hidden) renderItemDetail();
-    if(!document.getElementById("screen-mine").hidden) renderMine();
-    if(!document.getElementById("screen-edit").hidden) renderEditPoster();
+    var s = currentScreen();
+    if(s === "detail") renderDetail();
+    else if(s === "item") renderItemDetail();
+    else if(s === "mine") renderMine();
+    else if(s === "home") renderHome();
+    else if(s === "edit") renderEditPoster();
+    if(!sheetOverlay.hidden) renderSheet();
   }
 
-  function findCollection(id){
-    for(var i=0;i<state.collections.length;i++){ if(state.collections[i].id === id) return state.collections[i]; }
-    return null;
+  function metaSubtitle(theme, meta){
+    if(!meta || meta.status === "loading") return "Fetching info…";
+    if(meta.status === "nokey") return "Lookup not set up yet";
+    if(meta.status === "notfound") return "No match found";
+    if(meta.status === "error") return "Couldn’t fetch info";
+    if(meta.status === "found"){
+      if(theme === "games") return [meta.releaseDate ? String(meta.releaseDate).slice(0,4) : "", meta.person].filter(Boolean).join(", ");
+      if(theme === "music" || theme === "books") return [meta.person, meta.year].filter(Boolean).join(", ");
+      return [meta.year, meta.person].filter(Boolean).join(", ");
+    }
+    return "";
+  }
+  function displayTitle(item){ return (item.meta && item.meta.status === "found" && item.meta.title) ? item.meta.title : item.text; }
+
+  /* ---------- Home (start screen) ---------- */
+  document.getElementById("btn-new").addEventListener("click", function(){ openNew(null, "home"); });
+  document.getElementById("btn-mine").addEventListener("click", goCollections);
+  var CAT_ORDER = ["movie","series","games","music","books"];
+  (function buildChips(){
+    var wrap = document.getElementById("home-chips");
+    CAT_ORDER.forEach(function(k){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "cat-chip " + catClass(k);
+      b.innerHTML = THEMES[k].icon + "<span></span>";
+      b.lastChild.textContent = THEMES[k].plural;
+      b.addEventListener("click", function(){ openNew(k, "home"); });
+      wrap.appendChild(b);
+    });
+  })();
+
+  /* Five fanned covers: the newest real covers in the middle, category colours filling any gaps. */
+  var fanAnimated = false;
+  function buildFan(el, useOwn){
+    var cards = [];
+    if(useOwn){
+      var withCovers = [];
+      state.collections.forEach(function(col){ col.items.forEach(function(it){ if(posterSrc(it)) withCovers.push({ col: col, item: it }); }); });
+      withCovers.sort(function(a,b){ return addedAt(b.item) - addedAt(a.item); });
+      withCovers.slice(0,5).forEach(function(x){ cards.push({ cat: x.col.theme, src: posterSrc(x.item) }); });
+    }
+    var used = {}; cards.forEach(function(c){ used[c.cat] = true; });
+    var fill = CAT_ORDER.filter(function(k){ return !used[k]; }).concat(CAT_ORDER);
+    while(cards.length < 5) cards.push({ cat: fill.shift(), src: null });
+    var pos = [2,1,3,0,4]; // first card in the middle, then outwards
+    var slots = new Array(5);
+    cards.forEach(function(c, i){ slots[pos[i]] = c; });
+    el.innerHTML = slots.map(function(c){
+      return '<span class="cover fan-card v2 '+catClass(c.cat)+'">'+(c.src ? posterMarkup(c.src) : THEMES[c.cat].icon)+'</span>';
+    }).join("");
+    if(!fanAnimated){ el.classList.add("animate"); fanAnimated = true; }
+    else el.classList.remove("animate");
   }
 
-  /* ---------- Home ---------- */
-  document.getElementById("btn-new").addEventListener("click", openNew);
-  document.getElementById("btn-mine").addEventListener("click", function(){ renderMine(); showScreen("mine"); });
-  document.getElementById("btn-settings").addEventListener("click", openSettings);
+  function renderHome(){
+    var hasCols = state.collections.length > 0;
+    buildFan(document.getElementById("home-fan"), hasCols);
+    document.getElementById("home-new").hidden = hasCols;
+    document.getElementById("home-back").hidden = !hasCols;
+    document.getElementById("home-tagline").hidden = hasCols;
+    if(!hasCols) return;
 
-  /* ---------- New Collection: theme dropdown ---------- */
+    var all = [];
+    state.collections.forEach(function(col){ col.items.forEach(function(it){ all.push({ col: col, item: it }); }); });
+    var pick = all.filter(function(x){ return getStatus(x.item) === "progress"; })
+      .sort(function(a,b){ return (b.item.statusAt || addedAt(b.item)) - (a.item.statusAt || addedAt(a.item)); });
+    var mode = "Continue";
+    if(!pick.length){ mode = "Recently added"; pick = all.slice().sort(function(a,b){ return addedAt(b.item) - addedAt(a.item); }); }
+    pick = pick.slice(0,3);
+
+    var box = document.getElementById("home-cont");
+    box.hidden = pick.length === 0;
+    document.getElementById("home-cont-title").textContent = mode;
+    var done = 0, total = 0;
+    state.collections.forEach(function(col){ var p = progressOf(col); done += p.done; total += p.total; });
+    document.getElementById("home-cont-stat").textContent = done + " of " + total + " finished";
+    var row = document.getElementById("home-cont-row");
+    row.innerHTML = "";
+    pick.forEach(function(x){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "cc " + catClass(x.col.theme);
+      b.innerHTML = coverHtml(x.item, x.col.theme) + '<span class="cc-title"></span><span class="cc-sub"></span>';
+      b.querySelector(".cc-title").textContent = displayTitle(x.item);
+      b.querySelector(".cc-sub").textContent = mode === "Continue" ? THEMES[x.col.theme].statusLabels.progress : x.col.name;
+      b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home"); });
+      row.appendChild(b);
+    });
+  }
+
+  /* ---------- Intro (shown once, on a fresh install) ---------- */
+  var INTRO_KEY = "ultimateCollection:introSeen";
+  var introSlides = document.getElementById("intro-slides");
+  var introDots = document.getElementById("intro-dots").children;
+  var introNext = document.getElementById("intro-next");
+  function introIndex(){ return Math.round(introSlides.scrollLeft / Math.max(1, introSlides.clientWidth)); }
+  function syncIntro(){
+    var i = introIndex();
+    Array.prototype.forEach.call(introDots, function(d, k){ d.classList.toggle("is-on", k === i); });
+    introNext.textContent = i >= introDots.length - 1 ? "Get started" : "Continue";
+  }
+  introSlides.addEventListener("scroll", function(){ window.requestAnimationFrame(syncIntro); });
+  introNext.addEventListener("click", function(){
+    var i = introIndex();
+    if(i >= introDots.length - 1) finishIntro();
+    else introSlides.scrollTo({ left: (i + 1) * introSlides.clientWidth, behavior: "smooth" });
+  });
+  document.getElementById("intro-skip").addEventListener("click", finishIntro);
+  function finishIntro(){ try{ localStorage.setItem(INTRO_KEY, "1"); }catch(e){} goHome(); }
+  function shouldShowIntro(){
+    if(state.collections.length) return false;
+    try{ return !localStorage.getItem(INTRO_KEY); }catch(e){ return false; }
+  }
+  function openIntro(){
+    buildFan(document.getElementById("intro-fan"), false);
+    fanAnimated = false; // let the home fan play its entrance too
+    showScreen("intro");
+    introSlides.scrollLeft = 0; syncIntro();
+  }
+
+  /* ---------- New Collection ---------- */
   var themeSelectTrigger = document.getElementById("theme-select-trigger");
   var themeSelectMenu = document.getElementById("theme-select-menu");
   var themeSelectIcon = document.getElementById("theme-select-icon");
@@ -702,17 +1076,18 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
   Object.keys(THEMES).forEach(function(key){
     var t = THEMES[key];
     var opt = document.createElement("div");
-    opt.className = "select-option"; opt.dataset.theme = key;
-    opt.style.setProperty("--tc", t.color);
-    opt.innerHTML = t.icon + "<span>" + t.label + "</span>";
-    opt.addEventListener("click", function(){ selectTheme(key); closeThemeMenu(); });
+    opt.className = "select-option " + catClass(key); opt.dataset.theme = key;
+    opt.setAttribute("role", "option");
+    opt.innerHTML = t.icon + "<span></span>";
+    opt.lastChild.textContent = t.label;
+    opt.addEventListener("click", function(e){ e.stopPropagation(); selectTheme(key); closeThemeMenu(); });
     themeSelectMenu.appendChild(opt);
   });
   themeSelectTrigger.addEventListener("click", function(e){
     e.stopPropagation();
     if(themeSelectMenu.hidden) openThemeMenu(); else closeThemeMenu();
   });
-  document.addEventListener("click", function(){ closeThemeMenu(); });
+  document.addEventListener("click", function(){ closeThemeMenu(); closeFolderMenu(); });
   function openThemeMenu(){ themeSelectMenu.hidden = false; themeSelectTrigger.classList.add("is-open"); }
   function closeThemeMenu(){ themeSelectMenu.hidden = true; themeSelectTrigger.classList.remove("is-open"); }
 
@@ -720,28 +1095,28 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
   var createBtn = document.getElementById("new-create");
   nameInput.addEventListener("input", validateNewForm);
   nameInput.addEventListener("keydown", function(e){ if(e.key === "Enter" && !createBtn.disabled) createCollection(); });
-  document.getElementById("new-back").addEventListener("click", function(){ showScreen("home"); });
+  document.getElementById("new-back").addEventListener("click", function(){ if(newBackTarget === "home") goHome(); else goCollections(); });
   createBtn.addEventListener("click", createCollection);
 
-  function openNew(){
+  function openNew(preset, backTo){
+    newBackTarget = backTo || "mine";
     pendingTheme = null; nameInput.value = "";
-    themeSelectLabel.textContent = "Select a theme";
-    themeSelectIcon.innerHTML = ""; themeSelectIcon.style.color = "";
-    themeSelectTrigger.classList.remove("has-value");
-    themeSelectTrigger.style.removeProperty("--tc");
+    themeSelectLabel.textContent = "Choose a category";
+    themeSelectIcon.innerHTML = "";
+    themeSelectTrigger.classList.add("placeholder");
+    setCat(themeSelectTrigger, "movie"); themeSelectTrigger.classList.remove("cat-movie");
     Array.prototype.forEach.call(themeSelectMenu.children, function(c){ c.classList.remove("is-selected"); });
     closeThemeMenu();
+    if(typeof preset === "string" && THEMES[preset]) selectTheme(preset);
     validateNewForm(); showScreen("new");
-    setTimeout(function(){ nameInput.focus(); }, 50);
   }
   function selectTheme(key){
     pendingTheme = key;
     var t = THEMES[key];
     themeSelectIcon.innerHTML = t.icon;
-    themeSelectIcon.style.color = t.color;
     themeSelectLabel.textContent = t.label;
-    themeSelectTrigger.classList.add("has-value");
-    themeSelectTrigger.style.setProperty("--tc", t.color);
+    themeSelectTrigger.classList.remove("placeholder");
+    setCat(themeSelectTrigger, key);
     Array.prototype.forEach.call(themeSelectMenu.children, function(c){ c.classList.toggle("is-selected", c.dataset.theme === key); });
     validateNewForm();
   }
@@ -753,41 +1128,43 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     openDetail(col.id, "mine");
   }
 
-  /* ---------- Collection detail (list) ---------- */
-  var itemList = document.getElementById("item-list");
+  /* ---------- Collection (list / grid) ---------- */
+  var detailScreen = document.getElementById("screen-detail");
+  var itemListEl = document.getElementById("item-list");
   var detailInput = document.getElementById("detail-input");
+  var detailAddBtn = document.getElementById("detail-add");
   var detailEmpty = document.getElementById("detail-empty");
 
-  document.getElementById("detail-back").addEventListener("click", function(){ hideSuggestions(); showScreen(detailBackTarget); if(detailBackTarget === "mine") renderMine(); });
-  document.getElementById("detail-add").addEventListener("click", addItemFromInput);
+  document.getElementById("detail-back").addEventListener("click", function(){ hideSuggestions(); if(detailBackTarget === "home") goHome(); else goCollections(); });
+  detailAddBtn.addEventListener("click", addItemFromInput);
   detailInput.addEventListener("keydown", function(e){ if(e.key === "Enter"){ hideSuggestions(); addItemFromInput(); } });
   document.getElementById("detail-trash").addEventListener("click", function(){ var col = findCollection(currentId); if(col) requestDeleteCollection(col); });
+  document.getElementById("view-list").addEventListener("click", function(){ setView("list"); });
+  document.getElementById("view-grid").addEventListener("click", function(){ setView("grid"); });
+  function setView(v){ viewMode = v; try{ localStorage.setItem(VIEW_KEY, v); }catch(e){} renderDetail(); }
 
-  /* ---------- Keyword suggestions while typing a title ---------- */
+  /* Suggestions while typing a title */
   var suggestDropdown = document.getElementById("suggest-dropdown");
   var suggestTimer = null;
   var suggestSeq = 0;
-
   detailInput.addEventListener("input", function(){
     var q = detailInput.value.trim();
+    detailAddBtn.hidden = !q;
     if(suggestTimer) clearTimeout(suggestTimer);
     if(q.length < 2){ hideSuggestions(); return; }
     suggestTimer = setTimeout(function(){ fetchSuggestions(q); }, 300);
   });
-
   function hideSuggestions(){ suggestDropdown.hidden = true; suggestDropdown.innerHTML = ""; }
-
   function fetchSuggestions(q){
     var col = findCollection(currentId);
     if(!col) return;
     var mySeq = ++suggestSeq;
     runSuggest(col.theme, q).then(function(results){
-      if(mySeq !== suggestSeq) return; // a newer keystroke superseded this response
+      if(mySeq !== suggestSeq) return;
       if(detailInput.value.trim() !== q) return;
       renderSuggestions(col, results);
     });
   }
-
   function renderSuggestions(col, results){
     if(!results.length){ hideSuggestions(); return; }
     var theme = THEMES[col.theme];
@@ -795,87 +1172,114 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     results.forEach(function(hit){
       var row = document.createElement("div");
       row.className = "suggest-item";
+      row.setAttribute("role", "option");
       var thumbInner = hit.poster ? posterMarkup(hit.poster) : theme.icon;
-      row.innerHTML = '<span class="suggest-thumb">'+thumbInner+'</span><span class="suggest-text"><span class="suggest-title"></span><span class="suggest-year"></span></span>';
+      row.innerHTML = '<span class="cover v1 thumb-s">'+thumbInner+'</span><span class="suggest-text"><span class="suggest-title"></span><span class="suggest-year"></span></span>';
       row.querySelector(".suggest-title").textContent = hit.title;
       row.querySelector(".suggest-year").textContent = hit.year || "";
-      // mousedown (not click) fires before the input's blur, so the pick registers first
       row.addEventListener("mousedown", function(e){ e.preventDefault(); pickSuggestion(col, hit); });
       suggestDropdown.appendChild(row);
     });
     suggestDropdown.hidden = false;
   }
-
   function pickSuggestion(col, hit){
     hideSuggestions();
-    detailInput.value = "";
-    var item = { id: uid(), text: hit.title, done:false, meta:{ status:"loading" } };
+    detailInput.value = ""; detailAddBtn.hidden = true;
+    var item = { id: uid(), text: hit.title, done:false, status:"planned", addedAt: Date.now(), meta:{ status:"loading" } };
     col.items.push(item);
     saveCollections();
     renderDetail();
-    detailInput.focus();
     resolveById(col.id, item.id, col.theme, hit.id);
   }
 
-  function openDetail(id, backTo){ currentId = id; detailBackTarget = backTo || "mine"; hideSuggestions(); renderDetail(); showScreen("detail"); }
-
-  function metaSubtitle(theme, meta){
-    if(!meta || meta.status === "loading") return "Fetching info…";
-    if(meta.status === "nokey") return "Lookup not configured yet";
-    if(meta.status === "notfound") return "No match found";
-    if(meta.status === "error") return "Couldn’t fetch info — tap for options";
-    if(meta.status === "found"){
-      if(theme === "games") return [meta.releaseDate ? String(meta.releaseDate).slice(0,4) : "", meta.person].filter(Boolean).join(" · ");
-      if(theme === "music" || theme === "books") return [meta.person, meta.year].filter(Boolean).join(" · ");
-      return [meta.year, meta.rating ? ("★ "+meta.rating) : ""].filter(Boolean).join(" · ");
-    }
-    return "";
+  function openDetail(id, backTo){
+    currentId = id; detailBackTarget = backTo || "mine"; statusFilter = "all";
+    hideSuggestions(); detailInput.value = ""; detailAddBtn.hidden = true;
+    renderDetail(); showScreen("detail");
+    document.getElementById("detail-scroll").scrollTop = 0;
   }
 
   function renderDetail(){
     var col = findCollection(currentId);
-    if(!col){ showScreen(detailBackTarget); return; }
+    if(!col){ goCollections(); return; }
     var theme = THEMES[col.theme];
+    setCat(detailScreen, col.theme);
+    document.getElementById("detail-kind").textContent = theme.plural;
     document.getElementById("detail-title").textContent = col.name;
-    document.querySelector("#screen-detail").style.setProperty("--tc", theme.color);
-    var badge = document.getElementById("detail-badge");
-    badge.innerHTML = theme.icon + " " + theme.label;
-    badge.style.setProperty("--tc", theme.color);
+
+    var prog = progressOf(col);
+    document.getElementById("detail-progress-fill").style.width = (prog.total ? Math.round((prog.done/prog.total)*100) : 0) + "%";
+    document.getElementById("detail-progress-count").textContent = progressText(col);
 
     document.getElementById("detail-add-row").hidden = !!theme.manual;
+    document.getElementById("detail-tools").classList.toggle("manual", !!theme.manual);
+    detailInput.placeholder = "Search " + (col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : "a movie") + " to add";
+    document.getElementById("view-list").classList.toggle("is-active", viewMode === "list");
+    document.getElementById("view-grid").classList.toggle("is-active", viewMode === "grid");
+    document.getElementById("view-list").setAttribute("aria-pressed", viewMode === "list" ? "true" : "false");
+    document.getElementById("view-grid").setAttribute("aria-pressed", viewMode === "grid" ? "true" : "false");
+
+    // Filter chips (only statuses that have items)
+    var counts = { all: col.items.length, planned:0, progress:0, completed:0, dropped:0 };
+    col.items.forEach(function(i){ counts[getStatus(i)]++; });
+    if(statusFilter !== "all" && !counts[statusFilter]) statusFilter = "all";
+    var chips = document.getElementById("detail-chips");
+    chips.innerHTML = "";
+    chips.hidden = col.items.length === 0;
+    ["all"].concat(STATUS_ORDER).forEach(function(key){
+      if(key !== "all" && !counts[key]) return;
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip" + (statusFilter === key ? " is-active" : "");
+      b.setAttribute("aria-pressed", statusFilter === key ? "true" : "false");
+      b.textContent = (key === "all" ? "All" : theme.statusLabels[key]) + " " + counts[key];
+      b.addEventListener("click", function(){ statusFilter = key; renderDetail(); });
+      chips.appendChild(b);
+    });
+
+    detailEmpty.hidden = col.items.length !== 0;
+    document.getElementById("detail-empty-icon").innerHTML = theme.icon;
     document.getElementById("detail-empty-text").textContent = theme.manual
       ? "Nothing here yet. Tap + to add your first " + (col.theme === "books" ? "book" : "album or song") + "."
-      : "No titles yet. Search above to add one with its info filled in, or tap + to add it yourself.";
+      : "No titles yet. Search above to add one with its details filled in, or tap + to add it yourself.";
 
-    var done = col.items.filter(function(i){ return i.done; }).length;
-    var total = col.items.length;
-    document.getElementById("detail-progress-fill").style.width = (total ? Math.round((done/total)*100) : 0) + "%";
-    document.getElementById("detail-progress-count").textContent = done + " / " + total;
-
-    itemList.innerHTML = "";
-    detailEmpty.hidden = total !== 0;
-    col.items.forEach(function(item){
-      var row = document.createElement("div");
-      row.className = "item-row" + (item.done ? " is-done" : "");
-      row.style.setProperty("--tc", theme.color);
-      var thumbSrc = posterSrc(item);
-      var thumbInner = (item.meta && item.meta.status === "loading" && !thumbSrc) ? '<div class="spin"></div>'
-        : thumbSrc ? posterMarkup(thumbSrc)
-        : theme.icon;
-      row.innerHTML =
-        '<button class="item-check" aria-label="Toggle done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>'+
-        '<span class="item-thumb">'+thumbInner+'</span>'+
-        '<button class="item-main"><span class="item-title"></span><div class="item-sub"></div></button>'+
-        '<button class="item-del" aria-label="Delete item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>';
-      row.querySelector(".item-title").textContent = (item.meta && item.meta.status === "found" && item.meta.title) ? item.meta.title : item.text;
-      row.querySelector(".item-sub").textContent = metaSubtitle(col.theme, item.meta);
-      row.querySelector(".item-check").addEventListener("click", function(){ toggleItem(col.id, item.id); });
-      row.querySelector(".item-main").addEventListener("click", function(){
-        openItemDetail(col.id, item.id);
-      });
-      row.querySelector(".item-del").addEventListener("click", function(){ requestDeleteItem(col.id, item.id); });
-      itemList.appendChild(row);
+    var shown = col.items.filter(function(i){ return statusFilter === "all" || getStatus(i) === statusFilter; });
+    itemListEl.innerHTML = "";
+    itemListEl.className = viewMode === "grid" ? "item-grid" : "item-list";
+    shown.forEach(function(item){
+      var st = getStatus(item);
+      if(viewMode === "grid"){
+        var t = document.createElement("button");
+        t.type = "button"; t.className = "tile" + (st === "dropped" ? " is-dropped" : "");
+        t.innerHTML = coverHtml(item, col.theme) + '<span class="tile-title"></span>';
+        var pill = document.createElement("span");
+        pill.className = "st-pill st-" + st;
+        pill.innerHTML = statusMark(st) + "<span></span>";
+        pill.lastChild.textContent = theme.statusLabels[st];
+        t.querySelector(".cover").appendChild(pill);
+        t.querySelector(".tile-title").textContent = displayTitle(item);
+        t.addEventListener("click", function(){ openItemDetail(col.id, item.id); });
+        itemListEl.appendChild(t);
+      } else {
+        var row = document.createElement("div");
+        row.className = "item-row" + (st === "dropped" ? " is-dropped" : "");
+        row.innerHTML =
+          '<button class="item-open" type="button">' + coverHtml(item, col.theme, "thumb-s") +
+          '<span class="item-text"><span class="item-title"></span><span class="item-sub"></span></span></button>' +
+          '<button class="st-pill st-'+st+'" type="button">' + statusMark(st) + '<span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>';
+        row.querySelector(".item-title").textContent = displayTitle(item);
+        row.querySelector(".item-sub").textContent = metaSubtitle(col.theme, item.meta);
+        var pillBtn = row.querySelector(".st-pill");
+        pillBtn.querySelector("span:not(.dot)").textContent = theme.statusLabels[st];
+        pillBtn.setAttribute("aria-label", "Status: " + theme.statusLabels[st] + ". Change status");
+        row.querySelector(".item-open").addEventListener("click", function(){ openItemDetail(col.id, item.id); });
+        pillBtn.addEventListener("click", function(){ openSheet(col.id, item.id); });
+        itemListEl.appendChild(row);
+      }
     });
+    if(col.items.length && !shown.length){
+      itemListEl.className = "";
+      itemListEl.innerHTML = '<div class="list-note">Nothing with this status.</div>';
+    }
   }
 
   function addItemFromInput(){
@@ -884,22 +1288,12 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     if(!text) return;
     var col = findCollection(currentId);
     if(!col) return;
-    var item = { id: uid(), text: text, done: false, meta: null };
+    var item = { id: uid(), text: text, done: false, status: "planned", addedAt: Date.now(), meta: null };
     col.items.push(item);
     saveCollections();
-    detailInput.value = "";
+    detailInput.value = ""; detailAddBtn.hidden = true;
     renderDetail();
-    detailInput.focus();
     triggerLookup(col.id, item.id);
-  }
-  function toggleItem(colId, itemId){
-    var col = findCollection(colId);
-    if(!col) return;
-    var item = col.items.find(function(i){ return i.id === itemId; });
-    if(!item) return;
-    item.done = !item.done;
-    saveCollections();
-    refreshViews();
   }
   function requestDeleteItem(colId, itemId){
     var col = findCollection(colId);
@@ -909,12 +1303,10 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var item = col.items[idx];
     col.items.splice(idx, 1);
     saveCollections();
-    if(currentItemRef && currentItemRef.collectionId === colId && currentItemRef.itemId === itemId){
-      showScreen("detail");
-    }
-    renderDetail();
+    if(currentScreen() === "item" && currentItemRef && currentItemRef.itemId === itemId) leaveItem();
+    else refreshViews();
     pendingDelete = { type:"item", collectionId: colId, item: item, index: idx };
-    showToast('Removed "' + item.text + '"', true);
+    showToast('Removed "' + displayTitle(item) + '"', true);
   }
   function requestDeleteCollection(col){
     var count = col.items.length;
@@ -929,63 +1321,172 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       saveCollections();
       pendingDelete = { type:"collection", collection: col, index: idx };
       showToast('Deleted "' + col.name + '"', true);
-      showScreen("mine");
-      renderMine();
+      goCollections();
     });
   }
 
+  /* ---------- Quick status sheet ---------- */
+  var sheetOverlay = document.getElementById("sheet-overlay");
+  var sheetRef = null;
+  function openSheet(colId, itemId){
+    sheetRef = { colId: colId, itemId: itemId };
+    renderSheet();
+    sheetOverlay.hidden = false;
+    var active = sheetOverlay.querySelector(".sheet-opt.is-active") || sheetOverlay.querySelector(".sheet-opt");
+    if(active) active.focus();
+  }
+  function closeSheet(){ sheetOverlay.hidden = true; sheetRef = null; }
+  function renderSheet(){
+    if(!sheetRef) return;
+    var col = findCollection(sheetRef.colId), item = findItem(sheetRef.colId, sheetRef.itemId);
+    if(!col || !item){ closeSheet(); return; }
+    var theme = THEMES[col.theme];
+    setCat(sheetOverlay, col.theme);
+    var cov = document.getElementById("sheet-cover");
+    cov.outerHTML = coverHtml(item, col.theme, "thumb-s").replace('<span class="cover', '<span id="sheet-cover" class="cover');
+    document.getElementById("sheet-title").textContent = displayTitle(item);
+    document.getElementById("sheet-sub").textContent = metaSubtitle(col.theme, item.meta);
+    var opts = document.getElementById("sheet-opts");
+    opts.innerHTML = "";
+    var cur = getStatus(item);
+    STATUS_ORDER.forEach(function(st){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "sheet-opt" + (st === cur ? " is-active" : "");
+      b.setAttribute("role", "radio"); b.setAttribute("aria-checked", st === cur ? "true" : "false");
+      b.innerHTML = '<span class="dot st-'+st+'"></span><span></span>' + (st === cur ? checkSvg(2.6) : "");
+      b.children[1].textContent = theme.statusLabels[st];
+      b.addEventListener("click", function(){
+        var it = findItem(sheetRef.colId, sheetRef.itemId); if(!it) return closeSheet();
+        setStatus(it, st); saveCollections(); closeSheet(); refreshViews();
+      });
+      opts.appendChild(b);
+    });
+  }
+  sheetOverlay.addEventListener("click", function(e){ if(e.target === sheetOverlay) closeSheet(); });
+  document.getElementById("sheet-open").addEventListener("click", function(){
+    var ref = sheetRef; closeSheet();
+    if(ref) openItemDetail(ref.colId, ref.itemId);
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Escape") return;
+    if(!sheetOverlay.hidden) closeSheet();
+    else if(!confirmOverlay.hidden) confirmCancelBtn.click();
+  });
+
   /* ---------- Confirmation modal ---------- */
   var confirmOverlay = document.getElementById("confirm-overlay");
-  var confirmTitleEl = document.getElementById("confirm-title");
-  var confirmBodyEl = document.getElementById("confirm-body");
   var confirmOkBtn = document.getElementById("confirm-ok");
   var confirmCancelBtn = document.getElementById("confirm-cancel");
   var confirmResolver = null;
-
   function askConfirm(title, body){
-    confirmTitleEl.textContent = title;
-    confirmBodyEl.textContent = body;
+    document.getElementById("confirm-title").textContent = title;
+    document.getElementById("confirm-body").textContent = body;
     confirmOverlay.hidden = false;
+    confirmCancelBtn.focus();
     return new Promise(function(resolve){ confirmResolver = resolve; });
   }
-  confirmOkBtn.addEventListener("click", function(){
-    confirmOverlay.hidden = true;
-    var resolve = confirmResolver; confirmResolver = null;
-    if(resolve) resolve(true);
-  });
-  confirmCancelBtn.addEventListener("click", function(){
-    confirmOverlay.hidden = true;
-    var resolve = confirmResolver; confirmResolver = null;
-    if(resolve) resolve(false);
-  });
+  confirmOkBtn.addEventListener("click", function(){ confirmOverlay.hidden = true; var r = confirmResolver; confirmResolver = null; if(r) r(true); });
+  confirmCancelBtn.addEventListener("click", function(){ confirmOverlay.hidden = true; var r = confirmResolver; confirmResolver = null; if(r) r(false); });
 
-  /* ---------- Item detail (tile) ---------- */
-  function openItemDetail(colId, itemId){
+  /* ---------- Item detail ---------- */
+  var itemScreen = document.getElementById("screen-item");
+  var itemNotes = document.getElementById("item-notes");
+  function openItemDetail(colId, itemId, backTo){
     currentItemRef = { collectionId: colId, itemId: itemId };
+    itemBackTarget = backTo || "detail";
+    currentId = colId;
     renderItemDetail();
     showScreen("item");
   }
-  document.getElementById("item-back").addEventListener("click", function(){ showScreen("detail"); renderDetail(); });
+  function leaveItem(){
+    if(itemBackTarget === "home") goHome();
+    else { var col = findCollection(currentItemRef ? currentItemRef.collectionId : currentId); if(col){ currentId = col.id; renderDetail(); showScreen("detail"); } else goCollections(); }
+  }
+  document.getElementById("item-back").addEventListener("click", leaveItem);
   document.getElementById("item-trash").addEventListener("click", function(){
-    if(!currentItemRef) return;
-    requestDeleteItem(currentItemRef.collectionId, currentItemRef.itemId);
-  });
-  document.getElementById("item-toggle").addEventListener("click", function(){
-    if(!currentItemRef) return;
-    toggleItem(currentItemRef.collectionId, currentItemRef.itemId);
-    renderItemDetail();
+    if(currentItemRef) requestDeleteItem(currentItemRef.collectionId, currentItemRef.itemId);
   });
   document.getElementById("item-edit").addEventListener("click", function(){
-    if(!currentItemRef) return;
-    openEdit(currentItemRef.collectionId, currentItemRef.itemId);
+    if(currentItemRef) openEdit(currentItemRef.collectionId, currentItemRef.itemId);
   });
-  document.getElementById("detail-fab").addEventListener("click", function(){
-    hideSuggestions();
-    if(currentId) openEdit(currentId, null);
+  document.getElementById("item-notes-btn").addEventListener("click", function(){
+    itemNotes.scrollIntoView({ behavior:"smooth", block:"center" });
+    setTimeout(function(){ itemNotes.focus({ preventScroll:true }); }, 250);
+  });
+  var notesTimer = null;
+  itemNotes.addEventListener("input", function(){
+    var ref = currentItemRef, val = itemNotes.value;
+    if(notesTimer) clearTimeout(notesTimer);
+    notesTimer = setTimeout(function(){
+      var it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+      it.notes = val; saveCollections();
+    }, 400);
   });
 
+  function statCard(label, value, wide){
+    return '<div class="stat-card'+(wide?" wide":"")+'"><span class="stat-label">'+escapeHtml(label)+'</span><span class="stat-value">'+escapeHtml(value || "—")+'</span></div>';
+  }
+  /* Fetched items show every field; hand-made or edited items show only what was filled in. */
+  function infoGrid(themeKey, item){
+    var meta = item.meta || {};
+    var handMade = !!(meta.manual || item.edited);
+    var cards = "";
+    (FIELDS[themeKey] || []).forEach(function(f){
+      var v = meta[f.key];
+      var has = v !== undefined && v !== null && String(v).trim() !== "";
+      if(handMade && !has) return;
+      var label = (f.key === "rating" && !handMade) ? "TMDB rating" : f.label;
+      var shown = has ? String(v) : (f.key === "rating" ? "—" : "Unknown");
+      if(has && f.key === "rating" && /^\d+(\.\d+)?$/.test(shown.trim())) shown = shown.trim() + " / 10";
+      cards += statCard(label, shown, f.wide);
+    });
+    if(!cards) return '<div class="notice">No details yet. Tap Edit details to add them.</div>';
+    return '<div class="stat-grid">' + cards + '</div>';
+  }
+  function renderItemDetail(){
+    if(!currentItemRef) return;
+    var col = findCollection(currentItemRef.collectionId);
+    if(!col){ goCollections(); return; }
+    var item = findItem(col.id, currentItemRef.itemId);
+    if(!item){ leaveItem(); return; }
+    var theme = THEMES[col.theme];
+    setCat(itemScreen, col.theme);
+    document.getElementById("item-crumb").textContent = col.name;
+
+    var cov = document.getElementById("item-cover");
+    var src = posterSrc(item);
+    cov.innerHTML = src ? posterMarkup(src) : (item.meta && item.meta.status === "loading") ? '<span class="spin" style="width:28px;height:28px;border-width:3px"></span>' : theme.icon;
+    document.getElementById("item-name").textContent = displayTitle(item);
+    var sub = item.meta && item.meta.status === "found" ? metaSubtitle(col.theme, item.meta) : "";
+    var subEl = document.getElementById("item-subline");
+    subEl.textContent = sub; subEl.hidden = !sub;
+
+    buildStatusGroup(document.getElementById("item-status"), col.theme, getStatus(item), function(st){
+      var it = findItem(col.id, item.id); if(!it) return;
+      setStatus(it, st); saveCollections(); renderItemDetail();
+    });
+
+    var meta = item.meta, html = "";
+    var editHint = " Tap Edit details to fill them in yourself.";
+    if(meta && meta.status === "found") html = infoGrid(col.theme, item);
+    else if(!meta || meta.status === "loading") html = '<div class="notice">Fetching official info…</div>';
+    else if(meta.status === "nokey") html = '<div class="notice">Automatic details aren’t set up for this category yet.'+editHint+'</div>';
+    else if(meta.status === "notfound") html = '<div class="notice">No match found for "'+escapeHtml(item.text)+'". Check the spelling, or it may not be listed.'+editHint+'</div>';
+    else if(meta.status === "error") html = '<div class="notice">Couldn’t reach the database just now. <a href="#" id="item-retry">Try again</a>, or tap Edit details to fill them in yourself.</div>';
+    document.getElementById("item-info").innerHTML = html;
+    var retry = document.getElementById("item-retry");
+    if(retry) retry.addEventListener("click", function(e){ e.preventDefault(); triggerLookup(col.id, item.id); });
+
+    if(document.activeElement !== itemNotes) itemNotes.value = item.notes || "";
+  }
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c]; });
+  }
+
   /* ---------- Add / edit item ---------- */
-  var editState = null; // { colId, itemId|null, newBlob, newUrl, removePhoto }
+  document.getElementById("detail-fab").addEventListener("click", function(){ hideSuggestions(); if(currentId) openEdit(currentId, null); });
+  var editState = null; // { colId, itemId|null, newBlob, newUrl, removePhoto, status }
+  var editScreen = document.getElementById("screen-edit");
   var editTitle = document.getElementById("edit-title");
   var editSave = document.getElementById("edit-save");
   var editFile = document.getElementById("edit-file");
@@ -994,60 +1495,56 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
   function openEdit(colId, itemId){
     var col = findCollection(colId); if(!col) return;
     var theme = THEMES[col.theme];
-    var item = itemId ? col.items.find(function(i){ return i.id === itemId; }) : null;
+    var item = itemId ? findItem(colId, itemId) : null;
     if(itemId && !item) return;
     discardPendingPhoto();
-    editState = { colId: colId, itemId: itemId, newBlob: null, newUrl: null, removePhoto: false };
-    var screen = document.getElementById("screen-edit");
-    screen.style.setProperty("--tc", theme.color);
-    document.getElementById("edit-heading").textContent = item ? "Edit details" : "Add " + (col.theme === "books" ? "a book" : col.theme === "music" ? "music" : "a title");
+    editState = { colId: colId, itemId: itemId, newBlob: null, newUrl: null, removePhoto: false, status: item ? getStatus(item) : "planned" };
+    setCat(editScreen, col.theme);
+    document.getElementById("edit-heading").textContent = item ? "Edit details" : "Add " + (col.theme === "books" ? "a book" : col.theme === "music" ? "music" : col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : "a movie");
     editSave.textContent = item ? "Save changes" : "Add to collection";
     editPhotoError.hidden = true;
 
     var meta = (item && item.meta && item.meta.status === "found") ? item.meta : {};
-    editTitle.value = item ? ((meta.title) || item.text) : "";
+    editTitle.value = item ? (meta.title || item.text) : "";
     var wrap = document.getElementById("edit-fields");
     wrap.innerHTML = "";
     (FIELDS[col.theme] || []).forEach(function(f){
       var box = document.createElement("div");
       if(f.wide) box.className = "wide";
-      var lab = document.createElement("p");
-      lab.className = "section-label"; lab.textContent = f.label;
+      var lab = document.createElement("label");
+      lab.className = "section-label"; lab.style.display = "block"; lab.textContent = f.label;
+      lab.htmlFor = "edit-field-" + f.key;
       var inp = document.createElement("input");
       inp.className = "field"; inp.type = "text"; inp.maxLength = 80; inp.autocomplete = "off";
       inp.placeholder = f.placeholder || "";
       if(f.numeric) inp.inputMode = "decimal";
-      inp.dataset.key = f.key;
+      inp.dataset.key = f.key; inp.id = "edit-field-" + f.key;
       var v = meta[f.key];
       inp.value = (v === undefined || v === null) ? "" : String(v);
-      inp.id = "edit-field-" + f.key;
-      lab.setAttribute("aria-hidden", "true");
-      inp.setAttribute("aria-label", f.label);
       box.appendChild(lab); box.appendChild(inp);
       wrap.appendChild(box);
     });
+    renderEditStatus();
+    document.getElementById("edit-notes-wrap").hidden = !theme.notesInForm;
+    document.getElementById("edit-notes").value = (item && item.notes) || "";
     validateEdit();
     renderEditPoster();
     showScreen("edit");
-    document.querySelector("#screen-edit .grow").scrollTop = 0;
     if(!item) setTimeout(function(){ editTitle.focus(); }, 50);
   }
-  function editItem(){
-    if(!editState || !editState.itemId) return null;
-    var col = findCollection(editState.colId); if(!col) return null;
-    return col.items.find(function(i){ return i.id === editState.itemId; }) || null;
+  function editItemRef(){ return (editState && editState.itemId) ? findItem(editState.colId, editState.itemId) : null; }
+  function renderEditStatus(){
+    var col = findCollection(editState.colId); if(!col) return;
+    buildStatusGroup(document.getElementById("edit-status"), col.theme, editState.status, function(st){ editState.status = st; renderEditStatus(); });
   }
   function renderEditPoster(){
     if(!editState) return;
-    var col = findCollection(editState.colId); if(!col) return;
-    var theme = THEMES[col.theme];
-    var item = editItem();
+    var item = editItemRef();
     var src = null, hasOwnPhoto = false;
     if(editState.newUrl){ src = editState.newUrl; hasOwnPhoto = true; }
     else if(item && !editState.removePhoto && item.posterImg){ src = posterSrc(item); hasOwnPhoto = true; }
     else if(item && item.meta && item.meta.poster){ src = item.meta.poster; }
-    var btn = document.getElementById("edit-poster");
-    btn.innerHTML = src ? posterMarkup(src)
+    document.getElementById("edit-poster").innerHTML = src ? posterMarkup(src)
       : '<span class="edit-poster-hint">'+iconHtml("image")+'<span>Add a cover</span></span>';
     document.getElementById("edit-upload").textContent = src ? "Change photo" : "Upload photo";
     document.getElementById("edit-remove-photo").hidden = !hasOwnPhoto;
@@ -1062,9 +1559,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
   document.getElementById("edit-upload").addEventListener("click", function(){ editFile.click(); });
   document.getElementById("edit-remove-photo").addEventListener("click", function(){
     if(!editState) return;
-    discardPendingPhoto();
-    editState.removePhoto = true;
-    renderEditPoster();
+    discardPendingPhoto(); editState.removePhoto = true; renderEditPoster();
   });
   editFile.addEventListener("change", function(){
     var file = editFile.files && editFile.files[0];
@@ -1074,9 +1569,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     shrinkImage(file).then(function(blob){
       if(!editState) return;
       discardPendingPhoto();
-      editState.newBlob = blob;
-      editState.newUrl = URL.createObjectURL(blob);
-      editState.removePhoto = false;
+      editState.newBlob = blob; editState.newUrl = URL.createObjectURL(blob); editState.removePhoto = false;
       renderEditPoster();
     }).catch(function(){
       editPhotoError.textContent = "This photo couldn't be opened. Try a JPG or PNG image.";
@@ -1087,8 +1580,8 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var st = editState;
     discardPendingPhoto();
     editState = null;
-    if(st && st.itemId){ showScreen("item"); renderItemDetail(); }
-    else { showScreen("detail"); renderDetail(); }
+    if(st && st.itemId){ renderItemDetail(); showScreen("item"); }
+    else { renderDetail(); showScreen("detail"); }
   }
   document.getElementById("edit-back").addEventListener("click", closeEdit);
   editSave.addEventListener("click", saveEdit);
@@ -1099,11 +1592,10 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     var title = editTitle.value.trim(); if(!title) return;
     editSave.disabled = true;
 
-    var item = editItem();
+    var item = editItemRef();
     var isNew = !item;
-    if(isNew) item = { id: uid(), text: title, done: false, meta: null };
+    if(isNew) item = { id: uid(), text: title, done: false, addedAt: Date.now(), meta: null };
 
-    // Photo: store the new one first, then drop the old one
     var oldRef = item.posterImg || null;
     if(editState.newBlob){
       var ref = null;
@@ -1112,9 +1604,7 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
         try{ await putImage(ref, editState.newBlob); imageUrls[ref] = URL.createObjectURL(editState.newBlob); }
         catch(e){ ref = null; }
       }
-      if(!ref){
-        try{ ref = await blobToDataUrl(editState.newBlob); }catch(e){ ref = null; }
-      }
+      if(!ref){ try{ ref = await blobToDataUrl(editState.newBlob); }catch(e){ ref = null; } }
       if(!ref){
         editPhotoError.textContent = "The photo couldn't be saved on this device. Try a smaller image.";
         editPhotoError.hidden = false;
@@ -1128,7 +1618,6 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       deleteImage(oldRef);
     }
 
-    // Details
     var base = (item.meta && item.meta.status === "found") ? item.meta : { status:"found", manual:true };
     var meta = {};
     Object.keys(base).forEach(function(k){ meta[k] = base[k]; });
@@ -1139,127 +1628,88 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
       if(v) meta[inp.dataset.key] = v; else delete meta[inp.dataset.key];
     });
     if(meta.releaseDate && !meta.year) meta.year = String(meta.releaseDate).slice(0,4);
+    if(meta.length && col.theme === "music") delete meta.length;
     item.meta = meta;
     item.text = title;
     item.edited = true;
+    setStatus(item, editState.status || "planned");
+    if(THEMES[col.theme].notesInForm) item.notes = document.getElementById("edit-notes").value;
 
     if(isNew) col.items.push(item);
-    if(!saveCollections()){
-      showToast("Not enough space on this device to save. Remove some photos and try again.");
-    }
+    if(!saveCollections()) showToast("Not enough space on this device to save. Remove some photos and try again.");
     closeEdit();
   }
 
-  function statCard(iconName, label, value, wide){
-    return '<div class="stat-card'+(wide?" wide":"")+'"><span class="stat-label">'+iconHtml(iconName)+" "+label+'</span><span class="stat-value">'+escapeHtml(value || "—")+'</span></div>';
-  }
-  /* Fetched items show every field; hand-made or edited items show only what was filled in. */
-  function infoGrid(themeKey, item){
-    var meta = item.meta || {};
-    var handMade = !!(meta.manual || item.edited);
-    var cards = "";
-    (FIELDS[themeKey] || []).forEach(function(f){
-      var v = meta[f.key];
-      var has = v !== undefined && v !== null && String(v).trim() !== "";
-      if(handMade && !has) return;
-      var label = (f.key === "rating" && !handMade) ? "TMDB Rating" : f.label;
-      var shown = has ? String(v) : (f.key === "rating" ? "—" : "Unknown");
-      if(has && f.key === "rating" && /^\d+(\.\d+)?$/.test(shown.trim())) shown = shown.trim() + " / 10";
-      cards += statCard(f.icon, label, shown, f.wide);
-    });
-    if(!cards) return '<div class="notice">No details yet. Tap Edit to add them.</div>';
-    return '<div class="stat-grid">' + cards + '</div>';
-  }
-  function renderItemDetail(){
-    if(!currentItemRef) return;
-    var activeNotes = document.getElementById("item-notes");
-    if(activeNotes && document.activeElement === activeNotes) return; // don't clobber an in-progress note
-    var col = findCollection(currentItemRef.collectionId);
-    if(!col){ showScreen("mine"); return; }
-    var item = col.items.find(function(i){ return i.id === currentItemRef.itemId; });
-    if(!item){ showScreen("detail"); renderDetail(); return; }
-    var theme = THEMES[col.theme];
-    document.querySelector("#screen-item").style.setProperty("--tc", theme.color);
-    document.getElementById("item-crumb").textContent = col.name;
-
-    var meta = item.meta;
-    var displayTitle = (meta && meta.status === "found" && meta.title) ? meta.title : item.text;
-    document.getElementById("item-toggle").textContent = item.done ? "Mark not done" : "Mark done";
-
-    var bigSrc = posterSrc(item);
-    var posterInner = (meta && meta.status === "loading" && !bigSrc) ? '<div class="spin" style="width:28px;height:28px;border-width:3px"></div>'
-      : bigSrc ? posterMarkup(bigSrc)
-      : theme.icon;
-
-    var body = '<div class="item-poster" style="--tc:'+theme.color+'">'+posterInner+'</div>'+
-      '<h2 class="item-detail-title">'+escapeHtml(displayTitle)+'</h2>'+
-      '<span class="detail-badge" style="--tc:'+theme.color+'">'+theme.icon+' '+theme.label+'</span>';
-
-    var editHint = " Tap Edit to fill in the details yourself.";
-    if(meta && meta.status === "found"){
-      body += infoGrid(col.theme, item);
-    } else if(!meta || meta.status === "loading"){
-      body += '<div class="notice">Fetching official info…</div>';
-    } else if(meta.status === "nokey"){
-      body += '<div class="notice">The '+(col.theme === "games" ? "RAWG" : "TMDB")+' key hasn’t been set on the server yet, so posters and details can’t be fetched for this title.'+editHint+'</div>';
-    } else if(meta.status === "notfound"){
-      body += '<div class="notice">No match found for "'+escapeHtml(item.text)+'". Check the spelling, or it may not be listed in the database.'+editHint+'</div>';
-    } else if(meta.status === "error"){
-      body += '<div class="notice">Couldn’t reach the database just now. <a href="#" id="item-retry">Tap to retry</a>, or tap Edit to fill in the details yourself.</div>';
-    }
-
-    body += '<p class="section-label">Your notes</p>'+
-      '<textarea class="field notes-field" id="item-notes" placeholder="Add a personal note…" rows="3"></textarea>';
-
-    document.getElementById("item-detail-body").innerHTML = body;
-    var retry = document.getElementById("item-retry");
-    if(retry) retry.addEventListener("click", function(e){ e.preventDefault(); triggerLookup(col.id, item.id); });
-
-    var notesEl = document.getElementById("item-notes");
-    notesEl.value = item.notes || "";
-    var notesColId = col.id, notesItemId = item.id, notesTimer = null;
-    notesEl.addEventListener("input", function(){
-      var val = notesEl.value;
-      if(notesTimer) clearTimeout(notesTimer);
-      notesTimer = setTimeout(function(){
-        var c2 = findCollection(notesColId); if(!c2) return;
-        var i2 = c2.items.find(function(x){ return x.id === notesItemId; }); if(!i2) return;
-        i2.notes = val;
-        saveCollections();
-      }, 400);
-    });
-  }
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c]; });
-  }
-
-  /* ---------- My Collections ---------- */
+  /* ---------- Collections ---------- */
   var mineList = document.getElementById("mine-list");
   var mineEmpty = document.getElementById("mine-empty");
-  document.getElementById("mine-back").addEventListener("click", function(){ showScreen("home"); });
-  document.getElementById("mine-add").addEventListener("click", openNew);
-  document.getElementById("mine-empty-cta").addEventListener("click", openNew);
+  document.getElementById("mine-add").addEventListener("click", function(){ openNew(mineTab !== "all" ? mineTab : null, "mine"); });
+  document.getElementById("mine-empty-cta").addEventListener("click", function(){ openNew(mineTab !== "all" ? mineTab : null, "mine"); });
+  var MINE_TAB_KEY = "ultimateCollection:mineTab";
+  var mineTab = (function(){ try{ var t = localStorage.getItem(MINE_TAB_KEY); return (t === "all" || THEMES[t]) ? t : "all"; }catch(e){ return "all"; } })();
 
+  var folderTrigger = document.getElementById("folder-trigger");
+  var folderMenu = document.getElementById("folder-menu");
+  function folderCount(key){ return key === "all" ? state.collections.length : state.collections.filter(function(c){ return c.theme === key; }).length; }
+  function folderName(key){ return key === "all" ? "All collections" : THEMES[key].plural; }
+  function closeFolderMenu(){ folderMenu.hidden = true; folderTrigger.classList.remove("is-open"); folderTrigger.setAttribute("aria-expanded","false"); }
+  folderTrigger.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(folderMenu.hidden){ renderFolderMenu(); folderMenu.hidden = false; folderTrigger.classList.add("is-open"); folderTrigger.setAttribute("aria-expanded","true"); }
+    else closeFolderMenu();
+  });
+  function renderFolderMenu(){
+    folderMenu.innerHTML = "";
+    ["all"].concat(Object.keys(THEMES)).forEach(function(key){
+      var opt = document.createElement("div");
+      opt.className = "select-option" + (key === mineTab ? " is-selected" : "") + (key === "all" ? "" : " " + catClass(key));
+      opt.setAttribute("role", "option"); opt.setAttribute("aria-selected", key === mineTab ? "true" : "false");
+      opt.innerHTML = (key === "all" ? iconHtml("folder") : THEMES[key].icon) + '<span></span><span class="select-count">'+folderCount(key)+'</span>';
+      opt.children[1].textContent = folderName(key);
+      opt.addEventListener("click", function(e){
+        e.stopPropagation();
+        mineTab = key;
+        try{ localStorage.setItem(MINE_TAB_KEY, key); }catch(err){}
+        closeFolderMenu();
+        renderMine();
+      });
+      folderMenu.appendChild(opt);
+    });
+  }
   function renderMine(){
+    document.getElementById("folder-icon").innerHTML = mineTab === "all" ? iconHtml("folder") : THEMES[mineTab].icon;
+    setCat(folderTrigger, mineTab === "all" ? "movie" : mineTab);
+    if(mineTab === "all") folderTrigger.classList.remove("cat-movie");
+    document.getElementById("folder-label").textContent = folderName(mineTab);
+    document.getElementById("folder-count").textContent = folderCount(mineTab);
+    if(!folderMenu.hidden) renderFolderMenu();
+
     mineList.innerHTML = "";
-    mineEmpty.hidden = state.collections.length !== 0;
-    state.collections.forEach(function(col){
+    var shown = state.collections.filter(function(c){ return mineTab === "all" || c.theme === mineTab; });
+    mineEmpty.hidden = shown.length !== 0;
+    document.getElementById("mine-empty-text").textContent = mineTab === "all"
+      ? "No collections yet. Start your first one."
+      : "No " + THEMES[mineTab].plural.toLowerCase() + " lists yet.";
+    document.getElementById("mine-empty-cta").textContent = mineTab === "all" ? "New collection" : "New " + THEMES[mineTab].label.toLowerCase() + " list";
+    shown.forEach(function(col){
       var theme = THEMES[col.theme] || THEMES.movie;
-      var done = col.items.filter(function(i){ return i.done; }).length;
+      var prog = progressOf(col);
       var card = document.createElement("button");
-      card.type = "button"; card.className = "coll-card";
-      card.innerHTML =
-        '<span class="coll-chip" style="--tc:'+theme.color+'">'+theme.icon+'</span>'+
-        '<span class="coll-meta"><span class="name"></span></span>'+
-        '<span class="coll-count"></span>'+
-        '<button class="coll-trash" aria-label="Delete collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>'+
-        '<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>';
-      card.querySelector(".name").textContent = col.name;
-      card.querySelector(".coll-count").innerHTML =
-        "<span>" + col.items.length + " item" + (col.items.length === 1 ? "" : "s") + "</span>" +
-        "<span class=\"count-done\">" + done + " done</span>";
-      card.addEventListener("click", function(ev){ if(ev.target.closest(".coll-trash")) return; openDetail(col.id, "mine"); });
-      card.querySelector(".coll-trash").addEventListener("click", function(ev){ ev.stopPropagation(); requestDeleteCollection(col); });
+      card.type = "button"; card.className = "coll-card " + catClass(col.theme);
+      var covers = "";
+      for(var k=0;k<3;k++){
+        var it = col.items[k];
+        var src = it ? posterSrc(it) : null;
+        covers += '<span class="cover v'+(k+1)+' thumb-s">'+(src ? posterMarkup(src) : "")+'</span>';
+      }
+      card.innerHTML = '<span class="stack-covers" aria-hidden="true">'+covers+'</span>'+
+        '<span class="coll-meta"><span class="coll-name"></span><span class="coll-kind"></span>'+
+        '<span class="bar"><span style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
+        '<span class="coll-progress"></span></span>' + iconHtml("chev");
+      card.querySelector(".coll-name").textContent = col.name;
+      card.querySelector(".coll-kind").textContent = theme.plural;
+      card.querySelector(".coll-progress").textContent = col.items.length ? progressText(col) : "No items yet";
+      card.addEventListener("click", function(){ openDetail(col.id, "mine"); });
       mineList.appendChild(card);
     });
   }
@@ -1271,15 +1721,10 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
     if(!pendingDelete) return hideToast();
     if(pendingDelete.type === "item"){
       var col = findCollection(pendingDelete.collectionId);
-      if(col){
-        col.items.splice(Math.min(pendingDelete.index, col.items.length), 0, pendingDelete.item);
-        saveCollections();
-        refreshViews();
-      }
+      if(col){ col.items.splice(Math.min(pendingDelete.index, col.items.length), 0, pendingDelete.item); saveCollections(); refreshViews(); }
     } else if(pendingDelete.type === "collection"){
       state.collections.splice(Math.min(pendingDelete.index, state.collections.length), 0, pendingDelete.collection);
-      saveCollections();
-      renderMine();
+      saveCollections(); refreshViews();
     }
     pendingDelete = null;
     hideToast();
@@ -1296,33 +1741,27 @@ h1,h2,h3{margin:0;font-family:"Bebas Neue",system-ui,sans-serif;letter-spacing:.
   /* ---------- Settings: appearance (light / dark / system) ---------- */
   var APPEARANCE_KEY = "ultimateCollection:appearance";
   var modeGroup = document.getElementById("mode-group");
-
-  function loadAppearance(){
-    try{ return localStorage.getItem(APPEARANCE_KEY) || "system"; }catch(e){ return "system"; }
-  }
-  function saveAppearance(mode){
-    try{ localStorage.setItem(APPEARANCE_KEY, mode); }catch(e){}
-  }
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  function loadAppearance(){ try{ return localStorage.getItem(APPEARANCE_KEY) || "system"; }catch(e){ return "system"; } }
+  function saveAppearance(mode){ try{ localStorage.setItem(APPEARANCE_KEY, mode); }catch(e){} }
   function applyAppearance(mode){
-    if(mode === "light") document.documentElement.setAttribute("data-theme", "light");
-    else if(mode === "dark") document.documentElement.setAttribute("data-theme", "dark");
+    if(mode === "light" || mode === "dark") document.documentElement.setAttribute("data-theme", mode);
     else document.documentElement.removeAttribute("data-theme");
     Array.prototype.forEach.call(modeGroup.children, function(btn){
-      btn.classList.toggle("is-active", btn.dataset.mode === mode);
+      var on = btn.dataset.mode === mode;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-checked", on ? "true" : "false");
     });
+    var dark = mode === "dark" || (mode === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if(themeMeta) themeMeta.setAttribute("content", dark ? "#0E0F14" : "#F4F5F9");
   }
   Array.prototype.forEach.call(modeGroup.children, function(btn){
-    btn.addEventListener("click", function(){
-      applyAppearance(btn.dataset.mode);
-      saveAppearance(btn.dataset.mode);
-    });
+    btn.addEventListener("click", function(){ applyAppearance(btn.dataset.mode); saveAppearance(btn.dataset.mode); });
   });
-  document.getElementById("settings-back").addEventListener("click", function(){ showScreen("home"); });
-  function openSettings(){ showScreen("settings"); }
 
   /* ---------- Boot ---------- */
   applyAppearance(loadAppearance());
-  showScreen("home");
+  if(shouldShowIntro()) openIntro(); else goHome();
   openImgDb().then(function(db){
     imgDb = db;
     return loadAllImages();
