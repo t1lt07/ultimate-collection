@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F4F5F9">
-<title>Ultimate Collection</title>
+<title>CollectEon</title>
+<meta name="application-name" content="CollectEon">
+<meta name="apple-mobile-web-app-title" content="CollectEon">
+<meta name="description" content="CollectEon: one place for every movie, series, game, album and book you love.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -151,11 +154,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
 /* Home (start screen) */
 #screen-home .scroll{display:flex;flex-direction:column}
-.home-stage{flex:1;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:24px;padding:4px 0 8px}
+.home-stage{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:24px;padding:22px 0 8px}
 .home-title{margin:0;font-family:var(--font-display);font-size:35px;font-weight:800;letter-spacing:-0.035em;line-height:1.05}
 .home-title span{display:block;color:var(--accent)}
 .home-tagline{margin:12px auto 0;max-width:270px;font-size:15px;line-height:1.45;color:var(--muted)}
-.home-actions{display:flex;gap:10px;width:100%}
+.home-actions{display:flex;gap:10px;width:100%;margin-top:10px}
 .home-actions .btn{flex:1;padding:0 14px}
 .start-label{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
 .cat-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
@@ -173,42 +176,90 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .cc-title{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cc-sub{font-size:11.5px;font-weight:600;color:var(--deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* The cover fan */
-.fan{position:relative;width:300px;height:186px;flex:0 0 auto}
-.fan-card{position:absolute;left:calc(50% - 46px);top:10px;width:92px;height:138px;border-radius:16px;border:2px solid var(--surface);
-  box-shadow:0 18px 30px -16px rgba(0,0,0,.5);overflow:hidden;transform:var(--tf);padding:0}
-.fan-card > svg{width:28px;height:28px}
-.fan-card:nth-child(1){--tf:translate(-104px,22px) rotate(-18deg);z-index:1}
-.fan-card:nth-child(2){--tf:translate(-52px,8px) rotate(-9deg);z-index:2}
-.fan-card:nth-child(3){--tf:none;z-index:3}
-.fan-card:nth-child(4){--tf:translate(52px,8px) rotate(9deg);z-index:2}
-.fan-card:nth-child(5){--tf:translate(104px,22px) rotate(18deg);z-index:1}
-.fan.animate .fan-card{animation:fanOut .7s cubic-bezier(.2,.8,.2,1) both}
-.fan.animate .fan-card:nth-child(2),.fan.animate .fan-card:nth-child(4){animation-delay:.05s}
-.fan.animate .fan-card:nth-child(1),.fan.animate .fan-card:nth-child(5){animation-delay:.1s}
-@keyframes fanOut{from{transform:translateY(12px) scale(.94);opacity:0}to{transform:var(--tf);opacity:1}}
+/* Feature cards: two rows of two, one centred below; all inside the screen */
+.fan{width:100%;flex:0 0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:6px 2px 4px}
+.fan-card{min-height:112px;border-radius:20px;border:2px solid var(--surface);
+  box-shadow:0 14px 26px -16px rgba(0,0,0,.45);padding:13px 13px 14px;background:var(--t2);color:var(--deep);
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;transform:var(--tf)}
+.fan-card:nth-child(5){grid-column:1 / -1;justify-self:center;width:calc(50% - 6px)}
+.fan-card:nth-child(4n+1){--tf:rotate(-1.5deg)}
+.fan-card:nth-child(4n+2){--tf:rotate(1.5deg)}
+.fan-card:nth-child(4n+3){--tf:rotate(1.5deg)}
+.fan-card:nth-child(4n){--tf:rotate(-1.5deg)}
+.fan-card:nth-child(5){--tf:rotate(-1deg)}
+.fc-icon{width:32px;height:32px;border-radius:50%;background:var(--surface);color:var(--deep);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.fc-icon svg{width:17px;height:17px}
+.fc-text{display:flex;flex-direction:column;gap:3px}
+.fc-title{font-size:14.5px;font-weight:800;line-height:1.15;letter-spacing:-0.01em}
+.fc-sub{font-size:12px;font-weight:600;line-height:1.3;opacity:.9}
+.fan.animate .fan-card{animation:cardIn .6s cubic-bezier(.2,.8,.2,1) both}
+.fan.animate .fan-card:nth-child(2){animation-delay:.06s}
+.fan.animate .fan-card:nth-child(3){animation-delay:.12s}
+.fan.animate .fan-card:nth-child(4){animation-delay:.18s}
+.fan.animate .fan-card:nth-child(5){animation-delay:.24s}
+@keyframes cardIn{from{transform:translateY(16px);opacity:0}to{transform:var(--tf);opacity:1}}
+.title-block{margin-top:0}
+.title-block .wordmark{margin-bottom:8px}
 
-/* Intro (first launch only) */
-#screen-intro{padding-bottom:env(safe-area-inset-bottom, 0px)}
-.intro-top{display:flex;justify-content:flex-end;padding:14px 18px 0}
-.intro-slides{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
-.intro-slides::-webkit-scrollbar{display:none}
-.intro-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:0 26px;text-align:center}
-.intro-art{width:100%;height:280px;border-radius:32px;background:var(--surface);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
-.intro-slide h1{margin:0;font-family:var(--font-display);font-size:29px;font-weight:800;letter-spacing:-0.03em;line-height:1.12;text-wrap:balance}
-.intro-slide p{margin:12px 0 0;font-size:15.5px;line-height:1.5;color:var(--muted)}
-.intro-pills{display:flex;flex-direction:column;gap:10px;align-items:center}
-.intro-pills .st-pill{height:40px;padding:0 16px;font-size:14px}
-.intro-pills .st-pill svg{width:14px;height:14px}
-.intro-pills .dot{width:10px;height:10px}
-.intro-dots{display:flex;justify-content:center;gap:6px;padding:6px 0 18px}
-.intro-dots span{width:8px;height:8px;border-radius:4px;background:var(--line);transition:width .2s ease, background .2s ease}
-.intro-dots span.is-on{width:22px;background:var(--ink)}
-.intro-foot{padding:0 26px calc(24px + env(safe-area-inset-bottom, 0px))}
+/* App name */
+.wordmark{margin:0;text-align:center;font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-0.03em;color:var(--ink);flex:0 0 auto}
+.wordmark span{color:var(--accent)}
+
+/* Welcome (first screen: sign in or continue as guest) */
+.welcome-scroll{display:flex;flex-direction:column;padding-top:42px;padding-bottom:20px}
+.welcome-stage{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:26px}
+.welcome-actions{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;background:var(--bg);padding:14px 22px calc(16px + env(safe-area-inset-bottom, 0px));
+  box-shadow:0 -14px 22px -18px rgba(0,0,0,.35);position:relative;z-index:2}
+.welcome-btns{display:flex;gap:10px}
+.welcome-btns .btn{flex:1;padding:0 12px;height:54px}
+.welcome-guest{display:block;margin:2px auto 0;font-size:15px;font-weight:700;padding:8px 12px}
+.welcome-note{margin:0 auto;max-width:300px;text-align:center;font-size:12.5px;line-height:1.4;color:var(--muted)}
+
+/* Home sections for returning users */
+.home-sec{width:100%;text-align:left}
+.home-sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:2px 0 10px}
+.home-sec-head h2{margin:0;font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-0.02em}
+.pin-row{display:flex;gap:10px;overflow-x:auto;margin:0 -22px;padding:0 22px 4px;scrollbar-width:none}
+.pin-row::-webkit-scrollbar{display:none}
+.pin-card{flex:0 0 150px;border:none;border-radius:20px;background:var(--t1);color:var(--deep);padding:14px;text-align:left;display:flex;flex-direction:column;gap:8px}
+.pin-card svg{width:20px;height:20px}
+.pin-card .pc-name{font-size:14.5px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pin-card .pc-prog{font-size:12px;font-weight:600}
+.pin-card .bar{background:color-mix(in srgb, var(--deep) 16%, transparent)}
+.cont-box{text-align:left}
+.pick-btn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:none;border-radius:999px;background:var(--chip);color:var(--ink);font-size:12.5px;font-weight:700}
+.pick-btn svg{width:15px;height:15px}
+.act-row{width:100%;border:none;text-align:left;background:var(--surface);border-radius:18px;padding:8px 14px 8px 8px;display:flex;align-items:center;gap:12px;color:var(--ink)}
+.act-row .cover{width:40px;height:56px;border-radius:10px}
+.act-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.act-title{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-sub{font-size:12.5px;font-weight:600;color:var(--deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-time{font-size:12px;color:var(--muted);flex:0 0 auto}
+.stats-card{padding:16px}
+.stat-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat-tile{background:var(--bg);border-radius:14px;padding:12px 10px;display:flex;flex-direction:column;gap:2px}
+.st-num{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-0.02em}
+.st-lab{font-size:11.5px;font-weight:600;color:var(--muted);line-height:1.25}
+.cat-bars{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.cat-bar{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px}
+.cat-bar svg{width:18px;height:18px;color:var(--deep)}
+.cat-bar .cb-main{display:flex;flex-direction:column;gap:5px;min-width:0}
+.cat-bar .cb-name{font-size:13px;font-weight:700}
+.cat-bar .cb-num{font-size:12.5px;font-weight:700;color:var(--muted)}
+.pick-card{text-align:center;display:flex;flex-direction:column;align-items:center}
+.pick-eyebrow{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--muted)}
+.pick-card .cover{width:120px;height:180px;border-radius:16px;box-shadow:0 18px 30px -16px rgba(0,0,0,.45)}
+.pick-card .modal-actions{width:100%}
 
 /* Collections */
 .coll-list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
-.coll-card{width:100%;border:none;text-align:left;background:var(--surface);border-radius:24px;padding:13px 14px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);color:var(--ink)}
+.coll-card{width:100%;background:var(--surface);border-radius:24px;padding:13px 6px 13px 14px;display:flex;align-items:center;gap:4px;box-shadow:var(--shadow);color:var(--ink)}
+.coll-open{flex:1;min-width:0;border:none;background:none;padding:0;text-align:left;display:flex;align-items:center;gap:14px;color:inherit}
+.coll-more{width:40px;height:44px;border:none;border-radius:12px;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.coll-more svg{width:20px;height:20px}
+.coll-more:hover{background:var(--chip)}
+.coll-name .pin-mark{display:inline-flex;vertical-align:-2px;margin-right:5px;color:var(--accent)}
+.coll-name .pin-mark svg{width:14px;height:14px}
 .stack-covers{display:flex;flex:0 0 auto;width:76px;height:68px}
 .stack-covers .cover{width:40px;height:58px;border-radius:10px;border:2px solid var(--surface)}
 .stack-covers .cover:nth-child(2){margin-left:-22px;margin-top:4px}
@@ -219,7 +270,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .bar{height:6px;border-radius:4px;background:var(--track);overflow:hidden;display:block}
 .bar > span{display:block;height:100%;border-radius:4px;background:var(--bar);transition:width .25s ease}
 .coll-progress{font-size:12.5px;color:var(--muted)}
-.coll-card > svg{width:16px;height:16px;color:var(--muted);flex:0 0 auto}
+.coll-open > svg{width:16px;height:16px;color:var(--muted);flex:0 0 auto}
 
 .empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:48px 20px;color:var(--muted)}
 .empty .ring-icon{width:60px;height:60px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;color:var(--muted)}
@@ -332,6 +383,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .sheet-opt span:nth-child(2){flex:1}
 .sheet-opt svg{width:18px;height:18px}
 .sheet-opt.is-active{background:var(--chip)}
+.sheet-opt.danger{color:var(--drop-ink)}
+.sheet-opt:hover{background:var(--chip)}
 .sheet .btn{margin-top:12px;height:52px}
 .modal-card{background:var(--surface);border-radius:24px;padding:22px;width:100%;max-width:320px}
 .modal-title{margin:0 0 8px;font-family:var(--font-display);font-size:20px;font-weight:700}
@@ -343,43 +396,74 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .phone.tabs-on .toast{bottom:calc(100px + env(safe-area-inset-bottom, 0px))}
 .toast button{background:none;border:none;color:inherit;font-weight:800;font-size:14px;text-decoration:underline;flex:0 0 auto}
 
+/* Account + sign-in */
+.auth-lead{margin:10px 0 0;font-size:15px;line-height:1.45;color:var(--muted)}
+.auth-mode{margin-top:22px}
+.auth-mode.seg{grid-template-columns:repeat(2,minmax(0,1fr))}
+.provider-btn{margin-top:12px}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0 4px;font-size:13px;font-weight:600;color:var(--muted)}
+.auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.pw-wrap{position:relative}
+.pw-wrap .field{padding-right:76px}
+.pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:36px;padding:0 12px;border:none;border-radius:10px;background:var(--chip);color:var(--ink);font-size:12.5px;font-weight:700}
+.auth-msg{margin:14px 0 0;font-size:14px;line-height:1.45;border-radius:14px;padding:12px 14px}
+.auth-msg.error{background:var(--drop-bg);color:var(--drop-ink)}
+.auth-msg.info{background:var(--chip);color:var(--ink)}
+.auth-submit{margin-top:18px}
+.auth-forgot{display:block;margin:14px auto 0}
+.acct-head{display:flex;align-items:center;gap:12px}
+.acct-avatar{width:44px;height:44px;border-radius:50%;background:var(--btn);color:var(--on-btn);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex:0 0 auto}
+.acct-email{font-size:15px;font-weight:700;overflow-wrap:anywhere}
+.acct-sync{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:2px}
+.acct-sync .sdot{width:8px;height:8px;border-radius:50%;background:#2E9E5B}
+.acct-sync.syncing .sdot{background:var(--accent)}
+.acct-sync.offline .sdot,.acct-sync.error .sdot{background:var(--drop-ink)}
+.acct-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.acct-actions .btn{flex:1}
+.danger-link{display:block;margin:16px auto 0;background:none;border:none;color:var(--drop-ink);font-size:14px;font-weight:700;padding:8px}
+.acct-pitch strong{display:block;font-size:16px;font-weight:800;margin-bottom:6px}
+.acct-pitch p{margin:0 0 14px;font-size:14px;line-height:1.45;color:var(--muted)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 <div id="app">
   <div class="phone" id="phone">
 
-    <!-- INTRO (first launch) -->
-    <section class="screen" id="screen-intro" hidden>
-      <div class="intro-top"><button class="linkbtn" id="intro-skip" type="button" style="color:var(--muted);padding:10px 4px">Skip</button></div>
-      <div class="intro-slides" id="intro-slides">
-        <div class="intro-slide">
-          <div class="intro-art"><div class="fan" id="intro-fan"></div></div>
-          <div><h1>Everything you watch, play, hear and read</h1><p>Keep one list for all of it, with real covers and details filled in for you.</p></div>
-        </div>
-        <div class="intro-slide cat-movie">
-          <div class="intro-art"><div class="intro-pills">
-            <span class="st-pill st-planned"><span class="dot st-planned"></span>Planned</span>
-            <span class="st-pill st-progress"><span class="dot st-progress"></span>In progress</span>
-            <span class="st-pill st-completed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>Watched</span>
-          </div></div>
-          <div><h1>Track what you've finished</h1><p>Mark each title as planned, in progress or done, and add your own covers and notes.</p></div>
+    <!-- WELCOME (sign in or continue as guest) -->
+    <section class="screen" id="screen-welcome" hidden>
+      <div class="scroll welcome-scroll">
+        <div class="welcome-stage">
+          <div class="title-block">
+            <p class="wordmark" aria-label="CollectEon">Collect<span>Eon</span></p>
+            <h1 class="home-title">Your ultimate <span>collection</span></h1>
+            <p class="home-tagline">One place for every movie, series, game, album and book you love.</p>
+          </div>
+          <div class="fan" id="welcome-fan" aria-hidden="true"></div>
         </div>
       </div>
-      <div class="intro-dots" id="intro-dots" aria-hidden="true"><span class="is-on"></span><span></span></div>
-      <div class="intro-foot"><button class="btn btn-primary" id="intro-next" type="button">Continue</button></div>
+      <div class="welcome-actions">
+        <div class="welcome-btns">
+          <button class="btn btn-primary" id="welcome-signup" type="button">Create account</button>
+          <button class="btn btn-secondary" id="welcome-signin" type="button">Sign in</button>
+        </div>
+        <button class="linkbtn welcome-guest" id="welcome-guest" type="button">Continue as guest</button>
+        <p class="welcome-note" id="welcome-note">As a guest, your lists stay on this device. You can create an account any time to sync them.</p>
+      </div>
     </section>
 
     <!-- HOME -->
     <section class="screen has-tabs" id="screen-home" hidden>
       <div class="scroll">
         <div class="home-stage">
-          <div class="fan" id="home-fan" aria-hidden="true"></div>
-          <div>
+          <div class="title-block">
+            <p class="wordmark" aria-label="CollectEon">Collect<span>Eon</span></p>
             <h1 class="home-title">Your ultimate <span>collection</span></h1>
-            <p class="home-tagline" id="home-tagline">One pocket list for every movie, series, game, album and book you're keeping track of.</p>
           </div>
+          <div class="fan" id="home-fan" aria-hidden="true"></div>
+          
           <div id="home-new" style="width:100%">
             <p class="start-label">Start a new list</p>
             <div class="cat-chips" id="home-chips"></div>
@@ -389,10 +473,35 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
               <button class="btn btn-primary" id="btn-new" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New</button>
               <button class="btn btn-secondary" id="btn-mine" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/></svg>My collections</button>
             </div>
+            <section class="home-sec" id="home-pinned">
+              <div class="home-sec-head"><h2>Pinned</h2></div>
+              <div class="pin-row" id="home-pin-row"></div>
+            </section>
             <div class="soft-card cont-box" id="home-cont">
               <div class="cont-head"><strong id="home-cont-title">Continue</strong><span id="home-cont-stat"></span></div>
               <div class="cont-row" id="home-cont-row"></div>
             </div>
+            <div class="soft-card cont-box" id="home-next">
+              <div class="cont-head"><strong>Up next</strong>
+                <button class="pick-btn" id="home-pick" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/></svg>Pick for me</button>
+              </div>
+              <div class="cont-row" id="home-next-row"></div>
+            </div>
+            <section class="home-sec" id="home-activity">
+              <div class="home-sec-head"><h2>Last updated</h2></div>
+              <div class="stack" id="home-activity-list" style="margin-top:0"></div>
+            </section>
+            <section class="home-sec" id="home-stats">
+              <div class="home-sec-head"><h2>Your stats</h2></div>
+              <div class="soft-card stats-card">
+                <div class="stat-tiles">
+                  <div class="stat-tile"><span class="st-num tabular" id="stat-month">0</span><span class="st-lab">finished this month</span></div>
+                  <div class="stat-tile"><span class="st-num tabular" id="stat-done">0</span><span class="st-lab">finished in total</span></div>
+                  <div class="stat-tile"><span class="st-num tabular" id="stat-prog">0</span><span class="st-lab">in progress</span></div>
+                </div>
+                <div class="cat-bars" id="stat-cats"></div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -536,6 +645,51 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       <div class="footer-bar"><button class="btn btn-primary" id="edit-save" disabled>Save</button></div>
     </section>
 
+    <!-- SIGN IN / CREATE ACCOUNT -->
+    <section class="screen" id="screen-auth" hidden>
+      <div class="scroll">
+        <div class="topbar">
+          <button class="roundbtn" id="auth-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="spacer"></span>
+        </div>
+        <h1 class="display-xl" id="auth-title" style="margin-top:16px">Welcome back</h1>
+        <p class="auth-lead" id="auth-lead">Sign in to keep your collections in sync on your phone and computer.</p>
+        <div class="seg auth-mode" id="auth-mode" role="radiogroup" aria-label="Sign in or create an account">
+          <button class="seg-opt is-active" type="button" data-mode="signin" role="radio" aria-checked="true">Sign in</button>
+          <button class="seg-opt" type="button" data-mode="signup" role="radio" aria-checked="false">Create account</button>
+        </div>
+        <button class="btn btn-secondary provider-btn" id="auth-google" type="button">Continue with Google</button>
+        <button class="btn btn-secondary provider-btn" id="auth-apple" type="button" hidden>Continue with Apple</button>
+        <div class="auth-divider">or use email</div>
+        <form id="auth-form" novalidate>
+          <label class="section-label" for="auth-email" style="display:block">Email</label>
+          <input class="field" id="auth-email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+          <label class="section-label" for="auth-password" style="display:block">Password</label>
+          <div class="pw-wrap">
+            <input class="field" id="auth-password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required>
+            <button class="pw-toggle" id="auth-pw-toggle" type="button" aria-label="Show password">Show</button>
+          </div>
+          <p class="auth-msg" id="auth-msg" role="alert" hidden></p>
+          <button class="btn btn-primary auth-submit" id="auth-submit" type="submit">Sign in</button>
+        </form>
+        <button class="linkbtn auth-forgot" id="auth-forgot" type="button">Forgot password?</button>
+      </div>
+    </section>
+
+    <!-- NEW PASSWORD (after a reset link) -->
+    <section class="screen" id="screen-reset" hidden>
+      <div class="scroll">
+        <h1 class="display-xl" style="margin-top:56px">Set a new password</h1>
+        <p class="auth-lead">Choose a new password for your account.</p>
+        <form id="reset-form" novalidate>
+          <label class="section-label" for="reset-password" style="display:block">New password</label>
+          <input class="field" id="reset-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required>
+          <p class="auth-msg" id="reset-msg" role="alert" hidden></p>
+          <button class="btn btn-primary auth-submit" id="reset-submit" type="submit">Save password</button>
+        </form>
+      </div>
+    </section>
+
     <!-- SETTINGS -->
     <section class="screen has-tabs" id="screen-settings" hidden>
       <div class="scroll">
@@ -546,8 +700,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <button class="seg-opt" type="button" data-mode="light" role="radio">Light</button>
           <button class="seg-opt" type="button" data-mode="dark" role="radio">Dark</button>
         </div>
+        <p class="section-label">Account</p>
+        <div class="soft-card" id="acct-card"></div>
         <p class="section-label">About</p>
-        <div class="soft-card muted" style="font-size:14px;line-height:1.5">Your collections and photos are saved on this device. Movie, series and game details come from TMDB and RAWG.</div>
+        <div class="soft-card muted" style="font-size:14px;line-height:1.5"><strong style="display:block;color:var(--ink);font-size:15px;margin-bottom:4px">CollectEon</strong>Your collections are saved on this device, and in your account when you're signed in. Movie, series and game details come from TMDB and RAWG.</div>
       </div>
     </section>
 
@@ -566,6 +722,33 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         </div>
         <div class="sheet-opts" id="sheet-opts" role="radiogroup" aria-label="Status"></div>
         <button class="btn btn-primary" id="sheet-open" type="button">Open details</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="coll-overlay" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="coll-sheet-title">
+        <span class="sheet-handle"></span>
+        <div class="sheet-title" id="coll-sheet-title" style="margin-bottom:4px"></div>
+        <div class="sheet-sub" id="coll-sheet-sub"></div>
+        <div class="sheet-opts">
+          <button class="sheet-opt" id="coll-pin" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 4 3v2H6v-2l4-3-1-6Z"/><path d="M12 15v6"/></svg><span id="coll-pin-label">Pin to top</span></button>
+          <button class="sheet-opt danger" id="coll-delete" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg><span>Delete collection</span></button>
+        </div>
+        <button class="btn btn-ghost" id="coll-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="overlay center" id="pick-overlay" hidden>
+      <div class="modal-card pick-card" role="dialog" aria-modal="true" aria-labelledby="pick-title">
+        <p class="pick-eyebrow">How about this one?</p>
+        <span class="cover v3" id="pick-cover"></span>
+        <h3 class="modal-title" id="pick-title" style="margin:14px 0 2px"></h3>
+        <p class="modal-body" id="pick-sub" style="margin:0 0 18px"></p>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="pick-again" type="button">Pick again</button>
+          <button class="btn btn-primary" id="pick-start" type="button">Start it</button>
+        </div>
+        <button class="linkbtn" id="pick-close" type="button" style="margin-top:8px;color:var(--muted)">Not now</button>
       </div>
     </div>
 
@@ -849,8 +1032,13 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       return Array.isArray(parsed) ? parsed : [];
     }catch(e){ return []; }
   }
-  function saveCollections(){
+  function saveLocalOnly(){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.collections)); return true; }catch(e){ return false; }
+  }
+  function saveCollections(){
+    var ok = saveLocalOnly();
+    if(ok && typeof scheduleSync === "function") scheduleSync();
+    return ok;
   }
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
   function findCollection(id){
@@ -863,7 +1051,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   }
 
   /* ---------- Screens + tab bar ---------- */
-  var SCREENS = ["intro","home","new","detail","item","mine","settings","edit"];
+  var SCREENS = ["welcome","home","new","detail","item","mine","settings","edit","auth","reset"];
   var TAB_FOR = { home:"home", mine:"mine", detail:"mine", settings:"settings" };
   var phoneEl = document.getElementById("phone");
   var tabbar = document.getElementById("tabbar");
@@ -889,7 +1077,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       hideSuggestions();
       if(b.dataset.tab === "home") goHome();
       else if(b.dataset.tab === "mine") goCollections();
-      else showScreen("settings");
+      else { renderAccount(); showScreen("settings"); }
     });
   });
   function goHome(){ renderHome(); showScreen("home"); }
@@ -979,24 +1167,20 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     });
   })();
 
-  /* Five fanned covers: the newest real covers in the middle, category colours filling any gaps. */
+  /* Five cards that sum up what the app does. */
+  var FEATURE_CARDS = [
+    { cat:"movie",  title:"Your own collections", sub:"Movies, series, games, music and books", icon:'<rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/>' },
+    { cat:"series", title:"Make plans",           sub:"Line up what to watch, play or read next", icon:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>' },
+    { cat:"games",  title:"Track progress",       sub:"From planned to finished, at a glance", icon:'<circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>' },
+    { cat:"music",  title:"Sync your devices",    sub:"Pick up on your phone or computer", icon:'<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/>' },
+    { cat:"books",  title:"Share with friends",   sub:"Show off your lists and swap picks", icon:'<circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.2 10.8 7.6-4M8.2 13.2l7.6 4"/>' }
+  ];
+
   var fanAnimated = false;
-  function buildFan(el, useOwn){
-    var cards = [];
-    if(useOwn){
-      var withCovers = [];
-      state.collections.forEach(function(col){ col.items.forEach(function(it){ if(posterSrc(it)) withCovers.push({ col: col, item: it }); }); });
-      withCovers.sort(function(a,b){ return addedAt(b.item) - addedAt(a.item); });
-      withCovers.slice(0,5).forEach(function(x){ cards.push({ cat: x.col.theme, src: posterSrc(x.item) }); });
-    }
-    var used = {}; cards.forEach(function(c){ used[c.cat] = true; });
-    var fill = CAT_ORDER.filter(function(k){ return !used[k]; }).concat(CAT_ORDER);
-    while(cards.length < 5) cards.push({ cat: fill.shift(), src: null });
-    var pos = [2,1,3,0,4]; // first card in the middle, then outwards
-    var slots = new Array(5);
-    cards.forEach(function(c, i){ slots[pos[i]] = c; });
-    el.innerHTML = slots.map(function(c){
-      return '<span class="cover fan-card v2 '+catClass(c.cat)+'">'+(c.src ? posterMarkup(c.src) : THEMES[c.cat].icon)+'</span>';
+  function buildFan(el){
+    el.innerHTML = FEATURE_CARDS.map(function(c){
+      return '<span class="fan-card '+catClass(c.cat)+'"><span class="fc-icon">'+svg(c.icon)+'</span>'+
+        '<span class="fc-text"><span class="fc-title">'+escapeHtml(c.title)+'</span><span class="fc-sub">'+escapeHtml(c.sub)+'</span></span></span>';
     }).join("");
     if(!fanAnimated){ el.classList.add("animate"); fanAnimated = true; }
     else el.classList.remove("animate");
@@ -1004,68 +1188,179 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
   function renderHome(){
     var hasCols = state.collections.length > 0;
-    buildFan(document.getElementById("home-fan"), hasCols);
+    var homeFan = document.getElementById("home-fan");
+    homeFan.hidden = hasCols;               // returning users go straight to what they use every day
+    if(!hasCols) buildFan(homeFan);
     document.getElementById("home-new").hidden = hasCols;
     document.getElementById("home-back").hidden = !hasCols;
-    document.getElementById("home-tagline").hidden = hasCols;
-    if(!hasCols) return;
 
     var all = [];
     state.collections.forEach(function(col){ col.items.forEach(function(it){ all.push({ col: col, item: it }); }); });
-    var pick = all.filter(function(x){ return getStatus(x.item) === "progress"; })
-      .sort(function(a,b){ return (b.item.statusAt || addedAt(b.item)) - (a.item.statusAt || addedAt(a.item)); });
-    var mode = "Continue";
-    if(!pick.length){ mode = "Recently added"; pick = all.slice().sort(function(a,b){ return addedAt(b.item) - addedAt(a.item); }); }
-    pick = pick.slice(0,3);
+    var inProg = all.filter(function(x){ return getStatus(x.item) === "progress"; })
+      .sort(function(a,b){ return (b.item.statusAt || addedAt(b.item)) - (a.item.statusAt || addedAt(a.item)); })
+      .slice(0,3);
 
-    var box = document.getElementById("home-cont");
-    box.hidden = pick.length === 0;
-    document.getElementById("home-cont-title").textContent = mode;
+    if(!hasCols) return;
+
     var done = 0, total = 0;
     state.collections.forEach(function(col){ var p = progressOf(col); done += p.done; total += p.total; });
+
+    // Pinned lists
+    var pinned = sortPinnedFirst(state.collections).filter(function(c){ return c.pinnedAt; });
+    document.getElementById("home-pinned").hidden = !pinned.length;
+    var pr = document.getElementById("home-pin-row"); pr.innerHTML = "";
+    pinned.forEach(function(col){
+      var p = progressOf(col);
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "pin-card " + catClass(col.theme);
+      b.innerHTML = THEMES[col.theme].icon + '<span class="pc-name"></span><span class="bar"><span style="width:'+(p.total ? Math.round(p.done/p.total*100) : 0)+'%"></span></span><span class="pc-prog"></span>';
+      b.querySelector(".pc-name").textContent = col.name;
+      b.querySelector(".pc-prog").textContent = col.items.length ? progressText(col) : "No items yet";
+      b.addEventListener("click", function(){ openDetail(col.id, "home"); });
+      pr.appendChild(b);
+    });
+
+    // Continue (in progress)
+    document.getElementById("home-cont").hidden = inProg.length === 0;
     document.getElementById("home-cont-stat").textContent = done + " of " + total + " finished";
-    var row = document.getElementById("home-cont-row");
+    fillCoverRow(document.getElementById("home-cont-row"), inProg, function(x){ return THEMES[x.col.theme].statusLabels.progress; });
+
+    // Up next (planned)
+    var planned = all.filter(function(x){ return getStatus(x.item) === "planned"; });
+    document.getElementById("home-next").hidden = planned.length === 0;
+    fillCoverRow(document.getElementById("home-next-row"),
+      planned.slice().sort(function(a,b){ return addedAt(a.item) - addedAt(b.item); }).slice(0,3),
+      function(x){ return x.col.name; });
+
+    // Last updated
+    var acts = all.map(function(x){ var a = lastActivity(x.item); x.at = a.at; x.what = a.what; return x; })
+      .filter(function(x){ return x.at; })
+      .sort(function(a,b){ return b.at - a.at; }).slice(0,4);
+    document.getElementById("home-activity").hidden = acts.length === 0;
+    var al = document.getElementById("home-activity-list"); al.innerHTML = "";
+    acts.forEach(function(x){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "act-row " + catClass(x.col.theme);
+      b.innerHTML = coverHtml(x.item, x.col.theme, "thumb-s") + '<span class="act-text"><span class="act-title"></span><span class="act-sub"></span></span><span class="act-time"></span>';
+      b.querySelector(".act-title").textContent = displayTitle(x.item);
+      b.querySelector(".act-sub").textContent = activityLabel(x) + " · " + x.col.name;
+      b.querySelector(".act-time").textContent = relTime(x.at);
+      b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home"); });
+      al.appendChild(b);
+    });
+
+    // Stats
+    var now = new Date(), monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    var month = all.filter(function(x){ return getStatus(x.item) === "completed" && (x.item.statusAt || 0) >= monthStart; }).length;
+    document.getElementById("home-stats").hidden = all.length === 0;
+    document.getElementById("stat-month").textContent = month;
+    document.getElementById("stat-done").textContent = done;
+    document.getElementById("stat-prog").textContent = all.filter(function(x){ return getStatus(x.item) === "progress"; }).length;
+    var cats = document.getElementById("stat-cats"); cats.innerHTML = "";
+    Object.keys(THEMES).forEach(function(k){
+      var d = 0, t = 0;
+      state.collections.forEach(function(c){ if(c.theme !== k) return; var p = progressOf(c); d += p.done; t += p.total; });
+      if(!t) return;
+      var row = document.createElement("div");
+      row.className = "cat-bar " + catClass(k);
+      row.innerHTML = THEMES[k].icon + '<span class="cb-main"><span class="cb-name"></span><span class="bar"><span style="width:'+Math.round(d/t*100)+'%"></span></span></span><span class="cb-num tabular"></span>';
+      row.querySelector(".cb-name").textContent = THEMES[k].plural;
+      row.querySelector(".cb-num").textContent = d + " / " + t;
+      cats.appendChild(row);
+    });
+  }
+  function fillCoverRow(row, list, subFn){
     row.innerHTML = "";
-    pick.forEach(function(x){
+    list.forEach(function(x){
       var b = document.createElement("button");
       b.type = "button"; b.className = "cc " + catClass(x.col.theme);
       b.innerHTML = coverHtml(x.item, x.col.theme) + '<span class="cc-title"></span><span class="cc-sub"></span>';
       b.querySelector(".cc-title").textContent = displayTitle(x.item);
-      b.querySelector(".cc-sub").textContent = mode === "Continue" ? THEMES[x.col.theme].statusLabels.progress : x.col.name;
+      b.querySelector(".cc-sub").textContent = subFn(x);
       b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home"); });
       row.appendChild(b);
     });
   }
+  function lastActivity(it){
+    var cands = [[addedAt(it), "added"], [toMsSafe(it.statusAt), "status"], [toMsSafe(it.editedAt), "edited"]];
+    var best = [0, ""];
+    cands.forEach(function(c){ if(c[0] && c[0] >= best[0]) best = c; });
+    return { at: best[0], what: best[1] };
+  }
+  function toMsSafe(v){ var n = typeof v === "number" ? v : Date.parse(v); return isFinite(n) ? n : 0; }
+  function activityLabel(x){
+    if(x.what === "status") return "Marked " + THEMES[x.col.theme].statusLabels[getStatus(x.item)].toLowerCase();
+    if(x.what === "edited") return "Edited";
+    return "Added";
+  }
+  function relTime(t){
+    var diff = Date.now() - t, m = Math.round(diff / 60000);
+    if(m < 1) return "Just now";
+    if(m < 60) return m + "m ago";
+    var hrs = Math.round(m / 60);
+    if(hrs < 24) return hrs + "h ago";
+    var d = Math.round(hrs / 24);
+    if(d === 1) return "Yesterday";
+    if(d < 7) return d + "d ago";
+    return new Date(t).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+  }
 
-  /* ---------- Intro (shown once, on a fresh install) ---------- */
-  var INTRO_KEY = "ultimateCollection:introSeen";
-  var introSlides = document.getElementById("intro-slides");
-  var introDots = document.getElementById("intro-dots").children;
-  var introNext = document.getElementById("intro-next");
-  function introIndex(){ return Math.round(introSlides.scrollLeft / Math.max(1, introSlides.clientWidth)); }
-  function syncIntro(){
-    var i = introIndex();
-    Array.prototype.forEach.call(introDots, function(d, k){ d.classList.toggle("is-on", k === i); });
-    introNext.textContent = i >= introDots.length - 1 ? "Get started" : "Continue";
+  /* ---------- Pick for me ---------- */
+  var pickOverlay = document.getElementById("pick-overlay");
+  var pickRef = null;
+  function plannedPool(){
+    var out = [];
+    state.collections.forEach(function(col){ col.items.forEach(function(it){ if(getStatus(it) === "planned") out.push({ col: col, item: it }); }); });
+    return out;
   }
-  introSlides.addEventListener("scroll", function(){ window.requestAnimationFrame(syncIntro); });
-  introNext.addEventListener("click", function(){
-    var i = introIndex();
-    if(i >= introDots.length - 1) finishIntro();
-    else introSlides.scrollTo({ left: (i + 1) * introSlides.clientWidth, behavior: "smooth" });
+  function doPick(){
+    var pool = plannedPool();
+    if(!pool.length){ pickOverlay.hidden = true; return; }
+    var choices = pool.length > 1 && pickRef ? pool.filter(function(x){ return x.item.id !== pickRef.itemId; }) : pool;
+    var x = choices[Math.floor(Math.random() * choices.length)];
+    pickRef = { colId: x.col.id, itemId: x.item.id };
+    setCat(pickOverlay, x.col.theme);
+    var cov = document.getElementById("pick-cover");
+    cov.outerHTML = coverHtml(x.item, x.col.theme).replace('<span class="cover', '<span id="pick-cover" class="cover');
+    document.getElementById("pick-title").textContent = displayTitle(x.item);
+    document.getElementById("pick-sub").textContent = "From " + x.col.name;
+    document.getElementById("pick-again").hidden = pool.length < 2;
+    pickOverlay.hidden = false;
+  }
+  document.getElementById("home-pick").addEventListener("click", function(){ pickRef = null; doPick(); });
+  document.getElementById("pick-again").addEventListener("click", doPick);
+  document.getElementById("pick-close").addEventListener("click", function(){ pickOverlay.hidden = true; });
+  pickOverlay.addEventListener("click", function(e){ if(e.target === pickOverlay) pickOverlay.hidden = true; });
+  document.getElementById("pick-start").addEventListener("click", function(){
+    pickOverlay.hidden = true;
+    var it = pickRef && findItem(pickRef.colId, pickRef.itemId); if(!it) return;
+    setStatus(it, "progress"); saveCollections();
+    openItemDetail(pickRef.colId, pickRef.itemId, "home");
   });
-  document.getElementById("intro-skip").addEventListener("click", finishIntro);
-  function finishIntro(){ try{ localStorage.setItem(INTRO_KEY, "1"); }catch(e){} goHome(); }
-  function shouldShowIntro(){
-    if(state.collections.length) return false;
-    try{ return !localStorage.getItem(INTRO_KEY); }catch(e){ return false; }
+
+  /* ---------- Welcome: sign in or continue as guest ---------- */
+  var ENTRY_KEY = "ultimateCollection:entry";        // "guest" once someone chooses to continue without an account
+  var SESSION_KEY = "sb-vyshzvrsitibscjfurth-auth-token";
+  function hasStoredSession(){ try{ return !!localStorage.getItem(SESSION_KEY); }catch(e){ return false; } }
+  function isGuestChosen(){ try{ return localStorage.getItem(ENTRY_KEY) === "guest"; }catch(e){ return false; } }
+  function setEntry(v){ try{ if(v) localStorage.setItem(ENTRY_KEY, v); else localStorage.removeItem(ENTRY_KEY); }catch(e){} }
+  function shouldShowWelcome(){
+    // Everyone who isn't signed in chooses once: sign in, create an account, or carry on as a guest.
+    return !(hasStoredSession() || isGuestChosen());
   }
-  function openIntro(){
-    buildFan(document.getElementById("intro-fan"), false);
+  function openWelcome(){
+    var n = state.collections.length;
+    document.getElementById("welcome-note").textContent = n
+      ? "Your " + (n === 1 ? "collection" : n + " collections") + " on this device will be kept either way. Create an account or sign in to sync " + (n === 1 ? "it" : "them") + " to your other devices."
+      : "As a guest, your lists stay on this device. You can create an account any time to sync them.";
+    fanAnimated = false;
+    buildFan(document.getElementById("welcome-fan"));
     fanAnimated = false; // let the home fan play its entrance too
-    showScreen("intro");
-    introSlides.scrollLeft = 0; syncIntro();
+    showScreen("welcome");
   }
+  document.getElementById("welcome-signup").addEventListener("click", function(){ openAuth("signup", "welcome"); });
+  document.getElementById("welcome-signin").addEventListener("click", function(){ openAuth("signin", "welcome"); });
+  document.getElementById("welcome-guest").addEventListener("click", function(){ setEntry("guest"); goHome(); });
 
   /* ---------- New Collection ---------- */
   var themeSelectTrigger = document.getElementById("theme-select-trigger");
@@ -1370,6 +1665,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.addEventListener("keydown", function(e){
     if(e.key !== "Escape") return;
     if(!sheetOverlay.hidden) closeSheet();
+    else if(!collOverlay.hidden) closeCollSheet();
+    else if(!pickOverlay.hidden) pickOverlay.hidden = true;
     else if(!confirmOverlay.hidden) confirmCancelBtn.click();
   });
 
@@ -1378,9 +1675,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var confirmOkBtn = document.getElementById("confirm-ok");
   var confirmCancelBtn = document.getElementById("confirm-cancel");
   var confirmResolver = null;
-  function askConfirm(title, body){
+  function askConfirm(title, body, okLabel){
     document.getElementById("confirm-title").textContent = title;
     document.getElementById("confirm-body").textContent = body;
+    confirmOkBtn.textContent = okLabel || "Delete";
     confirmOverlay.hidden = false;
     confirmCancelBtn.focus();
     return new Promise(function(resolve){ confirmResolver = resolve; });
@@ -1419,7 +1717,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(notesTimer) clearTimeout(notesTimer);
     notesTimer = setTimeout(function(){
       var it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
-      it.notes = val; saveCollections();
+      it.notes = val; it.editedAt = Date.now(); saveCollections();
     }, 400);
   });
 
@@ -1632,6 +1930,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     item.meta = meta;
     item.text = title;
     item.edited = true;
+    if(!isNew) item.editedAt = Date.now();
     setStatus(item, editState.status || "planned");
     if(THEMES[col.theme].notesInForm) item.notes = document.getElementById("edit-notes").value;
 
@@ -1691,28 +1990,63 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       ? "No collections yet. Start your first one."
       : "No " + THEMES[mineTab].plural.toLowerCase() + " lists yet.";
     document.getElementById("mine-empty-cta").textContent = mineTab === "all" ? "New collection" : "New " + THEMES[mineTab].label.toLowerCase() + " list";
-    shown.forEach(function(col){
+    sortPinnedFirst(shown).forEach(function(col){
       var theme = THEMES[col.theme] || THEMES.movie;
       var prog = progressOf(col);
-      var card = document.createElement("button");
-      card.type = "button"; card.className = "coll-card " + catClass(col.theme);
+      var card = document.createElement("div");
+      card.className = "coll-card " + catClass(col.theme);
       var covers = "";
       for(var k=0;k<3;k++){
         var it = col.items[k];
         var src = it ? posterSrc(it) : null;
         covers += '<span class="cover v'+(k+1)+' thumb-s">'+(src ? posterMarkup(src) : "")+'</span>';
       }
-      card.innerHTML = '<span class="stack-covers" aria-hidden="true">'+covers+'</span>'+
+      card.innerHTML = '<button class="coll-open" type="button"><span class="stack-covers" aria-hidden="true">'+covers+'</span>'+
         '<span class="coll-meta"><span class="coll-name"></span><span class="coll-kind"></span>'+
         '<span class="bar"><span style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
-        '<span class="coll-progress"></span></span>' + iconHtml("chev");
-      card.querySelector(".coll-name").textContent = col.name;
+        '<span class="coll-progress"></span></span>' + iconHtml("chev") + '</button>' +
+        '<button class="coll-more" type="button" aria-label="Options for this collection"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>';
+      var nameEl = card.querySelector(".coll-name");
+      if(col.pinnedAt){ nameEl.innerHTML = '<span class="pin-mark" title="Pinned">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 4 3v2H6v-2l4-3-1-6Z"/><path d="M12 15v6"/></svg>'+'</span>'; }
+      nameEl.appendChild(document.createTextNode(col.name));
       card.querySelector(".coll-kind").textContent = theme.plural;
       card.querySelector(".coll-progress").textContent = col.items.length ? progressText(col) : "No items yet";
-      card.addEventListener("click", function(){ openDetail(col.id, "mine"); });
+      card.querySelector(".coll-open").addEventListener("click", function(){ openDetail(col.id, "mine"); });
+      card.querySelector(".coll-more").setAttribute("aria-label", "Options for " + col.name);
+      card.querySelector(".coll-more").addEventListener("click", function(){ openCollSheet(col.id); });
       mineList.appendChild(card);
     });
   }
+
+  /* ---------- Pinning ---------- */
+  function sortPinnedFirst(list){
+    var pinned = list.filter(function(c){ return c.pinnedAt; }).sort(function(a,b){ return b.pinnedAt - a.pinnedAt; });
+    return pinned.concat(list.filter(function(c){ return !c.pinnedAt; }));
+  }
+  var collOverlay = document.getElementById("coll-overlay");
+  var collSheetId = null;
+  function openCollSheet(id){
+    var col = findCollection(id); if(!col) return;
+    collSheetId = id;
+    setCat(collOverlay, col.theme);
+    document.getElementById("coll-sheet-title").textContent = col.name;
+    document.getElementById("coll-sheet-sub").textContent = THEMES[col.theme].plural + ", " + (col.items.length === 1 ? "1 item" : col.items.length + " items");
+    document.getElementById("coll-pin-label").textContent = col.pinnedAt ? "Unpin" : "Pin to top";
+    collOverlay.hidden = false;
+    document.getElementById("coll-pin").focus();
+  }
+  function closeCollSheet(){ collOverlay.hidden = true; collSheetId = null; }
+  collOverlay.addEventListener("click", function(e){ if(e.target === collOverlay) closeCollSheet(); });
+  document.getElementById("coll-cancel").addEventListener("click", closeCollSheet);
+  document.getElementById("coll-pin").addEventListener("click", function(){
+    var col = findCollection(collSheetId); closeCollSheet(); if(!col) return;
+    col.pinnedAt = col.pinnedAt ? null : Date.now();
+    saveCollections(); refreshViews();
+    showToast(col.pinnedAt ? 'Pinned "' + col.name + '"' : 'Unpinned "' + col.name + '"');
+  });
+  document.getElementById("coll-delete").addEventListener("click", function(){
+    var col = findCollection(collSheetId); closeCollSheet(); if(col) requestDeleteCollection(col);
+  });
 
   /* ---------- Toast / undo ---------- */
   var toastEl = document.getElementById("toast");
@@ -1759,9 +2093,514 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     btn.addEventListener("click", function(){ applyAppearance(btn.dataset.mode); saveAppearance(btn.dataset.mode); });
   });
 
+  /* =====================================================================
+     Accounts + sync (Supabase). Everything works without an account;
+     signing in adds a copy in the cloud that every device keeps in step with.
+     ===================================================================== */
+  var APPLE_ENABLED = false; // switch on once Sign in with Apple is set up in Supabase
+  var SITE_URL = location.origin + location.pathname;
+  var SUPA = null;
+  try{
+    if(window.supabase && window.supabase.createClient){
+      SUPA = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
+    }
+  }catch(e){ SUPA = null; }
+  var currentUser = null;
+
+  /* ---- what was last confirmed in the cloud (used to spot local changes) ---- */
+  var SYNC_KEY = "ultimateCollection:sync";
+  function emptySync(userId){ return { userId: userId || null, lastPull: null, cols: {}, items: {} }; }
+  var sync = (function(){
+    try{ var v = JSON.parse(localStorage.getItem(SYNC_KEY) || "null"); if(v && typeof v === "object" && v.cols && v.items) return v; }catch(e){}
+    return emptySync(null);
+  })();
+  function saveSync(){ try{ localStorage.setItem(SYNC_KEY, JSON.stringify(sync)); }catch(e){} }
+
+  function toIso(n){ return n ? new Date(n).toISOString() : null; }
+  function toMs(v){ if(v === null || v === undefined || v === "") return null; var n = typeof v === "number" ? v : Date.parse(v); return isFinite(n) ? n : null; }
+  function stable(v){
+    if(Array.isArray(v)) return "[" + v.map(stable).join(",") + "]";
+    if(v && typeof v === "object"){
+      return "{" + Object.keys(v).sort().filter(function(k){ return v[k] !== undefined; })
+        .map(function(k){ return JSON.stringify(k) + ":" + stable(v[k]); }).join(",") + "}";
+    }
+    return JSON.stringify(v === undefined ? null : v);
+  }
+  function colKey(c){ return stable({ n: c.name, t: c.theme, p: !!c.isPublic, pa: toMs(c.pinnedAt) }); }
+  function itemKey(it, colId){
+    return stable({ c: colId, t: it.text, s: getStatus(it), ps: it.prevStatus || null, sa: toMs(it.statusAt), e: !!it.edited,
+      m: it.meta || null, no: it.notes || null, pp: it.posterPath || null, a: addedAt(it) || null });
+  }
+  function itemFromRow(r){
+    return { id: r.id, text: r.text, status: r.status, done: r.status === "completed",
+      prevStatus: r.prev_status || undefined, statusAt: toMs(r.status_at) || undefined, edited: !!r.edited,
+      meta: r.meta || null, notes: r.notes || "", posterPath: r.poster_path || null, addedAt: toMs(r.added_at) || Date.now() };
+  }
+
+  /* ---- sync engine ---- */
+  var syncTimer = null, syncRunning = false, syncAgain = false;
+  var syncStatus = "idle", lastSyncedAt = null;
+  function setSyncStatus(st){ syncStatus = st; if(currentScreen() === "settings") renderAccount(); }
+  function scheduleSync(delay){
+    if(!currentUser || !SUPA) return;
+    if(syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(runSync, delay == null ? 1200 : delay);
+  }
+  async function runSync(){
+    if(!currentUser || !SUPA) return;
+    if(syncRunning){ syncAgain = true; return; }
+    syncRunning = true; setSyncStatus("syncing");
+    try{
+      await pushChanges();
+      await pullChanges();
+      lastSyncedAt = Date.now();
+      setSyncStatus("idle");
+    }catch(e){
+      setSyncStatus(navigator.onLine === false ? "offline" : "error");
+    }finally{
+      syncRunning = false;
+      if(syncAgain){ syncAgain = false; scheduleSync(300); }
+    }
+  }
+  function chunks(arr, n){ var out = []; for(var i=0;i<arr.length;i+=n) out.push(arr.slice(i, i+n)); return out; }
+  function getImageBlob(ref){
+    if(!ref) return Promise.resolve(null);
+    if(ref.indexOf("data:") === 0) return fetch(ref).then(function(r){ return r.blob(); }).catch(function(){ return null; });
+    if(!imgDb) return Promise.resolve(null);
+    return new Promise(function(resolve){
+      try{ var r = imgTx("readonly").get(ref); r.onsuccess = function(){ resolve(r.result || null); }; r.onerror = function(){ resolve(null); }; }
+      catch(e){ resolve(null); }
+    });
+  }
+  /* Upload a cover the first time it's seen (or after it changes); remember which local photo it came from. */
+  async function syncCoverUp(item, oldPaths){
+    var ref = item.posterImg || null;
+    if(!ref){
+      if(item.posterPath && item.posterFor){ oldPaths.push(item.posterPath); item.posterPath = null; item.posterFor = null; }
+      return false;
+    }
+    if(item.posterFor === ref && item.posterPath) return false;
+    var blob = await getImageBlob(ref);
+    if(!blob) return false;
+    var path = currentUser.id + "/" + item.id + "/" + Date.now() + ".jpg";
+    var up = await SUPA.storage.from("covers").upload(path, blob, { contentType: blob.type || "image/jpeg", upsert: false });
+    if(up.error) throw up.error;
+    if(item.posterPath) oldPaths.push(item.posterPath);
+    item.posterPath = path; item.posterFor = ref;
+    return true;
+  }
+  async function pushChanges(){
+    var uidv = currentUser.id;
+    var oldPaths = [], coversChanged = false;
+    for(var a=0;a<state.collections.length;a++){
+      var its = state.collections[a].items;
+      for(var b=0;b<its.length;b++){ if(await syncCoverUp(its[b], oldPaths)) coversChanged = true; }
+    }
+    if(coversChanged || oldPaths.length) saveLocalOnly();
+
+    var colRows = [], itemRows = [], done = [], seenC = {}, seenI = {};
+    state.collections.forEach(function(col){
+      seenC[col.id] = true;
+      var ck = colKey(col);
+      if(sync.cols[col.id] !== ck){
+        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic, pinned_at: toIso(toMs(col.pinnedAt)),
+          created_at: toIso(col.createdAt) || undefined, deleted_at: null });
+        done.push(["c", col.id, ck]);
+      }
+      col.items.forEach(function(it){
+        seenI[it.id] = true;
+        if(it.meta && it.meta.status === "loading") return; // wait until the lookup settles
+        var ik = itemKey(it, col.id);
+        if(sync.items[it.id] !== ik){
+          itemRows.push({ user_id: uidv, id: it.id, collection_id: col.id, text: String(it.text).slice(0, 200), status: getStatus(it),
+            prev_status: it.prevStatus || null, status_at: toIso(toMs(it.statusAt)), edited: !!it.edited, meta: it.meta || null,
+            notes: it.notes || null, poster_path: it.posterPath || null, added_at: toIso(addedAt(it)) || undefined, deleted_at: null });
+          done.push(["i", it.id, ik]);
+        }
+      });
+    });
+    var delC = Object.keys(sync.cols).filter(function(id){ return !seenC[id]; });
+    var delI = Object.keys(sync.items).filter(function(id){ return !seenI[id]; });
+    if(!colRows.length && !itemRows.length && !delC.length && !delI.length) return;
+
+    var now = new Date().toISOString(), i, r;
+    var cc = chunks(colRows, 200);
+    for(i=0;i<cc.length;i++){ r = await SUPA.from("collections").upsert(cc[i], { onConflict: "user_id,id" }); if(r.error) throw r.error; }
+    var ic = chunks(itemRows, 200);
+    for(i=0;i<ic.length;i++){ r = await SUPA.from("items").upsert(ic[i], { onConflict: "user_id,id" }); if(r.error) throw r.error; }
+    var di = chunks(delI, 200);
+    for(i=0;i<di.length;i++){ r = await SUPA.from("items").update({ deleted_at: now }).eq("user_id", uidv).in("id", di[i]); if(r.error) throw r.error; }
+    var dc = chunks(delC, 200);
+    for(i=0;i<dc.length;i++){ r = await SUPA.from("collections").update({ deleted_at: now }).eq("user_id", uidv).in("id", dc[i]); if(r.error) throw r.error; }
+
+    done.forEach(function(d){ if(d[0] === "c") sync.cols[d[1]] = d[2]; else sync.items[d[1]] = d[2]; });
+    delI.forEach(function(id){ delete sync.items[id]; });
+    delC.forEach(function(id){ delete sync.cols[id]; });
+    saveSync();
+    if(oldPaths.length){ SUPA.storage.from("covers").remove(oldPaths).catch(function(){}); }
+  }
+  async function fetchChanged(table, since){
+    var out = [], from = 0, page = 500;
+    for(;;){
+      var r = await SUPA.from(table).select("*").gte("updated_at", since).order("updated_at", { ascending: true }).range(from, from + page - 1);
+      if(r.error) throw r.error;
+      out = out.concat(r.data || []);
+      if(!r.data || r.data.length < page) break;
+      from += page;
+    }
+    return out;
+  }
+  async function pullChanges(){
+    var since = sync.lastPull || "1970-01-01T00:00:00Z";
+    var cols = await fetchChanged("collections", since);
+    var items = await fetchChanged("items", since);
+    var latest = since, changed = false;
+    function later(t){ if(t && t > latest) latest = t; }
+    cols.forEach(function(row){ later(row.updated_at); if(applyRemoteCollection(row)) changed = true; });
+    items.forEach(function(row){ later(row.updated_at); if(applyRemoteItem(row)) changed = true; });
+    sync.lastPull = latest;
+    saveSync();
+    if(changed){
+      state.collections.sort(function(a,b){ return (b.createdAt || 0) - (a.createdAt || 0); });
+      state.collections.forEach(function(c){ c.items.sort(function(x,y){ return addedAt(x) - addedAt(y); }); });
+      saveLocalOnly();
+      refreshViews();
+    }
+    downloadMissingCovers();
+  }
+  function applyRemoteCollection(row){
+    var local = findCollection(row.id);
+    if(row.deleted_at){
+      if(local){
+        local.items.forEach(function(it){ if(it.posterImg) deleteImage(it.posterImg); delete sync.items[it.id]; });
+        state.collections.splice(state.collections.indexOf(local), 1);
+      }
+      delete sync.cols[row.id];
+      return !!local;
+    }
+    var rk = stable({ n: row.name, t: row.theme, p: !!row.is_public, pa: toMs(row.pinned_at) });
+    if(local){
+      if(sync.cols[row.id] !== undefined && colKey(local) !== sync.cols[row.id]) return false; // newer edit here; it'll be uploaded
+      var same = colKey(local) === rk;
+      local.name = row.name; local.theme = row.theme; local.isPublic = !!row.is_public; local.pinnedAt = toMs(row.pinned_at);
+      sync.cols[row.id] = rk;
+      return !same;
+    }
+    state.collections.push({ id: row.id, name: row.name, theme: row.theme, isPublic: !!row.is_public, pinnedAt: toMs(row.pinned_at), createdAt: toMs(row.created_at) || Date.now(), items: [] });
+    sync.cols[row.id] = rk;
+    return true;
+  }
+  function applyRemoteItem(row){
+    var col = findCollection(row.collection_id);
+    var local = col ? col.items.find(function(i){ return i.id === row.id; }) : null;
+    if(row.deleted_at){
+      if(local){ if(local.posterImg) deleteImage(local.posterImg); col.items.splice(col.items.indexOf(local), 1); }
+      delete sync.items[row.id];
+      return !!local;
+    }
+    if(!col) return false;
+    var remote = itemFromRow(row);
+    var rk = itemKey(remote, col.id);
+    if(local){
+      var lk = itemKey(local, col.id);
+      if(sync.items[row.id] !== undefined && lk !== sync.items[row.id]) return false; // newer edit here; it'll be uploaded
+      if(lk === rk){ sync.items[row.id] = rk; return false; }
+      var keepImg = local.posterImg, keepFor = local.posterFor, oldPath = local.posterPath;
+      Object.keys(remote).forEach(function(k){ local[k] = remote[k]; });
+      if(remote.posterPath !== oldPath){ if(keepImg) deleteImage(keepImg); local.posterImg = null; local.posterFor = null; }
+      else { local.posterImg = keepImg; local.posterFor = keepFor; }
+      sync.items[row.id] = rk;
+      return true;
+    }
+    col.items.push(remote);
+    sync.items[row.id] = rk;
+    return true;
+  }
+  var downloading = {};
+  function downloadMissingCovers(){
+    if(!currentUser || !SUPA) return;
+    var todo = [];
+    state.collections.forEach(function(c){ c.items.forEach(function(it){ if(it.posterPath && !it.posterImg && !downloading[it.posterPath]) todo.push(it); }); });
+    todo.slice(0, 12).forEach(function(it){
+      var path = it.posterPath;
+      downloading[path] = true;
+      SUPA.storage.from("covers").download(path).then(async function(res){
+        if(res.error || !res.data) return;
+        if(it.posterPath !== path || it.posterImg) return;
+        var ref = null;
+        if(imgDb){ ref = "idb:" + uid(); try{ await putImage(ref, res.data); imageUrls[ref] = URL.createObjectURL(res.data); }catch(e){ ref = null; } }
+        if(!ref){ try{ ref = await blobToDataUrl(res.data); }catch(e){ ref = null; } }
+        if(!ref) return;
+        it.posterImg = ref; it.posterFor = ref;
+        saveLocalOnly(); refreshViews();
+      }).catch(function(){}).then(function(){ delete downloading[path]; });
+    });
+  }
+
+  /* ---- live updates from other devices ---- */
+  var rtChannel = null;
+  function startRealtime(){
+    stopRealtime();
+    if(!SUPA || !currentUser || !SUPA.channel) return;
+    try{
+      var f = "user_id=eq." + currentUser.id;
+      rtChannel = SUPA.channel("sync-" + currentUser.id)
+        .on("postgres_changes", { event: "*", schema: "public", table: "collections", filter: f }, function(){ scheduleSync(700); })
+        .on("postgres_changes", { event: "*", schema: "public", table: "items", filter: f }, function(){ scheduleSync(700); })
+        .subscribe();
+    }catch(e){ rtChannel = null; }
+  }
+  function stopRealtime(){ if(rtChannel && SUPA){ try{ SUPA.removeChannel(rtChannel); }catch(e){} } rtChannel = null; }
+  document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "visible") scheduleSync(200); });
+  window.addEventListener("online", function(){ scheduleSync(200); });
+  setInterval(function(){ if(document.visibilityState === "visible") scheduleSync(0); }, 60000);
+
+  /* ---- signing in / out ---- */
+  function clearLocalData(){
+    state.collections = [];
+    saveLocalOnly();
+    Object.keys(imageUrls).forEach(function(ref){ deleteImage(ref); });
+    if(imgDb){ try{ imgTx("readwrite").clear(); }catch(e){} }
+  }
+  function handleSignedIn(user){
+    var first = !currentUser || currentUser.id !== user.id;
+    currentUser = user;
+    if(!first){ scheduleSync(0); return; }
+    var merged = false;
+    if(sync.userId === user.id){ /* same account as before: carry on */ }
+    else if(!sync.userId){
+      merged = state.collections.length > 0;      // lists made before signing in move into the account
+      sync = emptySync(user.id); saveSync();
+    } else {
+      clearLocalData();                            // another account was used here before
+      sync = emptySync(user.id); saveSync();
+    }
+    startRealtime();
+    var s = currentScreen();
+    if(s === "welcome") goHome();
+    if(s === "auth"){ if(authBack === "settings"){ renderAccount(); showScreen("settings"); } else goHome(); }
+    if(s === "home") renderHome();
+    if(s === "settings") renderAccount();
+    runSync().then(function(){
+      if(merged) showToast("Your collections on this device are now saved to your account.");
+    });
+  }
+  function handleSignedOutElsewhere(){
+    // Session ended without the user pressing Sign out (e.g. expired): keep the data, stop syncing.
+    currentUser = null; stopRealtime();
+    if(currentScreen() === "settings") renderAccount();
+  }
+  async function signOut(){
+    var ok = await askConfirm("Sign out?", "Your collections stay safe in your account. They'll be removed from this device until you sign in again.", "Sign out");
+    if(!ok) return;
+    await runSync();
+    if(syncStatus !== "idle"){
+      var force = await askConfirm("Some changes haven't synced", "You seem to be offline, so your latest changes haven't reached your account yet. If you sign out now, they'll be lost.", "Sign out anyway");
+      if(!force) return;
+    }
+    try{ await SUPA.auth.signOut(); }catch(e){}
+    stopRealtime(); currentUser = null;
+    clearLocalData(); sync = emptySync(null); saveSync(); setEntry(null);
+    renderAccount(); openWelcome();
+    showToast("You're signed out.");
+  }
+  async function deleteAccount(){
+    var ok = await askConfirm("Delete your account?", "This permanently deletes your account and all your collections, items and photos on every device. It can't be undone.", "Delete account");
+    if(!ok) return;
+    showToast("Deleting your account…");
+    try{
+      var res = await SUPA.functions.invoke("delete-account", { method: "POST" });
+      if(res.error) throw res.error;
+    }catch(e){
+      showToast("Couldn't delete your account right now. Check your connection and try again.");
+      return;
+    }
+    try{ await SUPA.auth.signOut(); }catch(e){}
+    stopRealtime(); currentUser = null;
+    clearLocalData(); sync = emptySync(null); saveSync(); setEntry(null);
+    renderAccount(); openWelcome();
+    showToast("Your account and its data were deleted.");
+  }
+
+  async function eraseGuestData(){
+    var ok = await askConfirm("Delete all data on this device?", "This removes all your collections, items, covers and notes from this device. It can't be undone.", "Delete everything");
+    if(!ok) return;
+    clearLocalData(); setEntry(null);
+    try{ localStorage.removeItem(MINE_TAB_KEY); }catch(e){}
+    openWelcome();
+    showToast("All data on this device was deleted.");
+  }
+
+  /* ---- Settings: account card ---- */
+  function renderAccount(){
+    var card = document.getElementById("acct-card");
+    if(!SUPA){
+      card.innerHTML = '<div class="acct-pitch"><strong>Sign-in unavailable</strong><p style="margin:0">It needs an internet connection. Your collections still work on this device.</p></div>' +
+        '<button class="danger-link" id="acct-erase" type="button">Delete all data on this device</button>';
+      document.getElementById("acct-erase").addEventListener("click", eraseGuestData);
+      return;
+    }
+    if(!currentUser){
+      card.innerHTML = '<div class="acct-pitch"><strong>Sync across your devices</strong><p>Create a free account to keep your collections, covers and notes on your phone and computer. Anything already on this device comes with you.</p></div>' +
+        '<button class="btn btn-primary" id="acct-signin" type="button">Sign in or create account</button>' +
+        '<button class="danger-link" id="acct-erase" type="button">Delete all data on this device</button>';
+      document.getElementById("acct-signin").addEventListener("click", function(){ openAuth("signin", "settings"); });
+      document.getElementById("acct-erase").addEventListener("click", eraseGuestData);
+      return;
+    }
+    var email = currentUser.email || "Signed in";
+    var label = syncStatus === "syncing" ? "Syncing…"
+      : syncStatus === "offline" ? "Offline. Changes will sync when you're back online"
+      : syncStatus === "error" ? "Couldn't sync just now. We'll keep trying"
+      : lastSyncedAt ? "Synced" : "Ready to sync";
+    card.innerHTML = '<div class="acct-head"><span class="acct-avatar" aria-hidden="true"></span><span style="min-width:0"><span class="acct-email"></span>' +
+      '<span class="acct-sync ' + syncStatus + '"><span class="sdot"></span><span class="acct-sync-text"></span></span></span></div>' +
+      '<div class="acct-actions"><button class="btn btn-ghost btn-small" id="acct-sync-now" type="button">Sync now</button>' +
+      '<button class="btn btn-ghost btn-small" id="acct-signout" type="button">Sign out</button></div>' +
+      '<button class="danger-link" id="acct-delete" type="button">Delete account</button>';
+    card.querySelector(".acct-avatar").textContent = email.charAt(0).toUpperCase();
+    card.querySelector(".acct-email").textContent = email;
+    card.querySelector(".acct-sync-text").textContent = label;
+    document.getElementById("acct-sync-now").addEventListener("click", function(){ runSync(); });
+    document.getElementById("acct-signout").addEventListener("click", signOut);
+    document.getElementById("acct-delete").addEventListener("click", deleteAccount);
+  }
+
+  /* ---- Sign in / create account screen ---- */
+  var authMode = "signin", authBack = "settings";
+  var authForm = document.getElementById("auth-form");
+  var authEmail = document.getElementById("auth-email");
+  var authPassword = document.getElementById("auth-password");
+  var authSubmit = document.getElementById("auth-submit");
+  var authMsg = document.getElementById("auth-msg");
+  document.getElementById("auth-apple").hidden = !APPLE_ENABLED;
+  function openAuth(mode, backTo){
+    authBack = backTo || "settings";
+    setAuthMode(mode || "signin");
+    authPassword.value = "";
+    showAuthMsg("", "");
+    showScreen("auth");
+  }
+  function setAuthMode(mode){
+    authMode = mode;
+    Array.prototype.forEach.call(document.getElementById("auth-mode").children, function(b){
+      var on = b.dataset.mode === mode;
+      b.classList.toggle("is-active", on); b.setAttribute("aria-checked", on ? "true" : "false");
+    });
+    document.getElementById("auth-title").textContent = mode === "signin" ? "Welcome back" : "Create your account";
+    document.getElementById("auth-lead").textContent = mode === "signin"
+      ? "Sign in to keep your collections in sync on your phone and computer."
+      : "It's free. Your collections, covers and notes will sync to every device you sign in on.";
+    authSubmit.textContent = mode === "signin" ? "Sign in" : "Create account";
+    authPassword.setAttribute("autocomplete", mode === "signin" ? "current-password" : "new-password");
+    document.getElementById("auth-forgot").hidden = mode !== "signin";
+    showAuthMsg("", "");
+  }
+  Array.prototype.forEach.call(document.getElementById("auth-mode").children, function(b){
+    b.addEventListener("click", function(){ setAuthMode(b.dataset.mode); });
+  });
+  document.getElementById("auth-back").addEventListener("click", function(){
+    if(authBack === "welcome") openWelcome();
+    else if(authBack === "home") goHome();
+    else { renderAccount(); showScreen("settings"); }
+  });
+  document.getElementById("auth-pw-toggle").addEventListener("click", function(){
+    var show = authPassword.type === "password";
+    authPassword.type = show ? "text" : "password";
+    this.textContent = show ? "Hide" : "Show";
+    this.setAttribute("aria-label", show ? "Hide password" : "Show password");
+  });
+  function showAuthMsg(text, kind, el){
+    var box = el || authMsg;
+    box.textContent = text; box.className = "auth-msg " + (kind || ""); box.hidden = !text;
+  }
+  function friendlyAuthError(err){
+    var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
+    if(navigator.onLine === false || m.indexOf("failed to fetch") > -1 || m.indexOf("network") > -1) return "No connection. Check your internet and try again.";
+    if(m.indexOf("invalid login") > -1) return "That email and password don't match.";
+    if(m.indexOf("not confirmed") > -1) return "Please confirm your email first. Check your inbox for the link.";
+    if(m.indexOf("already registered") > -1 || m.indexOf("already been registered") > -1) return "An account with this email already exists. Try signing in instead.";
+    if(m.indexOf("rate limit") > -1 || m.indexOf("too many") > -1 || m.indexOf("security purposes") > -1) return "Too many attempts. Please wait a minute and try again.";
+    if(m.indexOf("password") > -1 && (m.indexOf("weak") > -1 || m.indexOf("at least") > -1)) return "Please choose a stronger password (at least 8 characters).";
+    if(m.indexOf("provider is not enabled") > -1 || m.indexOf("unsupported provider") > -1) return "This sign-in option isn't switched on yet.";
+    return "Something went wrong. Please try again.";
+  }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  authForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+    if(!SUPA){ showAuthMsg("Sign-in needs an internet connection.", "error"); return; }
+    var email = authEmail.value.trim(), pw = authPassword.value;
+    if(!validEmail(email)){ showAuthMsg("Please enter a valid email address.", "error"); authEmail.focus(); return; }
+    if(pw.length < 8){ showAuthMsg("Your password needs at least 8 characters.", "error"); authPassword.focus(); return; }
+    authSubmit.disabled = true; showAuthMsg("", "");
+    try{
+      if(authMode === "signin"){
+        var r = await SUPA.auth.signInWithPassword({ email: email, password: pw });
+        if(r.error) throw r.error;
+      } else {
+        var s2 = await SUPA.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: SITE_URL } });
+        if(s2.error) throw s2.error;
+        if(!s2.data || !s2.data.session){
+          showAuthMsg("Almost done! We sent a confirmation link to " + email + ". Open it on this device to finish creating your account.", "info");
+        }
+      }
+    }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
+    finally{ authSubmit.disabled = false; }
+  });
+  document.getElementById("auth-forgot").addEventListener("click", async function(){
+    var email = authEmail.value.trim();
+    if(!validEmail(email)){ showAuthMsg("Type your email above first, then tap Forgot password.", "error"); authEmail.focus(); return; }
+    try{
+      var r = await SUPA.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL });
+      if(r.error) throw r.error;
+      showAuthMsg("If there's an account for " + email + ", we've sent a link to reset the password.", "info");
+    }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
+  });
+  async function oauth(provider){
+    if(!SUPA){ showAuthMsg("Sign-in needs an internet connection.", "error"); return; }
+    try{
+      var r = await SUPA.auth.signInWithOAuth({ provider: provider, options: { redirectTo: SITE_URL } });
+      if(r.error) throw r.error;
+    }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
+  }
+  document.getElementById("auth-google").addEventListener("click", function(){ oauth("google"); });
+  document.getElementById("auth-apple").addEventListener("click", function(){ oauth("apple"); });
+
+  /* ---- New password after a reset link ---- */
+  document.getElementById("reset-form").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var pw = document.getElementById("reset-password").value, msg = document.getElementById("reset-msg");
+    if(pw.length < 8){ showAuthMsg("Your password needs at least 8 characters.", "error", msg); return; }
+    try{
+      var r = await SUPA.auth.updateUser({ password: pw });
+      if(r.error) throw r.error;
+      document.getElementById("reset-password").value = "";
+      goHome(); showToast("Your new password is saved.");
+    }catch(err){ showAuthMsg(friendlyAuthError(err), "error", msg); }
+  });
+
+  function initAuth(){
+    if(!SUPA) return;
+    // Tidy the address bar after returning from an email link or Google, and explain failed links.
+    var q = new URLSearchParams(location.search), hsh = new URLSearchParams(location.hash.replace(/^#/, ""));
+    var linkError = q.get("error_description") || hsh.get("error_description");
+    SUPA.auth.onAuthStateChange(function(event, session){
+      setTimeout(function(){
+        if(event === "PASSWORD_RECOVERY"){ if(session && session.user) currentUser = session.user; showScreen("reset"); return; }
+        if(session && session.user) handleSignedIn(session.user);
+        else if(event === "SIGNED_OUT" && currentUser) handleSignedOutElsewhere();
+        if(location.search || location.hash){ try{ history.replaceState(null, "", SITE_URL); }catch(e){} }
+      }, 0);
+    });
+    if(linkError) setTimeout(function(){ showToast(/expired|invalid/i.test(linkError) ? "That link has expired. Please request a new one." : linkError); }, 400);
+  }
+
   /* ---------- Boot ---------- */
   applyAppearance(loadAppearance());
-  if(shouldShowIntro()) openIntro(); else goHome();
+  if(shouldShowWelcome()) openWelcome(); else goHome();
+  initAuth();
   openImgDb().then(function(db){
     imgDb = db;
     return loadAllImages();
