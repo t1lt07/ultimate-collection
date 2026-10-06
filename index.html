@@ -7,15 +7,17 @@
 <title>CollectEon</title>
 <meta name="application-name" content="CollectEon">
 <meta name="apple-mobile-web-app-title" content="CollectEon">
-<meta name="description" content="CollectEon: one place for every movie, series, game, album and book you love.">
+<meta name="description" content="CollectEon: one place for every movie, series, anime, game, album and book you love.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --bg:#F4F5F9; --surface:#FFFFFF; --ink:#12131A; --muted:#5E6270; --line:#DADCE3; --chip:#ECEDF2;
   --btn:#12131A; --on-btn:#FFFFFF; --shadow:0 10px 26px -18px rgba(18,19,26,0.35); --shadow-strong:0 14px 28px -12px rgba(18,19,26,0.5);
-  --drop-bg:#FBE3E1; --drop-ink:#A3322B; --scrim:rgba(18,19,26,0.45); --tab-border:#E6E8EE; --accent:#B37A10;
+  --drop-bg:#FBE3E1; --drop-ink:#A3322B; --scrim:rgba(18,19,26,0.45); --tab-border:#E6E8EE; --accent:#B37A10; --edge:#D3D6DF;
   --frame-shadow:0 30px 60px -20px rgba(15,18,22,0.35), 0 2px 10px rgba(15,18,22,0.08);
   --font-display:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --font-body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -25,14 +27,14 @@
   :root:not([data-theme="light"]){
     --bg:#0E0F14; --surface:#1A1C24; --ink:#F1F2F5; --muted:#A3A7B4; --line:#2E313C; --chip:#262934;
     --btn:#F1F2F5; --on-btn:#12131A; --shadow:0 10px 26px -18px rgba(0,0,0,0.7); --shadow-strong:0 14px 28px -12px rgba(0,0,0,0.75);
-    --drop-bg:#3D1B19; --drop-ink:#F08A82; --scrim:rgba(0,0,0,0.62); --tab-border:#262934; --accent:#E0AA47;
+    --drop-bg:#3D1B19; --drop-ink:#F08A82; --scrim:rgba(0,0,0,0.62); --tab-border:#262934; --accent:#E0AA47; --edge:#3A3E4D;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E0F14; --surface:#1A1C24; --ink:#F1F2F5; --muted:#A3A7B4; --line:#2E313C; --chip:#262934;
   --btn:#F1F2F5; --on-btn:#12131A; --shadow:0 10px 26px -18px rgba(0,0,0,0.7); --shadow-strong:0 14px 28px -12px rgba(0,0,0,0.75);
-  --drop-bg:#3D1B19; --drop-ink:#F08A82; --scrim:rgba(0,0,0,0.62); --tab-border:#262934; --accent:#E0AA47;
+  --drop-bg:#3D1B19; --drop-ink:#F08A82; --scrim:rgba(0,0,0,0.62); --tab-border:#262934; --accent:#E0AA47; --edge:#3A3E4D;
   color-scheme: dark;
 }
 :root[data-theme="light"]{ color-scheme: light; }
@@ -73,7 +75,7 @@ button{cursor:pointer}
 .btn:active{transform:scale(.97)}
 .btn svg{width:18px;height:18px;flex:0 0 auto}
 .btn-primary{background:var(--btn);color:var(--on-btn)}
-.btn-secondary{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.btn-secondary{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);border:1.5px solid var(--edge)}
 .btn-ghost{background:var(--chip);color:var(--ink)}
 .btn-danger{background:var(--drop-ink);color:#fff}
 .btn-small{width:auto;height:40px;padding:0 16px;font-size:13.5px}
@@ -99,10 +101,11 @@ button{cursor:pointer}
 .tab svg{width:22px;height:22px}
 .tab.is-active{color:var(--ink);font-weight:700}
 
-/* Covers: whole image fits, a blurred copy fills the rest */
+/* Covers: the poster fills its box (cropped from the centre if its shape differs), never letterboxed */
 .pf{position:relative;width:100%;height:100%;display:block;overflow:hidden}
+.pf.fit .pf-img{object-fit:contain}
 .pf .pf-bg{position:absolute;inset:-12%;width:124%;height:124%;max-width:none;object-fit:cover;filter:blur(14px) saturate(1.15);opacity:.55;transform:scale(1.05)}
-.pf .pf-img{position:relative;width:100%;height:100%;object-fit:contain;display:block}
+.pf .pf-img{position:relative;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .cover{position:relative;overflow:hidden;background:var(--t2, var(--chip));color:var(--deep, var(--muted));display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .cover > svg{width:40%;max-width:28px;height:auto}
 .cover.v1{background:var(--t1)} .cover.v2{background:var(--t2)} .cover.v3{background:var(--t3)}
@@ -155,7 +158,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 /* Home (start screen) */
 #screen-home .scroll{display:flex;flex-direction:column}
 .home-stage{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:24px;padding:22px 0 8px}
-.home-title{margin:0;font-family:var(--font-display);font-size:35px;font-weight:800;letter-spacing:-0.035em;line-height:1.05}
+.home-title{margin:0;font-family:var(--font-display);font-size:31px;text-wrap:balance;font-weight:800;letter-spacing:-0.035em;line-height:1.05}
 .home-title span{display:block;color:var(--accent)}
 .home-tagline{margin:12px auto 0;max-width:270px;font-size:15px;line-height:1.45;color:var(--muted)}
 .home-actions{display:flex;gap:10px;width:100%;margin-top:10px}
@@ -260,7 +263,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .coll-more:hover{background:var(--chip)}
 .coll-name .pin-mark{display:inline-flex;vertical-align:-2px;margin-right:5px;color:var(--accent)}
 .coll-name .pin-mark svg{width:14px;height:14px}
-.stack-covers{display:flex;flex:0 0 auto;width:76px;height:68px}
+.stack-covers{display:flex;flex:0 0 auto;width:76px;height:68px;justify-content:center}
 .stack-covers .cover{width:40px;height:58px;border-radius:10px;border:2px solid var(--surface)}
 .stack-covers .cover:nth-child(2){margin-left:-22px;margin-top:4px}
 .stack-covers .cover:nth-child(3){margin-left:-22px;margin-top:8px}
@@ -340,6 +343,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .item-hero{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
 .item-cover{margin-top:14px;width:176px;height:264px;border-radius:22px;box-shadow:0 24px 40px -18px rgba(0,0,0,.5)}
 .item-cover > svg{max-width:40px}
+.item-cover.has-img{background:var(--surface);transition:width .2s ease,height .2s ease}
 .item-name{margin:20px 0 0;font-family:var(--font-display);font-size:27px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;text-wrap:balance}
 .item-subline{margin-top:4px;font-size:14px;color:var(--muted)}
 #item-status{margin-top:18px;width:100%}
@@ -355,7 +359,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .footer-bar{flex:0 0 auto;padding:12px 22px calc(22px + env(safe-area-inset-bottom, 0px))}
 
 /* Edit form */
-.edit-poster{display:block;width:150px;height:225px;margin:6px auto 12px;border-radius:20px;border:none;padding:0;cursor:pointer;background:var(--t1)}
+.edit-poster{display:block;width:150px;height:225px;transition:width .2s ease,height .2s ease;margin:6px auto 12px;border-radius:20px;border:none;padding:0;cursor:pointer;background:var(--t1)}
 .edit-poster-hint{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--deep);padding:0 14px}
 .edit-poster-hint svg{width:30px;height:30px}
 .poster-tools{display:flex;justify-content:center;gap:8px}
@@ -424,9 +428,41 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .acct-pitch strong{display:block;font-size:16px;font-weight:800;margin-bottom:6px}
 .acct-pitch p{margin:0 0 14px;font-size:14px;line-height:1.45;color:var(--muted)}
 
+/* Items without a status: multiplayer games and single songs */
+.mode-note{margin-top:18px;width:100%;min-height:50px;box-sizing:border-box;padding:12px 18px;background:var(--surface);border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:700;color:var(--deep);box-shadow:var(--shadow);text-align:center}
+.mode-note svg{width:18px;height:18px;flex:0 0 auto}
+.st-pill.st-mode{background:var(--t1);color:var(--deep);border-color:var(--t1)}
+.item-row .st-pill.st-mode{height:34px;padding:0 10px;flex:0 0 auto}
+.seg.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kind-hint{margin:8px 2px 0;font-size:13px;line-height:1.4;color:var(--muted)}
+
+/* Outlines so cards and buttons stand out from the background in light and dark */
+#btn-mine{border:1.5px solid var(--ink)}
+.act-row,.stats-card,.cont-box,.coll-card,.stat-card{border:1px solid var(--edge)}
+.stat-tile{border:1px solid var(--edge)}
+
+/* Labelled "Add manually" button in a collection */
+.fab.fab-label{width:auto;height:52px;border-radius:999px;padding:0 20px 0 16px;gap:8px;font-size:15px;font-weight:700}
+.fab.fab-label svg{width:20px;height:20px}
+
+/* Item page closing back into its card */
+#screen-item.is-closing{z-index:60;pointer-events:none}
+
+/* Personal notes: 1,000 character limit */
+.notes-field{font-size:16px;line-height:1.6;min-height:132px;resize:vertical}
+.notes-foot{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.notes-foot .bar{height:4px}
+.notes-foot .bar > span{background:var(--line)}
+.notes-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted)}
+.notes-count{font-weight:700;color:var(--deep)}
+.notes-foot.is-near .bar > span{background:var(--bar)}
+.notes-foot.is-full .bar > span{background:var(--drop-ink)}
+.notes-foot.is-full .notes-count{color:var(--drop-ink)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://vyshzvrsitibscjfurth.supabase.co" crossorigin>
 </head>
 <body>
 <div id="app">
@@ -438,8 +474,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <div class="welcome-stage">
           <div class="title-block">
             <p class="wordmark" aria-label="CollectEon">Collect<span>Eon</span></p>
-            <h1 class="home-title">Your ultimate <span>collection</span></h1>
-            <p class="home-tagline">One place for every movie, series, game, album and book you love.</p>
+            <h1 class="home-title">Build your personal <span>collection</span></h1>
+            <p class="home-tagline">One place for every movie, series, anime, game, album and book you love.</p>
           </div>
           <div class="fan" id="welcome-fan" aria-hidden="true"></div>
         </div>
@@ -460,7 +496,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <div class="home-stage">
           <div class="title-block">
             <p class="wordmark" aria-label="CollectEon">Collect<span>Eon</span></p>
-            <h1 class="home-title">Your ultimate <span>collection</span></h1>
+            <h1 class="home-title">Build your personal <span>collection</span></h1>
           </div>
           <div class="fan" id="home-fan" aria-hidden="true"></div>
           
@@ -589,7 +625,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <p id="detail-empty-text">No titles yet.</p>
         </div>
       </div>
-      <button class="fab" id="detail-fab" aria-label="Add an item manually"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="fab fab-label" id="detail-fab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Add manually</button>
     </section>
 
     <!-- ITEM -->
@@ -606,10 +642,15 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <h1 class="item-name" id="item-name"></h1>
           <div class="item-subline" id="item-subline"></div>
           <div class="seg" id="item-status" role="radiogroup" aria-label="Status"></div>
+          <div class="mode-note" id="item-mode-note" hidden></div>
         </div>
         <div id="item-info"></div>
         <p class="section-label">Your notes</p>
-        <textarea class="field" id="item-notes" rows="3" placeholder="Add a personal note…"></textarea>
+        <textarea class="field notes-field" id="item-notes" rows="5" maxlength="1000" placeholder="Add a personal note…"></textarea>
+        <div class="notes-foot" id="item-notes-foot">
+          <span class="bar"><span></span></span>
+          <span class="notes-row"><span>Up to 1,000 characters</span><span class="notes-count" aria-live="polite"></span></span>
+        </div>
       </div>
       <div class="bottom-actions">
         <button class="btn btn-secondary" id="item-edit" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Edit details</button>
@@ -634,12 +675,21 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <p class="form-error" id="edit-photo-error" hidden></p>
         <p class="section-label">Title</p>
         <input class="field" id="edit-title" type="text" maxlength="80" autocomplete="off" placeholder="Title">
-        <p class="section-label">Status</p>
+        <div id="edit-kind-wrap" hidden>
+          <p class="section-label" id="edit-kind-label">Type</p>
+          <div class="seg two" id="edit-kind" role="radiogroup" aria-labelledby="edit-kind-label"></div>
+          <p class="kind-hint" id="edit-kind-hint" hidden></p>
+        </div>
+        <p class="section-label" id="edit-status-label">Status</p>
         <div class="seg" id="edit-status" role="radiogroup" aria-label="Status"></div>
         <div class="field-grid" id="edit-fields"></div>
         <div id="edit-notes-wrap" hidden>
           <p class="section-label">Your notes</p>
-          <textarea class="field" id="edit-notes" rows="3" placeholder="Add a personal note…"></textarea>
+          <textarea class="field notes-field" id="edit-notes" rows="5" maxlength="1000" placeholder="Add a personal note…"></textarea>
+        <div class="notes-foot" id="edit-notes-foot">
+          <span class="bar"><span></span></span>
+          <span class="notes-row"><span>Up to 1,000 characters</span><span class="notes-count" aria-live="polite"></span></span>
+        </div>
         </div>
       </div>
       <div class="footer-bar"><button class="btn btn-primary" id="edit-save" disabled>Save</button></div>
@@ -703,7 +753,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <p class="section-label">Account</p>
         <div class="soft-card" id="acct-card"></div>
         <p class="section-label">About</p>
-        <div class="soft-card muted" style="font-size:14px;line-height:1.5"><strong style="display:block;color:var(--ink);font-size:15px;margin-bottom:4px">CollectEon</strong>Your collections are saved on this device, and in your account when you're signed in. Movie, series and game details come from TMDB and RAWG.</div>
+        <div class="soft-card muted" style="font-size:14px;line-height:1.5"><strong style="display:block;color:var(--ink);font-size:15px;margin-bottom:4px">CollectEon</strong>Your collections are saved on this device, and in your account when you're signed in. Movie, series and anime details come from TMDB, and game details from RAWG.</div>
       </div>
     </section>
 
@@ -775,6 +825,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var ICONS = {
     movie: '<path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/><path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/>',
     series: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 21h8M9 2.5 12 6l3-3.5"/>',
+    anime: '<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 2.8 12 7l3.5-4.2"/><path d="M12 10.2l.9 1.9 2.1.3-1.5 1.5.35 2.1L12 15l-1.85 1 .35-2.1L9 12.4l2.1-.3Z"/>',
     games: '<path d="M7 9h10l2.4 7a2 2 0 0 1-3.8 1.3L14.5 15h-5l-1.1 2.3A2 2 0 0 1 4.6 16L7 9Z"/><path d="M8.5 11.5v2M7.5 12.5h2M15.5 11.3h.01M17.5 13.3h.01"/>',
     music: '<path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
     books: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15Z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19M9 7.5h6"/>',
@@ -790,6 +841,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var THEMES = {
     movie:  { label:"Movie",  plural:"Movies", icon:iconHtml("movie"),  personLabel:"Director", statusLabels:{ planned:"Planned", progress:"In progress", completed:"Watched", dropped:"Dropped" } },
     series: { label:"Series", plural:"Series", icon:iconHtml("series"), personLabel:"Creator",  statusLabels:{ planned:"Planned", progress:"In progress", completed:"Watched", dropped:"Dropped" } },
+    anime:  { label:"Anime",  plural:"Anime",  icon:iconHtml("anime"),  personLabel:"Studio",   statusLabels:{ planned:"Planned", progress:"Watching", completed:"Watched", dropped:"Dropped" } },
     games:  { label:"Games",  plural:"Games",  icon:iconHtml("games"),  personLabel:"Studio",   statusLabels:{ planned:"Planned", progress:"In progress", completed:"Completed", dropped:"Dropped" } },
     music:  { label:"Music",  plural:"Music",  icon:iconHtml("music"),  personLabel:"Artist", manual:true, notesInForm:true, statusLabels:{ planned:"Planned", progress:"Listening", completed:"Listened", dropped:"Dropped" } },
     books:  { label:"Books",  plural:"Books",  icon:iconHtml("books"),  personLabel:"Author", manual:true, notesInForm:true, statusLabels:{ planned:"Planned", progress:"Reading", completed:"Read", dropped:"Dropped" } }
@@ -800,6 +852,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     light: {
       movie:{t1:"#F8E9C8",t2:"#F2D99B",t3:"#E8C473",deep:"#6B4500",bar:"#B37A10",track:"#F1EFE8"},
       series:{t1:"#CDEDEF",t2:"#9FD8DD",t3:"#5FB8C0",deep:"#0B5560",bar:"#12808B",track:"#EAF3F4"},
+      anime:{t1:"#FADDE9",t2:"#F5BBD2",t3:"#EC8FB5",deep:"#8A1C4E",bar:"#C2397A",track:"#F6ECF1"},
       games:{t1:"#E4DAFA",t2:"#CDBBF5",t3:"#A98DEB",deep:"#4B2A99",bar:"#6B45C4",track:"#F1EFF6"},
       music:{t1:"#D8E6FD",t2:"#AFCBFA",t3:"#7AA6F0",deep:"#1A4A9E",bar:"#2F6FD0",track:"#ECF1FA"},
       books:{t1:"#DCF0D3",t2:"#B9E0A8",t3:"#8CC673",deep:"#2A5F1E",bar:"#3E8A2E",track:"#EEF3EB"}
@@ -807,6 +860,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     dark: {
       movie:{t1:"#3A2C12",t2:"#4E3A15",t3:"#6A4E18",deep:"#F2C36B",bar:"#E0AA47",track:"#2A2618"},
       series:{t1:"#10363A",t2:"#15484D",t3:"#1C6067",deep:"#79D6DE",bar:"#3FB6C2",track:"#1A2C2E"},
+      anime:{t1:"#3D1A2A",t2:"#55223A",t3:"#742E50",deep:"#F5A6C8",bar:"#E86FA5",track:"#2C1C24"},
       games:{t1:"#2B2248",t2:"#382C60",t3:"#4A3A80",deep:"#C2ADF7",bar:"#A383E8",track:"#25212F"},
       music:{t1:"#172C4D",t2:"#1E3A66",t3:"#294E88",deep:"#9DBFF8",bar:"#73A1F2",track:"#1C2433"},
       books:{t1:"#1D3519",t2:"#284822",t3:"#36612E",deep:"#A3DA8F",bar:"#86C46F",track:"#1E2A1C"}
@@ -857,10 +911,19 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       el.appendChild(b);
     });
   }
+  /* Multiplayer games and single songs have no status: nothing to finish, so they stay out of
+     progress, status filters, "Pick for me" and the status counts. */
+  function isStatusless(item){
+    var m = item && item.meta;
+    return !!(m && (m.multiplayer === true || m.kind === "song"));
+  }
+  var MODE_ICONS = { multi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><circle cx="17" cy="9" r="2.6"/><path d="M15.8 14.3c2.3.2 4 1.8 4.6 4.4"/></svg>', song: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>' };
+  function modeLabel(item){ return item.meta && item.meta.kind === "song" ? "Song" : "Multiplayer"; }
+  function modeIcon(item){ return item.meta && item.meta.kind === "song" ? MODE_ICONS.song : MODE_ICONS.multi; }
   /* Progress counts finished items; dropped ones leave the total. */
   function progressOf(col){
     var done = 0, total = 0;
-    col.items.forEach(function(i){ var st = getStatus(i); if(st === "dropped") return; total++; if(st === "completed") done++; });
+    col.items.forEach(function(i){ if(isStatusless(i)) return; var st = getStatus(i); if(st === "dropped") return; total++; if(st === "completed") done++; });
     return { done: done, total: total };
   }
   function progressText(col){
@@ -877,6 +940,14 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       { key:"person",  label:"Director", placeholder:"e.g. Christopher Nolan" },
       { key:"genre",   label:"Genre",    placeholder:"e.g. Sci-fi, Drama", wide:true }
     ],
+    anime: [
+      { key:"rating",   label:"Rating",  placeholder:"e.g. 8.7", numeric:true },
+      { key:"year",     label:"Year",    placeholder:"e.g. 2023", numeric:true },
+      { key:"format",   label:"Format",  placeholder:"e.g. TV series or Film" },
+      { key:"episodes", label:"Length",  placeholder:"e.g. 28 episodes" },
+      { key:"person",   label:"Studio",  placeholder:"e.g. Madhouse" },
+      { key:"genre",    label:"Genre",   placeholder:"e.g. Fantasy, Adventure" }
+    ],
     series: [
       { key:"rating",  label:"Rating",          placeholder:"e.g. 9.0",   numeric:true },
       { key:"year",    label:"Year",            placeholder:"e.g. 2019",  numeric:true },
@@ -887,12 +958,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     games: [
       { key:"releaseDate",   label:"Release date",     placeholder:"e.g. 2023-05-12" },
       { key:"person",        label:"Studio",           placeholder:"e.g. FromSoftware" },
-      { key:"howLongToBeat", label:"How long to beat", placeholder:"e.g. 60 hours" },
       { key:"genre",         label:"Genre",            placeholder:"e.g. RPG", wide:true }
     ],
     music: [
       { key:"person", label:"Artist", placeholder:"e.g. Radiohead" },
       { key:"year",   label:"Year",   placeholder:"e.g. 1997", numeric:true },
+      { key:"album",  label:"From album", placeholder:"e.g. OK Computer", wide:true, only:"song" },
       { key:"genre",  label:"Genre",  placeholder:"e.g. Alt rock", wide:true }
     ],
     books: [
@@ -954,21 +1025,24 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     state.collections.forEach(function(c){ c.items.forEach(function(i){ if(i.posterImg) used[i.posterImg] = true; }); });
     Object.keys(imageUrls).forEach(function(ref){ if(!used[ref]) deleteImage(ref); });
   }
-  /* Shrinks a photo to at most 900px on its longest side, keeping its shape (no cropping). */
+  /* Shrinks a photo to at most 1600px on its longest side, keeping its shape (no cropping).
+     Sharp on phone screens, and still well under the 5 MB cloud limit. */
   function shrinkImage(file){
     return new Promise(function(resolve, reject){
       var url = URL.createObjectURL(file);
       var img = new Image();
       img.onload = function(){
-        var max = 900;
+        var max = 1600;
         var scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
         var w = Math.max(1, Math.round(img.naturalWidth * scale));
         var h = Math.max(1, Math.round(img.naturalHeight * scale));
         var canvas = document.createElement("canvas");
         canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        var ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(img, 0, 0, w, h);
         URL.revokeObjectURL(url);
-        canvas.toBlob(function(blob){ blob ? resolve(blob) : reject(new Error("encode_failed")); }, "image/jpeg", 0.84);
+        canvas.toBlob(function(blob){ blob ? resolve(blob) : reject(new Error("encode_failed")); }, "image/jpeg", 0.9);
       };
       img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("decode_failed")); };
       img.src = url;
@@ -991,15 +1065,45 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     }
     return (item.meta && item.meta.poster) || null;
   }
-  function posterMarkup(src){
-    var safe = String(src).replace(/"/g, "&quot;");
-    return '<span class="pf"><img class="pf-bg" src="'+safe+'" alt="" aria-hidden="true"><img class="pf-img" src="'+safe+'" alt=""></span>';
+  /* Picks a sharp enough version of a fetched poster for where it's shown (phones have 3x screens).
+     size: "s" small thumbnails, "m" grid tiles and cards, "l" the big cover on an item's page. */
+  function sizedPoster(src, size){
+    src = String(src || "");
+    var tmdb = /^(https:\/\/image\.tmdb\.org\/t\/p\/)(w\d+|original)(\/.+)$/.exec(src);
+    if(tmdb) return tmdb[1] + (size === "l" ? "w780" : size === "s" ? "w185" : "w500") + tmdb[3];
+    var rawg = /^(https:\/\/media\.rawg\.io\/media\/)(?:resize\/\d+\/-\/|crop\/\d+\/\d+\/)?((?:games|screenshots)\/.+)$/.exec(src);
+    if(rawg) return size === "l" ? rawg[1] + rawg[2] : rawg[1] + "resize/640/-/" + rawg[2];
+    return src;
+  }
+  function posterMarkup(src, size, fit){
+    var safe = sizedPoster(src, size || "m").replace(/"/g, "&quot;");
+    return '<span class="pf'+(fit ? " fit" : "")+'"><img class="pf-img" src="'+safe+'" alt="" decoding="async"'+(size === "s" ? ' loading="lazy"' : "")+'></span>';
+  }
+  /* The big cover takes the picture's own shape: tall posters stay tall, wide game art stays wide. */
+  function guessRatio(src){
+    src = String(src || "");
+    if(/media\.rawg\.io/.test(src)) return 16 / 9;
+    return 2 / 3;
+  }
+  function shapeBox(box, ratio, maxW, maxH){
+    if(!box || !(ratio > 0)) return;
+    ratio = Math.max(0.5, Math.min(2.2, ratio));
+    var w, h;
+    if(ratio <= 1){ h = maxH; w = Math.round(h * ratio); }
+    else { w = maxW; h = Math.round(w / ratio); if(h > maxH){ h = maxH; w = Math.round(h * ratio); } }
+    box.style.width = w + "px"; box.style.height = h + "px";
+  }
+  function fitBoxToImage(box, src, maxW, maxH){
+    shapeBox(box, guessRatio(src), maxW, maxH);
+    var img = box.querySelector("img"); if(!img) return;
+    function apply(){ if(img.naturalWidth && img.naturalHeight) shapeBox(box, img.naturalWidth / img.naturalHeight, maxW, maxH); }
+    if(img.complete) apply(); else img.addEventListener("load", apply, { once: true });
   }
   /* A cover tile: the real poster, a spinner while fetching, or a tinted placeholder with the category icon. */
   function variantFor(item){ var s = String(item.id || ""); var n = 0; for(var i=0;i<s.length;i++) n = (n + s.charCodeAt(i)) % 3; return "v" + (n + 1); }
   function coverHtml(item, themeKey, extraClass){
     var src = posterSrc(item);
-    var inner = src ? posterMarkup(src)
+    var inner = src ? posterMarkup(src, /thumb-s/.test(extraClass || "") ? "s" : "m")
       : (item.meta && item.meta.status === "loading") ? '<span class="spin"></span>'
       : THEMES[themeKey].icon;
     return '<span class="cover '+variantFor(item)+' '+(extraClass||"")+'">'+inner+'</span>';
@@ -1144,7 +1248,9 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(meta.status === "error") return "Couldn’t fetch info";
     if(meta.status === "found"){
       if(theme === "games") return [meta.releaseDate ? String(meta.releaseDate).slice(0,4) : "", meta.person].filter(Boolean).join(", ");
+      if(theme === "music" && meta.kind === "song") return [meta.person, meta.album ? "from " + meta.album : ""].filter(Boolean).join(", ");
       if(theme === "music" || theme === "books") return [meta.person, meta.year].filter(Boolean).join(", ");
+      if(theme === "anime") return [meta.year, meta.format].filter(Boolean).join(", ");
       return [meta.year, meta.person].filter(Boolean).join(", ");
     }
     return "";
@@ -1154,7 +1260,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   /* ---------- Home (start screen) ---------- */
   document.getElementById("btn-new").addEventListener("click", function(){ openNew(null, "home"); });
   document.getElementById("btn-mine").addEventListener("click", goCollections);
-  var CAT_ORDER = ["movie","series","games","music","books"];
+  var CAT_ORDER = ["movie","series","anime","games","music","books"];
   (function buildChips(){
     var wrap = document.getElementById("home-chips");
     CAT_ORDER.forEach(function(k){
@@ -1169,7 +1275,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
   /* Five cards that sum up what the app does. */
   var FEATURE_CARDS = [
-    { cat:"movie",  title:"Your own collections", sub:"Movies, series, games, music and books", icon:'<rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/>' },
+    { cat:"movie",  title:"Your own collections", sub:"Movies, series, anime, games, music and books", icon:'<rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/>' },
     { cat:"series", title:"Make plans",           sub:"Line up what to watch, play or read next", icon:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>' },
     { cat:"games",  title:"Track progress",       sub:"From planned to finished, at a glance", icon:'<circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>' },
     { cat:"music",  title:"Sync your devices",    sub:"Pick up on your phone or computer", icon:'<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/>' },
@@ -1196,7 +1302,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
     var all = [];
     state.collections.forEach(function(col){ col.items.forEach(function(it){ all.push({ col: col, item: it }); }); });
-    var inProg = all.filter(function(x){ return getStatus(x.item) === "progress"; })
+    var inProg = all.filter(function(x){ return !isStatusless(x.item) && getStatus(x.item) === "progress"; })
       .sort(function(a,b){ return (b.item.statusAt || addedAt(b.item)) - (a.item.statusAt || addedAt(a.item)); })
       .slice(0,3);
 
@@ -1226,7 +1332,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     fillCoverRow(document.getElementById("home-cont-row"), inProg, function(x){ return THEMES[x.col.theme].statusLabels.progress; });
 
     // Up next (planned)
-    var planned = all.filter(function(x){ return getStatus(x.item) === "planned"; });
+    var planned = all.filter(function(x){ return !isStatusless(x.item) && getStatus(x.item) === "planned"; });
     document.getElementById("home-next").hidden = planned.length === 0;
     fillCoverRow(document.getElementById("home-next-row"),
       planned.slice().sort(function(a,b){ return addedAt(a.item) - addedAt(b.item); }).slice(0,3),
@@ -1240,22 +1346,22 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var al = document.getElementById("home-activity-list"); al.innerHTML = "";
     acts.forEach(function(x){
       var b = document.createElement("button");
-      b.type = "button"; b.className = "act-row " + catClass(x.col.theme);
+      b.type = "button"; b.className = "act-row " + catClass(x.col.theme); b.dataset.itemId = x.item.id;
       b.innerHTML = coverHtml(x.item, x.col.theme, "thumb-s") + '<span class="act-text"><span class="act-title"></span><span class="act-sub"></span></span><span class="act-time"></span>';
       b.querySelector(".act-title").textContent = displayTitle(x.item);
       b.querySelector(".act-sub").textContent = activityLabel(x) + " · " + x.col.name;
       b.querySelector(".act-time").textContent = relTime(x.at);
-      b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home"); });
+      b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home", b); });
       al.appendChild(b);
     });
 
     // Stats
     var now = new Date(), monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-    var month = all.filter(function(x){ return getStatus(x.item) === "completed" && (x.item.statusAt || 0) >= monthStart; }).length;
+    var month = all.filter(function(x){ return !isStatusless(x.item) && getStatus(x.item) === "completed" && (x.item.statusAt || 0) >= monthStart; }).length;
     document.getElementById("home-stats").hidden = all.length === 0;
     document.getElementById("stat-month").textContent = month;
     document.getElementById("stat-done").textContent = done;
-    document.getElementById("stat-prog").textContent = all.filter(function(x){ return getStatus(x.item) === "progress"; }).length;
+    document.getElementById("stat-prog").textContent = all.filter(function(x){ return !isStatusless(x.item) && getStatus(x.item) === "progress"; }).length;
     var cats = document.getElementById("stat-cats"); cats.innerHTML = "";
     Object.keys(THEMES).forEach(function(k){
       var d = 0, t = 0;
@@ -1273,11 +1379,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     row.innerHTML = "";
     list.forEach(function(x){
       var b = document.createElement("button");
-      b.type = "button"; b.className = "cc " + catClass(x.col.theme);
+      b.type = "button"; b.className = "cc " + catClass(x.col.theme); b.dataset.itemId = x.item.id;
       b.innerHTML = coverHtml(x.item, x.col.theme) + '<span class="cc-title"></span><span class="cc-sub"></span>';
       b.querySelector(".cc-title").textContent = displayTitle(x.item);
       b.querySelector(".cc-sub").textContent = subFn(x);
-      b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home"); });
+      b.addEventListener("click", function(){ openItemDetail(x.col.id, x.item.id, "home", b); });
       row.appendChild(b);
     });
   }
@@ -1310,7 +1416,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var pickRef = null;
   function plannedPool(){
     var out = [];
-    state.collections.forEach(function(col){ col.items.forEach(function(it){ if(getStatus(it) === "planned") out.push({ col: col, item: it }); }); });
+    state.collections.forEach(function(col){ col.items.forEach(function(it){ if(!isStatusless(it) && getStatus(it) === "planned") out.push({ col: col, item: it }); }); });
     return out;
   }
   function doPick(){
@@ -1468,7 +1574,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       var row = document.createElement("div");
       row.className = "suggest-item";
       row.setAttribute("role", "option");
-      var thumbInner = hit.poster ? posterMarkup(hit.poster) : theme.icon;
+      var thumbInner = hit.poster ? posterMarkup(hit.poster, "s") : theme.icon;
       row.innerHTML = '<span class="cover v1 thumb-s">'+thumbInner+'</span><span class="suggest-text"><span class="suggest-title"></span><span class="suggest-year"></span></span>';
       row.querySelector(".suggest-title").textContent = hit.title;
       row.querySelector(".suggest-year").textContent = hit.year || "";
@@ -1508,7 +1614,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
     document.getElementById("detail-add-row").hidden = !!theme.manual;
     document.getElementById("detail-tools").classList.toggle("manual", !!theme.manual);
-    detailInput.placeholder = "Search " + (col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : "a movie") + " to add";
+    detailInput.placeholder = "Search " + (col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : col.theme === "anime" ? "an anime" : "a movie") + " to add";
     document.getElementById("view-list").classList.toggle("is-active", viewMode === "list");
     document.getElementById("view-grid").classList.toggle("is-active", viewMode === "grid");
     document.getElementById("view-list").setAttribute("aria-pressed", viewMode === "list" ? "true" : "false");
@@ -1516,7 +1622,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
     // Filter chips (only statuses that have items)
     var counts = { all: col.items.length, planned:0, progress:0, completed:0, dropped:0 };
-    col.items.forEach(function(i){ counts[getStatus(i)]++; });
+    col.items.forEach(function(i){ if(!isStatusless(i)) counts[getStatus(i)]++; });
     if(statusFilter !== "all" && !counts[statusFilter]) statusFilter = "all";
     var chips = document.getElementById("detail-chips");
     chips.innerHTML = "";
@@ -1537,26 +1643,27 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       ? "Nothing here yet. Tap + to add your first " + (col.theme === "books" ? "book" : "album or song") + "."
       : "No titles yet. Search above to add one with its details filled in, or tap + to add it yourself.";
 
-    var shown = col.items.filter(function(i){ return statusFilter === "all" || getStatus(i) === statusFilter; });
+    var shown = col.items.filter(function(i){ return statusFilter === "all" || (!isStatusless(i) && getStatus(i) === statusFilter); });
     itemListEl.innerHTML = "";
     itemListEl.className = viewMode === "grid" ? "item-grid" : "item-list";
     shown.forEach(function(item){
       var st = getStatus(item);
       if(viewMode === "grid"){
         var t = document.createElement("button");
-        t.type = "button"; t.className = "tile" + (st === "dropped" ? " is-dropped" : "");
+        t.type = "button"; t.className = "tile" + (st === "dropped" ? " is-dropped" : ""); t.dataset.itemId = item.id;
         t.innerHTML = coverHtml(item, col.theme) + '<span class="tile-title"></span>';
         var pill = document.createElement("span");
-        pill.className = "st-pill st-" + st;
-        pill.innerHTML = statusMark(st) + "<span></span>";
-        pill.lastChild.textContent = theme.statusLabels[st];
+        var free = isStatusless(item);
+        pill.className = "st-pill " + (free ? "st-mode" : "st-" + st);
+        pill.innerHTML = (free ? modeIcon(item) : statusMark(st)) + "<span></span>";
+        pill.lastChild.textContent = free ? modeLabel(item) : theme.statusLabels[st];
         t.querySelector(".cover").appendChild(pill);
         t.querySelector(".tile-title").textContent = displayTitle(item);
-        t.addEventListener("click", function(){ openItemDetail(col.id, item.id); });
+        t.addEventListener("click", function(){ openItemDetail(col.id, item.id, undefined, t); });
         itemListEl.appendChild(t);
       } else {
         var row = document.createElement("div");
-        row.className = "item-row" + (st === "dropped" ? " is-dropped" : "");
+        row.className = "item-row" + (st === "dropped" ? " is-dropped" : ""); row.dataset.itemId = item.id;
         row.innerHTML =
           '<button class="item-open" type="button">' + coverHtml(item, col.theme, "thumb-s") +
           '<span class="item-text"><span class="item-title"></span><span class="item-sub"></span></span></button>' +
@@ -1564,10 +1671,19 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         row.querySelector(".item-title").textContent = displayTitle(item);
         row.querySelector(".item-sub").textContent = metaSubtitle(col.theme, item.meta);
         var pillBtn = row.querySelector(".st-pill");
+        if(isStatusless(item)){
+          var tag = document.createElement("span");
+          tag.className = "st-pill st-mode";
+          tag.innerHTML = modeIcon(item) + "<span></span>";
+          tag.lastChild.textContent = modeLabel(item);
+          pillBtn.replaceWith(tag);
+          pillBtn = null;
+        } else {
         pillBtn.querySelector("span:not(.dot)").textContent = theme.statusLabels[st];
         pillBtn.setAttribute("aria-label", "Status: " + theme.statusLabels[st] + ". Change status");
-        row.querySelector(".item-open").addEventListener("click", function(){ openItemDetail(col.id, item.id); });
-        pillBtn.addEventListener("click", function(){ openSheet(col.id, item.id); });
+        }
+        row.querySelector(".item-open").addEventListener("click", function(){ openItemDetail(col.id, item.id, undefined, row); });
+        if(pillBtn) pillBtn.addEventListener("click", function(){ openSheet(col.id, item.id); });
         itemListEl.appendChild(row);
       }
     });
@@ -1689,16 +1805,114 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   /* ---------- Item detail ---------- */
   var itemScreen = document.getElementById("screen-item");
   var itemNotes = document.getElementById("item-notes");
-  function openItemDetail(colId, itemId, backTo){
+  function openItemDetail(colId, itemId, backTo, originEl){
     currentItemRef = { collectionId: colId, itemId: itemId };
     itemBackTarget = backTo || "detail";
     currentId = colId;
+    var from = originEl && originEl.isConnected ? originEl.getBoundingClientRect() : null;
+    var fromCover = originEl && originEl.querySelector ? originEl.querySelector(".cover") : null;
+    var coverRect = fromCover ? fromCover.getBoundingClientRect() : null;
+    if(itemScreen.classList.contains("is-closing")) finishItemClose();
     renderItemDetail();
     showScreen("item");
+    if(from) animateItemOpen(from, coverRect);
+  }
+  /* Opening animation: the details screen grows out of the card that was tapped,
+     its cover flies up into place, then the rest slides in. */
+  var OPEN_EASE = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+  function animateItemOpen(from, coverRect){
+    if(!itemScreen.animate) return;
+    if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try{
+      var pr = phoneEl.getBoundingClientRect();
+      var inset = Math.max(0, from.top - pr.top) + "px " + Math.max(0, pr.right - from.right) + "px " +
+                  Math.max(0, pr.bottom - from.bottom) + "px " + Math.max(0, from.left - pr.left) + "px";
+      itemScreen.animate([
+        { clipPath: "inset(" + inset + " round 20px)" },
+        { clipPath: "inset(0px 0px 0px 0px round 0px)" }
+      ], { duration: 460, easing: OPEN_EASE });
+      var cov = document.getElementById("item-cover"), to = cov.getBoundingClientRect();
+      if(coverRect && to.width){
+        var dx = (coverRect.left + coverRect.width / 2) - (to.left + to.width / 2);
+        var dy = (coverRect.top + coverRect.height / 2) - (to.top + to.height / 2);
+        cov.animate([
+          { transform: "translate(" + dx + "px," + dy + "px) scale(" + (coverRect.width / to.width) + ")" },
+          { transform: "none" }
+        ], { duration: 500, easing: OPEN_EASE });
+      }
+      ["item-name", "item-subline", "item-status", "item-mode-note", "item-info"].forEach(function(id, i){
+        var el = document.getElementById(id); if(!el || el.hidden) return;
+        el.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }],
+          { duration: 360, delay: 200 + i * 50, easing: "ease-out", fill: "backwards" });
+      });
+      var acts = itemScreen.querySelector(".bottom-actions");
+      if(acts) acts.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }],
+        { duration: 360, delay: 380, easing: "ease-out", fill: "backwards" });
+    }catch(e){ /* animation is decoration only */ }
   }
   function leaveItem(){
+    var leavingId = currentItemRef && currentItemRef.itemId;
+    var wasOpen = !itemScreen.hidden;
     if(itemBackTarget === "home") goHome();
     else { var col = findCollection(currentItemRef ? currentItemRef.collectionId : currentId); if(col){ currentId = col.id; renderDetail(); showScreen("detail"); } else goCollections(); }
+    if(wasOpen && leavingId) animateItemClose(leavingId);
+  }
+  /* Closing animation: the page shrinks back into the card it came from and the cover flies home.
+     If that card isn't on screen (deleted, or scrolled away), the page simply fades out. */
+  function finishItemClose(){
+    itemScreen.hidden = true;
+    itemScreen.classList.remove("is-closing");
+    if(itemScreen.getAnimations) itemScreen.getAnimations({ subtree: true }).forEach(function(a){ a.cancel(); });
+  }
+  function animateItemClose(itemId){
+    if(!itemScreen.animate) return;
+    if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try{
+      var dest = document.getElementById("screen-" + currentScreen());
+      var target = null;
+      if(dest) Array.prototype.some.call(dest.querySelectorAll("[data-item-id]"), function(el){
+        if(el.dataset.itemId === itemId){ target = el; return true; } return false;
+      });
+      var pr = phoneEl.getBoundingClientRect();
+      var r = target ? target.getBoundingClientRect() : null;
+      var tabTop = tabbar.hidden ? pr.bottom : tabbar.getBoundingClientRect().top;
+      var onScreen = r && r.width && r.top >= pr.top && r.bottom <= tabTop;
+
+      itemScreen.hidden = false;
+      itemScreen.classList.add("is-closing");
+      var anim;
+      if(onScreen){
+        var inset = Math.max(0, r.top - pr.top) + "px " + Math.max(0, pr.right - r.right) + "px " +
+                    Math.max(0, pr.bottom - r.bottom) + "px " + Math.max(0, r.left - pr.left) + "px";
+        var EASE_IN = "cubic-bezier(0.4, 0, 0.2, 1)";
+        anim = itemScreen.animate([
+          { clipPath: "inset(0px 0px 0px 0px round 0px)" },
+          { clipPath: "inset(" + inset + " round 20px)" }
+        ], { duration: 380, easing: EASE_IN, fill: "forwards" });
+        var cov = document.getElementById("item-cover"), from = cov.getBoundingClientRect();
+        var tc = target.querySelector(".cover");
+        if(tc && from.width){
+          var to = tc.getBoundingClientRect();
+          var dx = (to.left + to.width / 2) - (from.left + from.width / 2);
+          var dy = (to.top + to.height / 2) - (from.top + from.height / 2);
+          cov.animate([
+            { transform: "none" },
+            { transform: "translate(" + dx + "px," + dy + "px) scale(" + (to.width / from.width) + ")" }
+          ], { duration: 380, easing: EASE_IN, fill: "forwards" });
+        }
+        ["item-name", "item-subline", "item-status", "item-mode-note", "item-info"].forEach(function(id){
+          var el = document.getElementById(id); if(el && !el.hidden) el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: "forwards" });
+        });
+        var acts = itemScreen.querySelector(".bottom-actions");
+        if(acts) acts.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: "forwards" });
+      } else {
+        anim = itemScreen.animate([
+          { opacity: 1, transform: "none" },
+          { opacity: 0, transform: "scale(0.96)" }
+        ], { duration: 220, easing: "ease-in", fill: "forwards" });
+      }
+      anim.onfinish = finishItemClose;
+    }catch(e){ finishItemClose(); }
   }
   document.getElementById("item-back").addEventListener("click", leaveItem);
   document.getElementById("item-trash").addEventListener("click", function(){
@@ -1711,8 +1925,23 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     itemNotes.scrollIntoView({ behavior:"smooth", block:"center" });
     setTimeout(function(){ itemNotes.focus({ preventScroll:true }); }, 250);
   });
+  /* Personal notes are capped at 1,000 characters (the database enforces the same limit). */
+  var NOTES_MAX = 1000, NOTES_NEAR = 100;
+  function clampNotes(v){ return v ? String(v).slice(0, NOTES_MAX) : v; }
+  function updateNotesMeta(field){
+    var foot = document.getElementById(field.id + "-foot"); if(!foot) return;
+    var len = field.value.length, left = NOTES_MAX - len;
+    foot.querySelector(".bar > span").style.width = Math.min(100, Math.round(len / NOTES_MAX * 100)) + "%";
+    foot.classList.toggle("is-near", left <= NOTES_NEAR && left > 0);
+    foot.classList.toggle("is-full", left <= 0);
+    foot.querySelector(".notes-count").textContent =
+      left < 0 ? (-left) + " over the limit" : left === 0 ? "Limit reached" : left <= NOTES_NEAR ? left + " left" : "";
+  }
+  var editNotes = document.getElementById("edit-notes");
+  editNotes.addEventListener("input", function(){ updateNotesMeta(editNotes); });
   var notesTimer = null;
   itemNotes.addEventListener("input", function(){
+    updateNotesMeta(itemNotes);
     var ref = currentItemRef, val = itemNotes.value;
     if(notesTimer) clearTimeout(notesTimer);
     notesTimer = setTimeout(function(){
@@ -1730,6 +1959,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var handMade = !!(meta.manual || item.edited);
     var cards = "";
     (FIELDS[themeKey] || []).forEach(function(f){
+      if(f.only && f.only !== meta.kind) return;
       var v = meta[f.key];
       var has = v !== undefined && v !== null && String(v).trim() !== "";
       if(handMade && !has) return;
@@ -1753,7 +1983,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
     var cov = document.getElementById("item-cover");
     var src = posterSrc(item);
-    cov.innerHTML = src ? posterMarkup(src) : (item.meta && item.meta.status === "loading") ? '<span class="spin" style="width:28px;height:28px;border-width:3px"></span>' : theme.icon;
+    cov.innerHTML = src ? posterMarkup(src, "l") : (item.meta && item.meta.status === "loading") ? '<span class="spin" style="width:28px;height:28px;border-width:3px"></span>' : theme.icon;
+    cov.classList.toggle("has-img", !!src);
+    if(src){
+      var heroW = Math.min(320, (cov.parentElement && cov.parentElement.clientWidth) || 320);
+      fitBoxToImage(cov, src, heroW, 280);
+    } else { cov.style.width = ""; cov.style.height = ""; }
     document.getElementById("item-name").textContent = displayTitle(item);
     var sub = item.meta && item.meta.status === "found" ? metaSubtitle(col.theme, item.meta) : "";
     var subEl = document.getElementById("item-subline");
@@ -1763,6 +1998,16 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       var it = findItem(col.id, item.id); if(!it) return;
       setStatus(it, st); saveCollections(); renderItemDetail();
     });
+    var free = isStatusless(item), modeNote = document.getElementById("item-mode-note");
+    document.getElementById("item-status").hidden = free;
+    modeNote.hidden = !free;
+    if(free){
+      var isSong = item.meta.kind === "song";
+      modeNote.innerHTML = modeIcon(item) + "<span></span>";
+      modeNote.lastChild.textContent = isSong
+        ? (item.meta.album ? "Song from " + item.meta.album : "Song, no status to track")
+        : "Multiplayer game, no status to track";
+    }
 
     var meta = item.meta, html = "";
     var editHint = " Tap Edit details to fill them in yourself.";
@@ -1776,6 +2021,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(retry) retry.addEventListener("click", function(e){ e.preventDefault(); triggerLookup(col.id, item.id); });
 
     if(document.activeElement !== itemNotes) itemNotes.value = item.notes || "";
+    updateNotesMeta(itemNotes);
   }
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c]; });
@@ -1796,9 +2042,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var item = itemId ? findItem(colId, itemId) : null;
     if(itemId && !item) return;
     discardPendingPhoto();
-    editState = { colId: colId, itemId: itemId, newBlob: null, newUrl: null, removePhoto: false, status: item ? getStatus(item) : "planned" };
+    var m0 = (item && item.meta) || {};
+    editState = { colId: colId, itemId: itemId, newBlob: null, newUrl: null, removePhoto: false, status: item ? getStatus(item) : "planned",
+      kind: col.theme === "music" ? (m0.kind === "song" ? "song" : "album") : col.theme === "games" ? (m0.multiplayer === true ? "multi" : "single") : null };
     setCat(editScreen, col.theme);
-    document.getElementById("edit-heading").textContent = item ? "Edit details" : "Add " + (col.theme === "books" ? "a book" : col.theme === "music" ? "music" : col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : "a movie");
+    document.getElementById("edit-heading").textContent = item ? "Edit details" : "Add " + (col.theme === "books" ? "a book" : col.theme === "music" ? "music" : col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : col.theme === "anime" ? "an anime" : "a movie");
     editSave.textContent = item ? "Save changes" : "Add to collection";
     editPhotoError.hidden = true;
 
@@ -1817,6 +2065,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       inp.placeholder = f.placeholder || "";
       if(f.numeric) inp.inputMode = "decimal";
       inp.dataset.key = f.key; inp.id = "edit-field-" + f.key;
+      if(f.only){ box.dataset.only = f.only; }
       var v = meta[f.key];
       inp.value = (v === undefined || v === null) ? "" : String(v);
       box.appendChild(lab); box.appendChild(inp);
@@ -1825,15 +2074,46 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     renderEditStatus();
     document.getElementById("edit-notes-wrap").hidden = !theme.notesInForm;
     document.getElementById("edit-notes").value = (item && item.notes) || "";
+    updateNotesMeta(document.getElementById("edit-notes"));
     validateEdit();
     renderEditPoster();
     showScreen("edit");
     if(!item) setTimeout(function(){ editTitle.focus(); }, 50);
   }
   function editItemRef(){ return (editState && editState.itemId) ? findItem(editState.colId, editState.itemId) : null; }
+  var KIND_OPTIONS = {
+    music: [{ key:"album", label:"Album" }, { key:"song", label:"Song" }],
+    games: [{ key:"single", label:"Single player" }, { key:"multi", label:"Multiplayer" }]
+  };
   function renderEditStatus(){
     var col = findCollection(editState.colId); if(!col) return;
     buildStatusGroup(document.getElementById("edit-status"), col.theme, editState.status, function(st){ editState.status = st; renderEditStatus(); });
+    // Album or song / single player or multiplayer
+    var opts = KIND_OPTIONS[col.theme];
+    var kindWrap = document.getElementById("edit-kind-wrap");
+    kindWrap.hidden = !opts;
+    if(opts){
+      var seg = document.getElementById("edit-kind"); seg.innerHTML = "";
+      opts.forEach(function(o){
+        var b = document.createElement("button");
+        var on = editState.kind === o.key;
+        b.type = "button"; b.className = "seg-opt" + (on ? " is-active" : "");
+        b.setAttribute("role", "radio"); b.setAttribute("aria-checked", on ? "true" : "false");
+        b.textContent = o.label;
+        b.addEventListener("click", function(){ editState.kind = o.key; renderEditStatus(); });
+        seg.appendChild(b);
+      });
+    }
+    var free = editState.kind === "song" || editState.kind === "multi";
+    var hint = document.getElementById("edit-kind-hint");
+    hint.hidden = !free;
+    hint.textContent = editState.kind === "song" ? "Songs don't have a status. Add the album it's from below."
+      : editState.kind === "multi" ? "Multiplayer games are played online, so they don't have a status." : "";
+    document.getElementById("edit-status-label").hidden = free;
+    document.getElementById("edit-status").hidden = free;
+    Array.prototype.forEach.call(document.querySelectorAll("#edit-fields [data-only]"), function(box){
+      box.hidden = box.dataset.only !== editState.kind;
+    });
   }
   function renderEditPoster(){
     if(!editState) return;
@@ -1842,8 +2122,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(editState.newUrl){ src = editState.newUrl; hasOwnPhoto = true; }
     else if(item && !editState.removePhoto && item.posterImg){ src = posterSrc(item); hasOwnPhoto = true; }
     else if(item && item.meta && item.meta.poster){ src = item.meta.poster; }
-    document.getElementById("edit-poster").innerHTML = src ? posterMarkup(src)
+    var ep = document.getElementById("edit-poster");
+    ep.innerHTML = src ? posterMarkup(src, "l")
       : '<span class="edit-poster-hint">'+iconHtml("image")+'<span>Add a cover</span></span>';
+    if(src) fitBoxToImage(ep, src, 260, 225); else { ep.style.width = ""; ep.style.height = ""; }
     document.getElementById("edit-upload").textContent = src ? "Change photo" : "Upload photo";
     document.getElementById("edit-remove-photo").hidden = !hasOwnPhoto;
   }
@@ -1923,8 +2205,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     meta.title = title;
     Array.prototype.forEach.call(document.querySelectorAll("#edit-fields input"), function(inp){
       var v = inp.value.trim();
+      if(inp.parentElement && inp.parentElement.hidden) v = "";   // e.g. "From album" on an album
       if(v) meta[inp.dataset.key] = v; else delete meta[inp.dataset.key];
     });
+    if(col.theme === "music") meta.kind = editState.kind === "song" ? "song" : "album";
+    if(col.theme === "games") meta.multiplayer = editState.kind === "multi";
+    delete meta.howLongToBeat;
     if(meta.releaseDate && !meta.year) meta.year = String(meta.releaseDate).slice(0,4);
     if(meta.length && col.theme === "music") delete meta.length;
     item.meta = meta;
@@ -1932,7 +2218,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     item.edited = true;
     if(!isNew) item.editedAt = Date.now();
     setStatus(item, editState.status || "planned");
-    if(THEMES[col.theme].notesInForm) item.notes = document.getElementById("edit-notes").value;
+    if(THEMES[col.theme].notesInForm) item.notes = clampNotes(document.getElementById("edit-notes").value);
 
     if(isNew) col.items.push(item);
     if(!saveCollections()) showToast("Not enough space on this device to save. Remove some photos and try again.");
@@ -1996,11 +2282,13 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       var card = document.createElement("div");
       card.className = "coll-card " + catClass(col.theme);
       var covers = "";
-      for(var k=0;k<3;k++){
+      var nCov = Math.min(3, col.items.length);
+      for(var k=0;k<nCov;k++){
         var it = col.items[k];
-        var src = it ? posterSrc(it) : null;
-        covers += '<span class="cover v'+(k+1)+' thumb-s">'+(src ? posterMarkup(src) : "")+'</span>';
+        var src = posterSrc(it);
+        covers += '<span class="cover v'+(k+1)+' thumb-s">'+(src ? posterMarkup(src, "s") : theme.icon)+'</span>';
       }
+      if(!nCov) covers = '<span class="cover v1 thumb-s">'+theme.icon+'</span>';
       card.innerHTML = '<button class="coll-open" type="button"><span class="stack-covers" aria-hidden="true">'+covers+'</span>'+
         '<span class="coll-meta"><span class="coll-name"></span><span class="coll-kind"></span>'+
         '<span class="bar"><span style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
@@ -2100,13 +2388,27 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var APPLE_ENABLED = false; // switch on once Sign in with Apple is set up in Supabase
   var SITE_URL = location.origin + location.pathname;
   var SUPA = null;
-  try{
-    if(window.supabase && window.supabase.createClient){
-      SUPA = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-      });
-    }
-  }catch(e){ SUPA = null; }
+  var SUPA_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";
+  var supaState = "loading"; // loading | ready | failed
+  /* The sign-in library loads in the background so the app appears straight away, even on a slow connection. */
+  function loadSupabase(){
+    supaState = "loading";
+    var tag = document.createElement("script");
+    tag.src = SUPA_LIB; tag.async = true;
+    tag.onload = function(){
+      try{
+        SUPA = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+        });
+        supaState = "ready";
+        initAuth();
+      }catch(e){ supaState = "failed"; }
+      if(currentScreen() === "settings") renderAccount();
+    };
+    tag.onerror = function(){ supaState = "failed"; tag.remove(); if(currentScreen() === "settings") renderAccount(); };
+    document.head.appendChild(tag);
+  }
+  window.addEventListener("online", function(){ if(supaState === "failed") loadSupabase(); });
   var currentUser = null;
 
   /* ---- what was last confirmed in the cloud (used to spot local changes) ---- */
@@ -2216,7 +2518,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         if(sync.items[it.id] !== ik){
           itemRows.push({ user_id: uidv, id: it.id, collection_id: col.id, text: String(it.text).slice(0, 200), status: getStatus(it),
             prev_status: it.prevStatus || null, status_at: toIso(toMs(it.statusAt)), edited: !!it.edited, meta: it.meta || null,
-            notes: it.notes || null, poster_path: it.posterPath || null, added_at: toIso(addedAt(it)) || undefined, deleted_at: null });
+            notes: clampNotes(it.notes) || null, poster_path: it.posterPath || null, added_at: toIso(addedAt(it)) || undefined, deleted_at: null });
           done.push(["i", it.id, ik]);
         }
       });
@@ -2436,6 +2738,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   /* ---- Settings: account card ---- */
   function renderAccount(){
     var card = document.getElementById("acct-card");
+    if(!SUPA && supaState === "loading"){
+      card.innerHTML = '<div class="acct-pitch"><strong>Connecting…</strong><p style="margin:0">Your account options will appear in a moment.</p></div>';
+      return;
+    }
     if(!SUPA){
       card.innerHTML = '<div class="acct-pitch"><strong>Sign-in unavailable</strong><p style="margin:0">It needs an internet connection. Your collections still work on this device.</p></div>' +
         '<button class="danger-link" id="acct-erase" type="button">Delete all data on this device</button>';
@@ -2530,7 +2836,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
   authForm.addEventListener("submit", async function(e){
     e.preventDefault();
-    if(!SUPA){ showAuthMsg("Sign-in needs an internet connection.", "error"); return; }
+    if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
     var email = authEmail.value.trim(), pw = authPassword.value;
     if(!validEmail(email)){ showAuthMsg("Please enter a valid email address.", "error"); authEmail.focus(); return; }
     if(pw.length < 8){ showAuthMsg("Your password needs at least 8 characters.", "error"); authPassword.focus(); return; }
@@ -2552,6 +2858,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.getElementById("auth-forgot").addEventListener("click", async function(){
     var email = authEmail.value.trim();
     if(!validEmail(email)){ showAuthMsg("Type your email above first, then tap Forgot password.", "error"); authEmail.focus(); return; }
+    if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); return; }
     try{
       var r = await SUPA.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL });
       if(r.error) throw r.error;
@@ -2559,7 +2866,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
   });
   async function oauth(provider){
-    if(!SUPA){ showAuthMsg("Sign-in needs an internet connection.", "error"); return; }
+    if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
     try{
       var r = await SUPA.auth.signInWithOAuth({ provider: provider, options: { redirectTo: SITE_URL } });
       if(r.error) throw r.error;
@@ -2600,7 +2907,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   /* ---------- Boot ---------- */
   applyAppearance(loadAppearance());
   if(shouldShowWelcome()) openWelcome(); else goHome();
-  initAuth();
+  loadSupabase();
   openImgDb().then(function(db){
     imgDb = db;
     return loadAllImages();
