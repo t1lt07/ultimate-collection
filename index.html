@@ -209,13 +209,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .wordmark span{color:var(--accent)}
 
 /* Welcome (first screen: sign in or continue as guest) */
-.welcome-scroll{display:flex;flex-direction:column;padding-top:42px;padding-bottom:20px}
-.welcome-stage{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:26px}
-.welcome-actions{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;background:var(--bg);padding:14px 22px calc(16px + env(safe-area-inset-bottom, 0px));
-  box-shadow:0 -14px 22px -18px rgba(0,0,0,.35);position:relative;z-index:2}
+.welcome-scroll{display:flex;flex-direction:column;padding-top:36px;padding-bottom:calc(28px + env(safe-area-inset-bottom, 0px))}
+.welcome-stage{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:22px}
+.welcome-actions{width:100%;display:flex;flex-direction:column;gap:8px;text-align:center}
 .welcome-btns{display:flex;gap:10px}
 .welcome-btns .btn{flex:1;padding:0 12px;height:54px}
-.welcome-guest{display:block;margin:2px auto 0;font-size:15px;font-weight:700;padding:8px 12px}
+.welcome-guest{height:50px;font-size:15px;border:1.5px solid var(--edge)}
 .welcome-note{margin:0 auto;max-width:300px;text-align:center;font-size:12.5px;line-height:1.4;color:var(--muted)}
 
 /* Home sections for returning users */
@@ -339,14 +338,53 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
 /* Item detail */
 .item-band{position:absolute;left:0;right:0;top:0;height:250px;background:var(--t1);border-radius:0 0 36px 36px;pointer-events:none}
-#screen-item .scroll{position:relative;padding-bottom:110px}
+#screen-item .scroll{position:relative;padding-top:0;padding-bottom:calc(32px + env(safe-area-inset-bottom, 0px))}
 .item-hero{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
-.item-cover{margin-top:14px;width:176px;height:264px;border-radius:22px;box-shadow:0 24px 40px -18px rgba(0,0,0,.5)}
+.item-cover{margin-top:4px;width:176px;height:264px;border-radius:22px;box-shadow:0 24px 40px -18px rgba(0,0,0,.5)}
 .item-cover > svg{max-width:40px}
 .item-cover.has-img{background:var(--surface);transition:width .2s ease,height .2s ease}
 .item-name{margin:20px 0 0;font-family:var(--font-display);font-size:27px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;text-wrap:balance}
 .item-subline{margin-top:4px;font-size:14px;color:var(--muted)}
-#item-status{margin-top:18px;width:100%}
+/* Two columns: official info on the left, your own score, status and playtime on the right */
+.item-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px;align-items:stretch;text-align:left}
+.info-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.col-head{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:24px;padding:0 4px}
+.col-title{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.src-tag{font-size:11px;font-weight:700;border-radius:999px;padding:3px 8px;background:var(--surface);color:var(--ink);border:1px solid var(--edge);white-space:nowrap}
+#item-info{flex:1;display:flex;flex-direction:column;gap:8px}
+#item-info .stat-card{flex:1 1 auto;justify-content:center}
+#item-info .stat-card{padding:10px 14px;border-radius:16px}
+#item-info .stat-value{font-size:14.5px}
+#item-info .notice{margin-top:0;padding:14px;font-size:13.5px}
+.mine-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.mine-card{flex:1;background:var(--t1);color:var(--deep);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.mine-col .col-title{color:var(--deep)}
+.mine-col .col-head{padding:0 4px}
+.mine-field{display:flex;flex-direction:column;gap:6px}
+.mine-field[hidden]{display:none}
+.mine-label{font-size:12px;font-weight:600}
+.mine-box{height:48px;border-radius:14px;background:var(--surface);display:flex;align-items:center;padding:0 12px 0 14px;gap:6px;border:1.5px solid transparent}
+.mine-box:focus-within{border-color:var(--ink)}
+.mine-box input{flex:1;min-width:0;width:100%;border:none;outline:none;background:transparent;padding:0;font-size:19px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+.mine-box input::-webkit-outer-spin-button,.mine-box input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.mine-box input::placeholder{color:var(--muted);font-weight:700}
+.mine-unit{font-size:13px;font-weight:700;color:var(--muted);flex:0 0 auto}
+.mine-select{position:relative;display:block}
+.mine-select select{width:100%;height:48px;border:1.5px solid transparent;border-radius:14px;background:var(--surface);color:var(--ink);padding:0 34px 0 14px;font-family:inherit;font-size:15px;font-weight:700;appearance:none;-webkit-appearance:none;cursor:pointer}
+.mine-select select:focus{outline:none;border-color:var(--ink)}
+.mine-select select.is-dropped{background:var(--drop-bg);color:var(--drop-ink)}
+.mine-select svg{position:absolute;right:12px;top:16px;width:16px;height:16px;pointer-events:none;color:var(--muted)}
+.mine-col .mode-note{margin-top:0;min-height:48px;border-radius:14px;padding:10px 12px;box-shadow:none;font-size:13.5px}
+/* Genre picker in the add/edit form: type to filter, or open the full list */
+.combo{position:relative}
+.combo .field{padding-right:52px}
+.combo-toggle{position:absolute;right:6px;top:6px;width:44px;height:40px;border:none;border-radius:12px;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.combo-toggle svg{width:16px;height:16px;transition:transform .15s ease}
+.combo.is-open .combo-toggle svg{transform:rotate(180deg)}
+.combo-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 18px 40px -16px rgba(0,0,0,.45);max-height:236px;overflow-y:auto}
+.combo-opt{display:block;width:100%;min-height:42px;border:none;border-radius:10px;background:transparent;color:var(--ink);text-align:left;padding:0 12px;font-size:15px;font-weight:600;cursor:pointer}
+.combo-opt:hover,.combo-opt.is-active{background:var(--t1, var(--chip));color:var(--deep, var(--ink))}
+.combo-opt.is-active{font-weight:700}
 .stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .stat-card{background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .stat-card.wide{grid-column:1 / -1}
@@ -437,7 +475,6 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .kind-hint{margin:8px 2px 0;font-size:13px;line-height:1.4;color:var(--muted)}
 
 /* Outlines so cards and buttons stand out from the background in light and dark */
-#btn-mine{border:1.5px solid var(--ink)}
 .act-row,.stats-card,.cont-box,.coll-card,.stat-card{border:1px solid var(--edge)}
 .stat-tile{border:1px solid var(--edge)}
 
@@ -459,6 +496,117 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .notes-foot.is-full .bar > span{background:var(--drop-ink)}
 .notes-foot.is-full .notes-count{color:var(--drop-ink)}
 
+/* Start a collection */
+.start-btn{margin-top:4px}
+.fill-opts{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.fill-opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1.5px solid var(--edge);background:var(--bg);color:var(--ink);border-radius:20px;padding:14px 12px 14px 14px}
+.fill-opt:active{transform:scale(.98)}
+.fill-ic{width:44px;height:44px;border-radius:14px;background:var(--btn);color:var(--on-btn);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.fill-ic svg{width:22px;height:22px}
+.fill-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.fill-text strong{font-size:16px;font-weight:800}
+.fill-text span{font-size:13px;line-height:1.4;color:var(--muted)}
+.fill-chev{width:18px;height:18px;color:var(--muted);flex:0 0 auto}
+#new-fill-hint:empty{display:none}
+.select-option.is-disabled{opacity:.42;cursor:not-allowed}
+.select-option.is-disabled:hover{background:transparent}
+.select-option .opt-note{flex:0 0 auto;font-size:12px;font-weight:600;color:var(--muted)}
+
+/* Extra filters in a collection */
+.chips.filter-row{margin-top:8px;align-items:center}
+.filter-lab{flex:0 0 auto;font-size:12.5px;font-weight:600;color:var(--muted);margin-right:2px}
+.chip.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:0 10px 0 14px}
+.chip.filter-chip svg{width:12px;height:12px;opacity:.75}
+.list-note .linkbtn{display:block;margin:8px auto 0;text-decoration:underline}
+.sheet-opt .opt-label{flex:1}
+#filter-opts .sheet-opt span:nth-child(2){flex:0 0 auto}
+.sheet-opt .opt-gap{width:18px;flex:0 0 auto}
+.sheet-opt .opt-count{font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Item page: back, edit and delete stay pinned while scrolling */
+.item-topbar{position:sticky;top:0;z-index:8;display:grid;grid-template-columns:100px minmax(0,1fr) 100px;align-items:center;gap:8px;
+  margin:0 -22px;padding:14px 22px 10px;transition:background .2s ease, box-shadow .2s ease}
+.itb-side{display:flex;gap:8px}
+.itb-right{justify-content:flex-end}
+.item-topbar .crumb{text-align:center;font-size:13px;font-weight:700;color:var(--deep, var(--muted));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-topbar.is-stuck{background:color-mix(in srgb, var(--bg) 88%, transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 18px -16px rgba(0,0,0,.5)}
+.item-topbar.is-stuck .crumb{color:var(--ink)}
+
+/* My score: big number with /10 right beside it */
+.mine-box.score-box{height:60px;justify-content:flex-start;gap:3px;cursor:text}
+.mine-box.score-box input{flex:0 0 auto;width:calc(var(--len, 1) * 1ch + 2px);font-size:32px;line-height:1;letter-spacing:-0.02em}
+.mine-box.score-box .mine-unit{font-size:15px;align-self:center;margin-top:8px}
+
+/* Season and episode progress */
+.prog-sum{font-size:13px;font-weight:700;text-align:right}
+.prog-next{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 12px;border:none;border-radius:999px;background:var(--btn);color:var(--on-btn);font-size:13.5px;font-weight:700}
+.prog-next svg{width:16px;height:16px}
+.prog-next:active{transform:scale(.96)}
+.prog-next[disabled]{opacity:.45;cursor:default;transform:none}
+.prog-next[disabled] svg{display:none}
+
+/* Notes: shows when the text is saved */
+.notes-head{display:flex;align-items:center;gap:10px;margin:20px 0 8px;min-height:32px}
+.notes-head .section-label{margin:0;flex:1}
+.notes-state{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.notes-state.is-saved{color:#2E9E5B}
+.notes-state svg{width:14px;height:14px}
+.notes-done{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px 0 10px;border:none;border-radius:999px;background:var(--btn);color:var(--on-btn);font-size:13px;font-weight:700}
+.notes-done svg{width:14px;height:14px}
+
+/* Data source credits (TMDB and RAWG) */
+.about-card{font-size:14px;line-height:1.5}
+.about-mark{text-align:left;font-size:22px;margin-bottom:6px}
+.credits{padding:6px}
+.credit-row{display:flex;align-items:center;gap:14px;padding:12px;color:var(--ink);text-decoration:none}
+.credit-row + .credit-row{border-top:1px solid var(--line)}
+.credit-logo{flex:0 0 auto;width:64px;height:40px;border-radius:10px;background:var(--chip);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.credit-logo svg{width:22px;height:22px}
+.credit-logo.tmdb{background:transparent;width:auto;min-width:64px;height:auto}
+.credit-logo.tmdb img{display:block;width:96px;height:auto}
+.tmdb-fallback{font-size:13px;font-weight:800;color:#01b4e4;letter-spacing:.04em}
+.credit-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.credit-text strong{font-size:14.5px;font-weight:800}
+.credit-text span{font-size:12.5px;line-height:1.4;color:var(--muted)}
+.credit-text .credit-link{color:var(--ink);font-weight:700}
+.data-credit{display:block;margin:16px 4px 0;text-align:center;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none}
+.data-credit strong{color:var(--ink)}
+.data-credit.item-credit{margin-top:10px;text-align:right}
+.pick-card .data-credit{margin-top:6px}
+.suggest-credit{display:block;padding:8px 10px 6px;border-top:1px solid var(--line);margin-top:4px;font-size:11.5px;font-weight:600;color:var(--muted);text-align:right;text-decoration:none}
+.suggest-credit strong{color:var(--ink)}
+
+/* Rounded pickers (status, season, episode) that open a sheet instead of a system list */
+.pick-trigger{width:100%;height:48px;border:1.5px solid transparent;border-radius:14px;background:var(--surface);color:var(--ink);padding:0 10px 0 14px;
+  font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;text-align:left}
+.pick-trigger .pt-label{flex:1;min-width:0;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick-trigger{gap:4px}
+.pick-trigger .pt-label .dot{width:9px;height:9px}
+.pick-trigger .chev{width:16px;height:16px;color:var(--muted);flex:0 0 auto}
+.pick-trigger:active{transform:scale(.98)}
+.pick-trigger.is-dropped{background:var(--drop-bg);color:var(--drop-ink)}
+.pick-trigger.is-empty .pt-label{color:var(--muted)}
+.pick-trigger[disabled]{opacity:.5;cursor:default;transform:none}
+.mine-prog{display:flex;flex-direction:column;gap:12px}
+.prog-meta{display:flex;flex-direction:column;gap:6px}
+.prog-meta .bar{height:6px;background:color-mix(in srgb, var(--deep) 16%, transparent)}
+.mine-prog .prog-sum{font-size:12px;font-weight:700;text-align:left}
+.mine-prog .prog-next{width:100%;justify-content:center;height:44px}
+#ps-opts.sheet-opts{max-height:52vh;overflow-y:auto;padding:2px}
+#ps-opts .opt-sub{font-size:13px;font-weight:600;color:var(--muted)}
+#ps-opts .sheet-opt .dot{width:12px;height:12px;border-width:2px}
+#ps-opts .sheet-opt .dot.st-completed{color:var(--bar)}
+#ps-opts .sheet-opt .dot.st-dropped{color:var(--drop-ink)}
+#ps-opts .sheet-opt .dot.st-planned{color:var(--muted)}
+.ps-grid{margin-top:16px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-height:46vh;overflow-y:auto;padding:2px}
+.ps-num{height:50px;border-radius:16px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.ps-num.is-done{background:var(--t1);color:var(--deep);border-color:var(--t1)}
+.ps-num.is-active{background:var(--btn);color:var(--on-btn);border-color:var(--btn)}
+.ps-num.ps-clear{grid-column:1 / -1;height:44px;font-size:14px;font-weight:600;color:var(--muted)}
+
+.search-close{width:36px;height:36px;border-radius:12px;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.search-close svg{width:16px;height:16px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -477,16 +625,16 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
             <h1 class="home-title">Build your personal <span>collection</span></h1>
             <p class="home-tagline">One place for every movie, series, anime, game, album and book you love.</p>
           </div>
+          <div class="welcome-actions">
+            <div class="welcome-btns">
+              <button class="btn btn-primary" id="welcome-signup" type="button">Create account</button>
+              <button class="btn btn-secondary" id="welcome-signin" type="button">Sign in</button>
+            </div>
+            <button class="btn btn-ghost welcome-guest" id="welcome-guest" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6"/></svg>Continue as guest</button>
+            <p class="welcome-note" id="welcome-note">As a guest, your lists stay on this device. You can create an account any time to sync them.</p>
+          </div>
           <div class="fan" id="welcome-fan" aria-hidden="true"></div>
         </div>
-      </div>
-      <div class="welcome-actions">
-        <div class="welcome-btns">
-          <button class="btn btn-primary" id="welcome-signup" type="button">Create account</button>
-          <button class="btn btn-secondary" id="welcome-signin" type="button">Sign in</button>
-        </div>
-        <button class="linkbtn welcome-guest" id="welcome-guest" type="button">Continue as guest</button>
-        <p class="welcome-note" id="welcome-note">As a guest, your lists stay on this device. You can create an account any time to sync them.</p>
       </div>
     </section>
 
@@ -501,13 +649,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <div class="fan" id="home-fan" aria-hidden="true"></div>
           
           <div id="home-new" style="width:100%">
-            <p class="start-label">Start a new list</p>
-            <div class="cat-chips" id="home-chips"></div>
+            <button class="btn btn-primary start-btn" id="home-start" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Start a collection</button>
           </div>
           <div id="home-back" style="width:100%;display:flex;flex-direction:column;gap:18px">
             <div class="home-actions">
-              <button class="btn btn-primary" id="btn-new" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New</button>
-              <button class="btn btn-secondary" id="btn-mine" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/></svg>My collections</button>
+              <button class="btn btn-primary" id="btn-new" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Start a collection</button>
             </div>
             <section class="home-sec" id="home-pinned">
               <div class="home-sec-head"><h2>Pinned</h2></div>
@@ -539,6 +685,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
               </div>
             </section>
           </div>
+          <a class="data-credit" id="home-credit" href="https://rawg.io" target="_blank" rel="noopener" hidden>Game details and images from <strong>RAWG</strong> <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
@@ -551,6 +698,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <span class="spacer"></span>
         </div>
         <h1 class="display-xl" style="margin-top:16px">New collection</h1>
+        <p class="section-label" id="new-fill-label">How to add titles</p>
+        <div class="seg two" id="new-fill" role="radiogroup" aria-labelledby="new-fill-label">
+          <button class="seg-opt" type="button" data-fill="auto" role="radio">Autofill</button>
+          <button class="seg-opt" type="button" data-fill="manual" role="radio">Manual</button>
+        </div>
+        <p class="kind-hint" id="new-fill-hint"></p>
         <p class="section-label">Category</p>
         <div class="select-wrap" id="theme-select-wrap">
           <button type="button" class="select-trigger placeholder" id="theme-select-trigger" aria-haspopup="listbox">
@@ -588,6 +741,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <p id="mine-empty-text">No collections yet.</p>
           <button class="btn btn-primary btn-small" id="mine-empty-cta" type="button">New collection</button>
         </div>
+        <a class="data-credit" id="mine-credit" href="https://rawg.io" target="_blank" rel="noopener" hidden>Game details and images from <strong>RAWG</strong> <span aria-hidden="true">↗</span></a>
       </div>
     </section>
 
@@ -610,6 +764,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg>
               <input id="detail-input" type="text" placeholder="Search a title to add" maxlength="80" autocomplete="off" enterkeyhint="go">
               <button class="search-go" id="detail-add" type="button" aria-label="Add and look up info" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              <button class="search-close" id="detail-search-close" type="button" aria-label="Close search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
             </label>
             <div class="suggest-dropdown" id="suggest-dropdown" hidden></div>
           </div>
@@ -619,42 +774,83 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           </div>
         </div>
         <div class="chips" id="detail-chips" role="group" aria-label="Filter by status"></div>
+        <div class="chips filter-row" id="detail-filters" role="group" aria-label="More filters"></div>
         <div id="item-list"></div>
         <div class="empty" id="detail-empty" hidden>
           <span class="ring-icon" id="detail-empty-icon"></span>
           <p id="detail-empty-text">No titles yet.</p>
         </div>
+        <a class="data-credit" id="detail-credit" href="https://rawg.io" target="_blank" rel="noopener" hidden>Game details and images from <strong>RAWG</strong> <span aria-hidden="true">↗</span></a>
       </div>
-      <button class="fab fab-label" id="detail-fab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Add manually</button>
+      <button class="fab fab-label" id="detail-fab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add</button>
     </section>
 
     <!-- ITEM -->
     <section class="screen" id="screen-item" hidden>
       <div class="scroll" id="item-scroll">
         <div class="item-band"></div>
-        <div class="item-hero">
-          <div class="topbar" style="width:100%">
+        <div class="item-topbar" id="item-topbar">
+          <span class="itb-side">
             <button class="roundbtn" id="item-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <span class="crumb" id="item-crumb"></span>
+          </span>
+          <span class="crumb" id="item-crumb"></span>
+          <span class="itb-side itb-right">
+            <button class="roundbtn" id="item-edit" aria-label="Edit details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg></button>
             <button class="roundbtn" id="item-trash" aria-label="Delete item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>
-          </div>
+          </span>
+        </div>
+        <div class="item-hero">
           <div class="cover item-cover v3" id="item-cover"></div>
           <h1 class="item-name" id="item-name"></h1>
           <div class="item-subline" id="item-subline"></div>
-          <div class="seg" id="item-status" role="radiogroup" aria-label="Status"></div>
-          <div class="mode-note" id="item-mode-note" hidden></div>
         </div>
-        <div id="item-info"></div>
-        <p class="section-label">Your notes</p>
+        <div class="item-cols" id="item-cols">
+          <section class="info-col" aria-labelledby="item-info-title">
+            <div class="col-head"><span class="col-title" id="item-info-title">Official</span><span class="src-tag" id="item-src" hidden></span></div>
+            <div id="item-info"></div>
+          </section>
+          <section class="mine-col" aria-labelledby="item-mine-title">
+            <div class="col-head"><span class="col-title" id="item-mine-title">Yours</span></div>
+            <div class="mine-card">
+            <label class="mine-field">
+              <span class="mine-label">My score</span>
+              <span class="mine-box score-box"><input id="item-score" type="number" min="0" max="10" step="0.5" inputmode="decimal" placeholder="–" autocomplete="off"><span class="mine-unit">/10</span></span>
+            </label>
+            <div class="mine-field" id="item-status-field">
+              <span class="mine-label" id="item-status-lab">Status</span>
+              <button class="pick-trigger" id="item-status" type="button" aria-haspopup="dialog" aria-labelledby="item-status-lab item-status"><span class="pt-label"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+            </div>
+            <div class="mine-prog" id="item-progress" hidden>
+              <div class="mine-field">
+                <span class="mine-label" id="prog-season-lab">Season</span>
+                <button class="pick-trigger" id="prog-season" type="button" aria-haspopup="dialog" aria-labelledby="prog-season-lab prog-season"><span class="pt-label"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              </div>
+              <div class="mine-field">
+                <span class="mine-label" id="prog-episode-lab">Episode</span>
+                <button class="pick-trigger" id="prog-episode" type="button" aria-haspopup="dialog" aria-labelledby="prog-episode-lab prog-episode"><span class="pt-label"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              </div>
+              <div class="prog-meta" id="prog-meta"><span class="bar" id="prog-bar-wrap"><span id="prog-bar" style="width:0%"></span></span><span class="prog-sum" id="prog-sum"></span></div>
+              <button class="prog-next" id="prog-next" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Next episode</span></button>
+            </div>
+            <div class="mode-note" id="item-mode-note" hidden></div>
+            <label class="mine-field" id="item-playtime-field" hidden>
+              <span class="mine-label">My playtime</span>
+              <span class="mine-box"><input id="item-playtime" type="number" min="0" max="99999" step="1" inputmode="numeric" placeholder="0" autocomplete="off"><span class="mine-unit">hours</span></span>
+            </label>
+            </div>
+          </section>
+        </div>
+        <a class="data-credit item-credit" id="item-credit" href="#" target="_blank" rel="noopener" hidden></a>
+        <div class="notes-head">
+          <label class="section-label" for="item-notes">Your notes</label>
+          <span class="notes-state" id="item-notes-state" aria-live="polite"></span>
+          <button class="notes-done" id="item-notes-done" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Done</button>
+        </div>
         <textarea class="field notes-field" id="item-notes" rows="5" maxlength="1000" placeholder="Add a personal note…"></textarea>
         <div class="notes-foot" id="item-notes-foot">
           <span class="bar"><span></span></span>
           <span class="notes-row"><span>Up to 1,000 characters</span><span class="notes-count" aria-live="polite"></span></span>
         </div>
-      </div>
-      <div class="bottom-actions">
-        <button class="btn btn-secondary" id="item-edit" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>Edit details</button>
-        <button class="btn btn-primary" id="item-notes-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Your notes</button>
       </div>
     </section>
 
@@ -753,7 +949,18 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <p class="section-label">Account</p>
         <div class="soft-card" id="acct-card"></div>
         <p class="section-label">About</p>
-        <div class="soft-card muted" style="font-size:14px;line-height:1.5"><strong style="display:block;color:var(--ink);font-size:15px;margin-bottom:4px">CollectEon</strong>Your collections are saved on this device, and in your account when you're signed in. Movie, series and anime details come from TMDB, and game details from RAWG.</div>
+        <div class="soft-card muted about-card"><p class="wordmark about-mark" aria-label="CollectEon">Collect<span>Eon</span></p>Your collections are saved on this device, and in your account when you're signed in.</div>
+        <p class="section-label">Data sources</p>
+        <div class="soft-card credits">
+          <a class="credit-row" href="https://www.themoviedb.org" target="_blank" rel="noopener">
+            <span class="credit-logo tmdb"><img src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" width="96" height="13" decoding="async" referrerpolicy="no-referrer" id="tmdb-logo"><span class="tmdb-fallback" hidden>TMDB</span></span>
+            <span class="credit-text"><strong>Movies, series and anime</strong><span>This product uses the TMDB API but is not endorsed or certified by TMDB.</span><span class="credit-link">themoviedb.org <span aria-hidden="true">↗</span></span></span>
+          </a>
+          <a class="credit-row" href="https://rawg.io" target="_blank" rel="noopener">
+            <span class="credit-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9h10l2.4 7a2 2 0 0 1-3.8 1.3L14.5 15h-5l-1.1 2.3A2 2 0 0 1 4.6 16L7 9Z"/><path d="M8.5 11.5v2M7.5 12.5h2M15.5 11.3h.01M17.5 13.3h.01"/></svg></span>
+            <span class="credit-text"><strong>Games</strong><span>Game details and images from RAWG.</span><span class="credit-link">rawg.io <span aria-hidden="true">↗</span></span></span>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -788,6 +995,46 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       </div>
     </div>
 
+    <div class="overlay" id="fill-overlay" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="fill-title">
+        <span class="sheet-handle"></span>
+        <div class="sheet-title" id="fill-title" style="margin-bottom:4px">Start a collection</div>
+        <div class="sheet-sub" id="fill-sub">How do you want to add titles?</div>
+        <div class="fill-opts">
+          <button class="fill-opt" id="fill-auto" type="button">
+            <span class="fill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l1.9 4.6 4.6 1.9-4.6 1.9L12 16.5l-1.9-4.6L5.5 10l4.6-1.9Z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8Z"/></svg></span>
+            <span class="fill-text"><strong>Autofill</strong><span id="fill-auto-text">Search a title and its poster and details fill in for you. For movies, series, anime and games.</span></span>
+            <svg class="fill-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button class="fill-opt" id="fill-manual" type="button">
+            <span class="fill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg></span>
+            <span class="fill-text"><strong>Manual</strong><span id="fill-manual-text">Type in each title and its details yourself. Works for every category.</span></span>
+            <svg class="fill-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+        <button class="btn btn-ghost" id="fill-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="ps-overlay" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ps-title">
+        <span class="sheet-handle"></span>
+        <div class="sheet-title" id="ps-title"></div>
+        <div class="sheet-sub" id="ps-sub" hidden></div>
+        <div id="ps-opts"></div>
+        <button class="btn btn-ghost" id="ps-close" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="filter-overlay" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="filter-title">
+        <span class="sheet-handle"></span>
+        <div class="sheet-title" id="filter-title"></div>
+        <div class="sheet-opts" id="filter-opts" role="radiogroup"></div>
+        <button class="btn btn-ghost" id="filter-close" type="button">Done</button>
+      </div>
+    </div>
+
     <div class="overlay center" id="pick-overlay" hidden>
       <div class="modal-card pick-card" role="dialog" aria-modal="true" aria-labelledby="pick-title">
         <p class="pick-eyebrow">How about this one?</p>
@@ -799,6 +1046,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <button class="btn btn-primary" id="pick-start" type="button">Start it</button>
         </div>
         <button class="linkbtn" id="pick-close" type="button" style="margin-top:8px;color:var(--muted)">Not now</button>
+        <a class="data-credit" id="pick-credit" href="https://rawg.io" target="_blank" rel="noopener" hidden>Game details and images from <strong>RAWG</strong> <span aria-hidden="true">↗</span></a>
       </div>
     </div>
 
@@ -946,19 +1194,20 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       { key:"format",   label:"Format",  placeholder:"e.g. TV series or Film" },
       { key:"episodes", label:"Length",  placeholder:"e.g. 28 episodes" },
       { key:"person",   label:"Studio",  placeholder:"e.g. Madhouse" },
-      { key:"genre",    label:"Genre",   placeholder:"e.g. Fantasy, Adventure" }
+      { key:"genre",    label:"Genre",   placeholder:"e.g. Fantasy, Adventure", wide:true }
     ],
     series: [
       { key:"rating",  label:"Rating",          placeholder:"e.g. 9.0",   numeric:true },
       { key:"year",    label:"Year",            placeholder:"e.g. 2019",  numeric:true },
-      { key:"runtime", label:"Episode runtime", placeholder:"e.g. 50m" },
+      { key:"episodes", label:"Seasons & episodes", placeholder:"e.g. 5 seasons, 62 episodes" },
       { key:"person",  label:"Creator",         placeholder:"e.g. Phoebe Waller-Bridge" },
       { key:"genre",   label:"Genre",           placeholder:"e.g. Comedy", wide:true }
     ],
     games: [
-      { key:"releaseDate",   label:"Release date",     placeholder:"e.g. 2023-05-12" },
-      { key:"person",        label:"Studio",           placeholder:"e.g. FromSoftware" },
-      { key:"genre",         label:"Genre",            placeholder:"e.g. RPG", wide:true }
+      { key:"rating", label:"Rating", placeholder:"e.g. 4.4",   numeric:true },
+      { key:"year",   label:"Year",   placeholder:"e.g. 2023",  numeric:true },
+      { key:"person", label:"Studio", placeholder:"e.g. FromSoftware" },
+      { key:"genre",  label:"Genre",  placeholder:"e.g. RPG", wide:true }
     ],
     music: [
       { key:"person", label:"Artist", placeholder:"e.g. Radiohead" },
@@ -970,8 +1219,17 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       { key:"person", label:"Author", placeholder:"e.g. Ursula K. Le Guin" },
       { key:"year",   label:"Year",   placeholder:"e.g. 1969", numeric:true },
       { key:"pages",  label:"Pages",  placeholder:"e.g. 304",  numeric:true },
-      { key:"genre",  label:"Genre",  placeholder:"e.g. Science fiction" }
+      { key:"genre",  label:"Genre",  placeholder:"e.g. Science fiction", wide:true }
     ]
+  };
+  /* Genre suggestions for the add/edit form, per category */
+  var GENRES = {
+    movie:  ["Action","Adventure","Animation","Biography","Comedy","Crime","Documentary","Drama","Family","Fantasy","History","Horror","Music","Musical","Mystery","Romance","Sci-fi","Sport","Thriller","War","Western"],
+    series: ["Action","Adventure","Animation","Comedy","Crime","Documentary","Drama","Family","Fantasy","History","Horror","Kids","Mystery","Reality","Romance","Sci-fi","Sitcom","Thriller","War","Western"],
+    anime:  ["Action","Adventure","Comedy","Drama","Fantasy","Horror","Isekai","Mecha","Music","Mystery","Psychological","Romance","Sci-fi","Shoujo","Shounen","Slice of life","Sports","Supernatural","Thriller"],
+    games:  ["Action","Adventure","Fighting","Horror","Indie","MMO","Platformer","Puzzle","Racing","RPG","Shooter","Simulation","Sports","Strategy","Survival"],
+    music:  ["Alt rock","Classical","Country","Electronic","Folk","Hip hop","Indie","Jazz","Metal","Pop","Punk","R&B","Rock","Soul","Soundtrack"],
+    books:  ["Biography","Classics","Comics","Fantasy","Fiction","History","Horror","Memoir","Mystery","Non-fiction","Poetry","Romance","Science fiction","Self-help","Thriller","Young adult"]
   };
 
   /* ---------- Cover photos uploaded from the device (kept in IndexedDB, not localStorage) ---------- */
@@ -1125,7 +1383,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var pendingDelete = null;
   var toastTimer = null;
   var currentItemRef = null; // {collectionId, itemId}
-  var statusFilter = "all";
+  var statusFilter = "all", searchOpen = false;
+  var ratingFilter = "any", playFilter = "any";
   var VIEW_KEY = "ultimateCollection:view";
   var viewMode = (function(){ try{ return localStorage.getItem(VIEW_KEY) === "grid" ? "grid" : "list"; }catch(e){ return "list"; } })();
 
@@ -1212,7 +1471,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     catch(e){ result = { status:"error" }; }
     var item = findItem(colId, itemId);
     if(!item || item.edited) return;
-    item.meta = result;
+    item.meta = stampFetched(result);
     saveCollections();
     refreshViews();
   }
@@ -1226,11 +1485,93 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     runLookup(col.theme, item.text).then(function(result){
       var item2 = findItem(colId, itemId);
       if(!item2 || item2.edited) return;
-      item2.meta = result;
+      item2.meta = stampFetched(result);
       saveCollections();
       refreshViews();
     });
   }
+  function stampFetched(result){
+    if(result && result.status === "found") result.fetchedAt = Date.now();
+    return result;
+  }
+
+  /* ---------- Keeping TMDB details fresh ----------
+     TMDB's terms don't allow keeping its data for more than 6 months. Details from TMDB
+     (movies, series, anime) are fetched again once they're about 5 months old, so nothing
+     stored on the phone or in the account is ever older than that. What people type
+     themselves (score, status, notes, progress, fields they edited) is theirs and stays. */
+  var REFRESH_AFTER = 150 * 24 * 3600 * 1000;          // about 5 months
+  var TMDB_THEMES = { movie: true, series: true, anime: true };
+  var DETAIL_KEYS = ["title","year","rating","runtime","person","genre","format","episodes"];
+  function needsRefresh(col, item){
+    if(!TMDB_THEMES[col.theme]) return false;
+    var m = item.meta;
+    if(!m || m.status !== "found" || m.manual) return false;
+    if(hasEpisodes(col, item) && !Array.isArray(m.seasons)) return true;   // fetched before seasons were added
+    var t = toMsSafe(m.fetchedAt);
+    return !t || Date.now() - t > REFRESH_AFTER;
+  }
+  /* Fields the person changed in Edit details. Older edits didn't record this, so every filled-in field counts as theirs. */
+  function ownFields(item){
+    var m = item.meta || {};
+    if(Array.isArray(m.userFields)) return m.userFields;
+    if(!item.edited) return [];
+    return DETAIL_KEYS.filter(function(k){ return m[k] !== undefined && m[k] !== null && String(m[k]).trim() !== ""; });
+  }
+  function normTitle(t){ return String(t || "").toLowerCase().replace(/[^a-z0-9\u00c0-\uffff]+/g, ""); }
+  function sameTitle(old, fresh){
+    if(normTitle(old.title) !== normTitle(fresh.title)) return false;
+    return !old.year || !fresh.year || String(old.year).slice(0,4) === String(fresh.year).slice(0,4);
+  }
+  var refreshBusy = {}, refreshRunning = false;
+  async function refreshItem(colId, itemId){
+    var col = findCollection(colId), item = findItem(colId, itemId);
+    if(!col || !item || !needsRefresh(col, item) || refreshBusy[itemId]) return;
+    if(navigator.onLine === false) return;
+    refreshBusy[itemId] = true;
+    try{
+      var old = item.meta, byId = !!old.sourceId, res;
+      try{
+        res = await callLookupFn(byId ? { theme: col.theme, id: old.sourceId, mode: "resolve" }
+                                      : { theme: col.theme, title: old.title || item.text });
+      }catch(e){ return; }                               // offline or server trouble: try again later
+      item = findItem(colId, itemId);
+      if(!item || item.meta !== old) return;             // changed meanwhile
+      if(!res || (res.status !== "found" && res.status !== "notfound")) return;
+      var keep = ownFields(item);
+      var matched = res.status === "found" && (byId || sameTitle(old, res));
+      var meta;
+      if(matched){
+        meta = stampFetched(res);
+        keep.forEach(function(k){ if(old[k] !== undefined) meta[k] = old[k]; });
+      } else if(keep.length){
+        meta = { status: "found", manual: true, userFields: keep };   // keep only what they typed
+        keep.forEach(function(k){ meta[k] = old[k]; });
+      } else {
+        meta = { status: "notfound" };                   // TMDB no longer has it: drop the old details
+      }
+      if(keep.length) meta.userFields = keep;
+      item.meta = meta;
+      saveCollections();
+      refreshViews();
+    } finally { delete refreshBusy[itemId]; }
+  }
+  async function refreshStale(){
+    if(refreshRunning || navigator.onLine === false) return;
+    refreshRunning = true;
+    try{
+      var todo = [];
+      state.collections.forEach(function(c){ c.items.forEach(function(it){ if(needsRefresh(c, it)) todo.push([c.id, it.id]); }); });
+      for(var i = 0; i < todo.length && i < 25; i++){      // a few at a time, gently
+        await refreshItem(todo[i][0], todo[i][1]);
+        await new Promise(function(r){ setTimeout(r, 400); });
+      }
+    } finally { refreshRunning = false; }
+  }
+  document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "visible") setTimeout(refreshStale, 1500); });
+  window.addEventListener("online", function(){ setTimeout(refreshStale, 1500); });
+  setInterval(function(){ if(document.visibilityState === "visible") refreshStale(); }, 30 * 60 * 1000);
+
   function refreshViews(){
     var s = currentScreen();
     if(s === "detail") renderDetail();
@@ -1247,7 +1588,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(meta.status === "notfound") return "No match found";
     if(meta.status === "error") return "Couldn’t fetch info";
     if(meta.status === "found"){
-      if(theme === "games") return [meta.releaseDate ? String(meta.releaseDate).slice(0,4) : "", meta.person].filter(Boolean).join(", ");
+      if(theme === "games") return [gameYear(meta), meta.person].filter(Boolean).join(", ");
       if(theme === "music" && meta.kind === "song") return [meta.person, meta.album ? "from " + meta.album : ""].filter(Boolean).join(", ");
       if(theme === "music" || theme === "books") return [meta.person, meta.year].filter(Boolean).join(", ");
       if(theme === "anime") return [meta.year, meta.format].filter(Boolean).join(", ");
@@ -1257,26 +1598,27 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   }
   function displayTitle(item){ return (item.meta && item.meta.status === "found" && item.meta.title) ? item.meta.title : item.text; }
 
-  /* ---------- Home (start screen) ---------- */
-  document.getElementById("btn-new").addEventListener("click", function(){ openNew(null, "home"); });
-  document.getElementById("btn-mine").addEventListener("click", goCollections);
-  var CAT_ORDER = ["movie","series","anime","games","music","books"];
-  (function buildChips(){
-    var wrap = document.getElementById("home-chips");
-    CAT_ORDER.forEach(function(k){
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "cat-chip " + catClass(k);
-      b.innerHTML = THEMES[k].icon + "<span></span>";
-      b.lastChild.textContent = THEMES[k].plural;
-      b.addEventListener("click", function(){ openNew(k, "home"); });
-      wrap.appendChild(b);
-    });
+  /* ---------- Data source credits ---------- */
+  /* RAWG asks for a link back on every screen that shows its data; TMDB's credit lives in Settings. */
+  function fromLookup(item){ return !!(item && item.meta && item.meta.status === "found" && !item.meta.manual); }
+  function usesRawg(col, item){ return col.theme === "games" && fromLookup(item); }
+  function colUsesRawg(col){ return col.theme === "games" && col.items.some(fromLookup); }
+  function anyRawg(){ return state.collections.some(colUsesRawg); }
+  function showCredit(id, on){ var el = document.getElementById(id); if(el) el.hidden = !on; }
+  (function(){
+    var logo = document.getElementById("tmdb-logo");
+    function fallback(){ logo.hidden = true; logo.nextElementSibling.hidden = false; }
+    logo.addEventListener("error", fallback);
+    if(logo.complete && !logo.naturalWidth) fallback();
   })();
 
-  /* Five cards that sum up what the app does. */
+  /* ---------- Home (start screen) ---------- */
+  document.getElementById("btn-new").addEventListener("click", function(){ openStart(null, "home"); });
+  document.getElementById("home-start").addEventListener("click", function(){ openStart(null, "home"); });
+
+  /* Four cards that sum up what the app does. */
   var FEATURE_CARDS = [
     { cat:"movie",  title:"Your own collections", sub:"Movies, series, anime, games, music and books", icon:'<rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.2 3.6-.9 3 15.5-3.6.9z"/>' },
-    { cat:"series", title:"Make plans",           sub:"Line up what to watch, play or read next", icon:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>' },
     { cat:"games",  title:"Track progress",       sub:"From planned to finished, at a glance", icon:'<circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>' },
     { cat:"music",  title:"Sync your devices",    sub:"Pick up on your phone or computer", icon:'<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/>' },
     { cat:"books",  title:"Share with friends",   sub:"Show off your lists and swap picks", icon:'<circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.2 10.8 7.6-4M8.2 13.2l7.6 4"/>' }
@@ -1306,6 +1648,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       .sort(function(a,b){ return (b.item.statusAt || addedAt(b.item)) - (a.item.statusAt || addedAt(a.item)); })
       .slice(0,3);
 
+    showCredit("home-credit", hasCols && anyRawg());
     if(!hasCols) return;
 
     var done = 0, total = 0;
@@ -1431,6 +1774,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     document.getElementById("pick-title").textContent = displayTitle(x.item);
     document.getElementById("pick-sub").textContent = "From " + x.col.name;
     document.getElementById("pick-again").hidden = pool.length < 2;
+    showCredit("pick-credit", usesRawg(x.col, x.item));
     pickOverlay.hidden = false;
   }
   document.getElementById("home-pick").addEventListener("click", function(){ pickRef = null; doPick(); });
@@ -1468,6 +1812,56 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.getElementById("welcome-signin").addEventListener("click", function(){ openAuth("signin", "welcome"); });
   document.getElementById("welcome-guest").addEventListener("click", function(){ setEntry("guest"); goHome(); });
 
+  /* ---------- Start a collection: Autofill or Manual ---------- */
+  /* Autofill looks titles up (movies, series, anime, games); Manual means typing everything in.
+     Music and books have no lookup, so they're always manual. */
+  function canAutofill(key){ return !!THEMES[key] && !THEMES[key].manual; }
+  function isManualCol(col){ return !!col && (THEMES[col.theme].manual || col.fillMode === "manual"); }
+  var fillOverlay = document.getElementById("fill-overlay");
+  var fillRef = null;
+  function setFillTexts(adding){
+    document.getElementById("fill-title").textContent = adding ? "Add a title" : "Start a collection";
+    document.getElementById("fill-sub").textContent = adding ? "How do you want to add it?" : "How do you want to add titles?";
+    document.getElementById("fill-auto-text").textContent = adding
+      ? "Search for it, and its poster and details fill in for you."
+      : "Search a title and its poster and details fill in for you. For movies, series, anime and games.";
+    document.getElementById("fill-manual-text").textContent = adding
+      ? "Type in the title and its details yourself."
+      : "Type in each title and its details yourself. Works for every category.";
+  }
+  function openStart(preset, backTo){
+    if(preset && !canAutofill(preset)){ openNew(preset, backTo, "manual"); return; }
+    fillRef = { preset: preset || null, backTo: backTo };
+    setFillTexts(false);
+    fillOverlay.hidden = false;
+    document.getElementById("fill-auto").focus();
+  }
+  function closeFill(){ fillOverlay.hidden = true; fillRef = null; }
+  /* Adding to a collection: the same choice. Autofill opens the search, Manual opens the form. */
+  function openAdd(colId){
+    var col = findCollection(colId); if(!col) return;
+    if(!canAutofill(col.theme)){ openEdit(colId, null); return; }
+    fillRef = { addTo: colId };
+    setFillTexts(true);
+    fillOverlay.hidden = false;
+    document.getElementById("fill-auto").focus();
+  }
+  function pickFill(mode){
+    var r = fillRef; closeFill(); if(!r) return;
+    if(r.addTo){
+      if(mode === "manual"){ openEdit(r.addTo, null); return; }
+      searchOpen = true; renderDetail();
+      document.getElementById("detail-scroll").scrollTop = 0;
+      setTimeout(function(){ detailInput.focus(); }, 60);
+      return;
+    }
+    openNew(r.preset, r.backTo, mode);
+  }
+  document.getElementById("fill-auto").addEventListener("click", function(){ pickFill("auto"); });
+  document.getElementById("fill-manual").addEventListener("click", function(){ pickFill("manual"); });
+  document.getElementById("fill-cancel").addEventListener("click", closeFill);
+  fillOverlay.addEventListener("click", function(e){ if(e.target === fillOverlay) closeFill(); });
+
   /* ---------- New Collection ---------- */
   var themeSelectTrigger = document.getElementById("theme-select-trigger");
   var themeSelectMenu = document.getElementById("theme-select-menu");
@@ -1479,9 +1873,13 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var opt = document.createElement("div");
     opt.className = "select-option " + catClass(key); opt.dataset.theme = key;
     opt.setAttribute("role", "option");
-    opt.innerHTML = t.icon + "<span></span>";
-    opt.lastChild.textContent = t.label;
-    opt.addEventListener("click", function(e){ e.stopPropagation(); selectTheme(key); closeThemeMenu(); });
+    opt.innerHTML = t.icon + "<span></span>" + (t.manual ? '<span class="opt-note">Manual only</span>' : "");
+    opt.children[1].textContent = t.label;
+    opt.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(pendingFill === "auto" && !canAutofill(key)) return;
+      selectTheme(key); closeThemeMenu();
+    });
     themeSelectMenu.appendChild(opt);
   });
   themeSelectTrigger.addEventListener("click", function(e){
@@ -1499,9 +1897,39 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.getElementById("new-back").addEventListener("click", function(){ if(newBackTarget === "home") goHome(); else goCollections(); });
   createBtn.addEventListener("click", createCollection);
 
-  function openNew(preset, backTo){
+  var pendingFill = "auto";
+  var newFill = document.getElementById("new-fill");
+  function setFill(mode){
+    pendingFill = mode === "manual" ? "manual" : "auto";
+    Array.prototype.forEach.call(newFill.children, function(b){
+      var on = b.dataset.fill === pendingFill;
+      b.classList.toggle("is-active", on); b.setAttribute("aria-checked", on ? "true" : "false");
+    });
+    Array.prototype.forEach.call(themeSelectMenu.children, function(c){
+      var off = pendingFill === "auto" && !canAutofill(c.dataset.theme);
+      c.classList.toggle("is-disabled", off); c.setAttribute("aria-disabled", off ? "true" : "false");
+    });
+    document.getElementById("new-fill-hint").textContent = pendingFill === "auto"
+      ? "Search a title and its details fill in for you. Music and books are manual only."
+      : "You'll type in each title and its details yourself.";
+    if(pendingTheme && pendingFill === "auto" && !canAutofill(pendingTheme)) clearTheme();
+    validateNewForm();
+  }
+  Array.prototype.forEach.call(newFill.children, function(b){
+    b.addEventListener("click", function(){ setFill(b.dataset.fill); });
+  });
+  function clearTheme(){
+    pendingTheme = null;
+    themeSelectLabel.textContent = "Choose a category";
+    themeSelectIcon.innerHTML = "";
+    themeSelectTrigger.classList.add("placeholder");
+    setCat(themeSelectTrigger, "movie"); themeSelectTrigger.classList.remove("cat-movie");
+    Array.prototype.forEach.call(themeSelectMenu.children, function(c){ c.classList.remove("is-selected"); });
+  }
+  function openNew(preset, backTo, fill){
     newBackTarget = backTo || "mine";
     pendingTheme = null; nameInput.value = "";
+    setFill(fill || (preset && !canAutofill(preset) ? "manual" : "auto"));
     themeSelectLabel.textContent = "Choose a category";
     themeSelectIcon.innerHTML = "";
     themeSelectTrigger.classList.add("placeholder");
@@ -1524,7 +1952,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   function validateNewForm(){ createBtn.disabled = !(pendingTheme && nameInput.value.trim().length); }
   function createCollection(){
     if(createBtn.disabled) return;
-    var col = { id: uid(), name: nameInput.value.trim(), theme: pendingTheme, createdAt: Date.now(), items: [] };
+    var col = { id: uid(), name: nameInput.value.trim(), theme: pendingTheme, createdAt: Date.now(), items: [],
+      fillMode: (pendingFill === "manual" || !canAutofill(pendingTheme)) ? "manual" : "auto" };
     state.collections.unshift(col); saveCollections();
     openDetail(col.id, "mine");
   }
@@ -1581,6 +2010,13 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       row.addEventListener("mousedown", function(e){ e.preventDefault(); pickSuggestion(col, hit); });
       suggestDropdown.appendChild(row);
     });
+    if(col.theme === "games"){
+      var cr = document.createElement("a");
+      cr.className = "suggest-credit"; cr.href = "https://rawg.io"; cr.target = "_blank"; cr.rel = "noopener";
+      cr.innerHTML = 'Search results from <strong>RAWG</strong> <span aria-hidden="true">↗</span>';
+      cr.addEventListener("mousedown", function(e){ e.preventDefault(); });
+      suggestDropdown.appendChild(cr);
+    }
     suggestDropdown.hidden = false;
   }
   function pickSuggestion(col, hit){
@@ -1594,7 +2030,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   }
 
   function openDetail(id, backTo){
-    currentId = id; detailBackTarget = backTo || "mine"; statusFilter = "all";
+    currentId = id; detailBackTarget = backTo || "mine"; statusFilter = "all"; ratingFilter = "any"; playFilter = "any"; searchOpen = false;
     hideSuggestions(); detailInput.value = ""; detailAddBtn.hidden = true;
     renderDetail(); showScreen("detail");
     document.getElementById("detail-scroll").scrollTop = 0;
@@ -1612,8 +2048,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     document.getElementById("detail-progress-fill").style.width = (prog.total ? Math.round((prog.done/prog.total)*100) : 0) + "%";
     document.getElementById("detail-progress-count").textContent = progressText(col);
 
-    document.getElementById("detail-add-row").hidden = !!theme.manual;
-    document.getElementById("detail-tools").classList.toggle("manual", !!theme.manual);
+    var manualCol = isManualCol(col);
+    var showSearch = searchOpen && canAutofill(col.theme);
+    document.getElementById("detail-add-row").hidden = !showSearch;
+    document.getElementById("detail-tools").classList.toggle("manual", !showSearch);
     detailInput.placeholder = "Search " + (col.theme === "games" ? "a game" : col.theme === "series" ? "a series" : col.theme === "anime" ? "an anime" : "a movie") + " to add";
     document.getElementById("view-list").classList.toggle("is-active", viewMode === "list");
     document.getElementById("view-grid").classList.toggle("is-active", viewMode === "grid");
@@ -1636,14 +2074,33 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       b.addEventListener("click", function(){ statusFilter = key; renderDetail(); });
       chips.appendChild(b);
     });
+    // Your rating, and your playtime for games
+    var more = document.getElementById("detail-filters");
+    more.innerHTML = ""; more.hidden = col.items.length === 0;
+    var lab = document.createElement("span"); lab.className = "filter-lab"; lab.textContent = col.theme === "games" ? "Sort & filter" : "Sort by";
+    more.appendChild(lab);
+    more.appendChild(filterChip("rating", col));
+    if(col.theme === "games") more.appendChild(filterChip("play", col)); else playFilter = "any";
 
     detailEmpty.hidden = col.items.length !== 0;
+    showCredit("detail-credit", colUsesRawg(col));
     document.getElementById("detail-empty-icon").innerHTML = theme.icon;
-    document.getElementById("detail-empty-text").textContent = theme.manual
-      ? "Nothing here yet. Tap + to add your first " + (col.theme === "books" ? "book" : "album or song") + "."
-      : "No titles yet. Search above to add one with its details filled in, or tap + to add it yourself.";
+    document.getElementById("detail-empty-text").textContent = !canAutofill(col.theme)
+      ? "Nothing here yet. Tap Add to add your first " + (col.theme === "books" ? "book" : "album or song") + "."
+      : "No titles yet. Tap Add to search for one, or fill it in yourself.";
 
-    var shown = col.items.filter(function(i){ return statusFilter === "all" || (!isStatusless(i) && getStatus(i) === statusFilter); });
+    var shown = col.items.filter(function(i){
+      return (statusFilter === "all" || (!isStatusless(i) && getStatus(i) === statusFilter)) &&
+        passes(PLAY_FILTERS, playFilter, playOf(i));
+    });
+    if(ratingFilter === "desc" || ratingFilter === "asc"){
+      var dir = ratingFilter === "desc" ? -1 : 1;
+      shown = shown.map(function(it, idx){ return { it: it, idx: idx, n: scoreOf(it) }; }).sort(function(a, b){
+        if(a.n === null && b.n === null) return a.idx - b.idx;
+        if(a.n === null) return 1; if(b.n === null) return -1;     // unrated at the end either way
+        return (a.n - b.n) * dir || a.idx - b.idx;
+      }).map(function(x){ return x.it; });
+    }
     itemListEl.innerHTML = "";
     itemListEl.className = viewMode === "grid" ? "item-grid" : "item-list";
     shown.forEach(function(item){
@@ -1689,9 +2146,72 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     });
     if(col.items.length && !shown.length){
       itemListEl.className = "";
-      itemListEl.innerHTML = '<div class="list-note">Nothing with this status.</div>';
+      itemListEl.innerHTML = '<div class="list-note">Nothing matches these filters.<button class="linkbtn" id="filters-clear" type="button">Clear filters</button></div>';
+      document.getElementById("filters-clear").addEventListener("click", function(){ statusFilter = "all"; playFilter = "any"; renderDetail(); });
     }
   }
+
+  /* ---------- Filters by your rating and your playtime ---------- */
+  var RATING_FILTERS = [
+    { key:"any",  label:"Default order" },
+    { key:"desc", label:"Highest rated first" },
+    { key:"asc",  label:"Lowest rated first" }
+  ];
+  var PLAY_FILTERS = [
+    { key:"any",  label:"Any playtime" },
+    { key:"lt10", label:"Under 10 h",  test:function(n){ return n !== null && n < 10; } },
+    { key:"10",   label:"10 to 30 h",  test:function(n){ return n !== null && n >= 10 && n < 30; } },
+    { key:"30",   label:"30 to 100 h", test:function(n){ return n !== null && n >= 30 && n < 100; } },
+    { key:"100",  label:"100 h or more", test:function(n){ return n !== null && n >= 100; } },
+    { key:"none", label:"Not set",     test:function(n){ return n === null; } }
+  ];
+  function numOrNull(v){ if(v === undefined || v === null || v === "") return null; var n = parseFloat(v); return isFinite(n) ? n : null; }
+  function scoreOf(item){ return numOrNull(mineOf(item).score); }
+  function playOf(item){ return numOrNull(mineOf(item).playtime); }
+  function passes(list, key, n){
+    if(key === "any") return true;
+    var f = list.find(function(x){ return x.key === key; });
+    return !f || !f.test || f.test(n);
+  }
+  var FILTER_DEFS = {
+    rating: { title:"Sort by your rating", sort: true, list: RATING_FILTERS, get:function(){ return ratingFilter; }, set:function(v){ ratingFilter = v; }, valueOf: scoreOf, idle:"My rating" },
+    play:   { title:"Filter by your playtime", list: PLAY_FILTERS, get:function(){ return playFilter; }, set:function(v){ playFilter = v; }, valueOf: playOf, idle:"Playtime" }
+  };
+  function filterChip(kind, col){
+    var def = FILTER_DEFS[kind], cur = def.get();
+    var opt = def.list.find(function(x){ return x.key === cur; }) || def.list[0];
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip filter-chip" + (cur !== "any" ? " is-active" : "");
+    b.innerHTML = '<span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    b.firstChild.textContent = cur === "any" ? def.idle : kind === "rating" ? (cur === "desc" ? "Rating: high to low" : "Rating: low to high") : opt.label;
+    b.setAttribute("aria-haspopup", "dialog");
+    b.addEventListener("click", function(){ openFilterSheet(kind, col.id); });
+    return b;
+  }
+  var filterOverlay = document.getElementById("filter-overlay");
+  function openFilterSheet(kind, colId){
+    var def = FILTER_DEFS[kind], col = findCollection(colId); if(!col) return;
+    setCat(filterOverlay, col.theme);
+    document.getElementById("filter-title").textContent = def.title;
+    var opts = document.getElementById("filter-opts"); opts.innerHTML = "";
+    opts.setAttribute("aria-label", def.title);
+    var cur = def.get();
+    def.list.forEach(function(o){
+      var n = def.sort ? "" : o.key === "any" ? col.items.length : col.items.filter(function(i){ return o.test(def.valueOf(i)); }).length;
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "sheet-opt" + (o.key === cur ? " is-active" : "");
+      b.setAttribute("role", "radio"); b.setAttribute("aria-checked", o.key === cur ? "true" : "false");
+      b.innerHTML = '<span class="opt-label"></span><span class="opt-count"></span>' + (o.key === cur ? checkSvg(2.6) : '<span class="opt-gap"></span>');
+      b.children[0].textContent = o.label; b.children[1].textContent = n;
+      b.addEventListener("click", function(){ def.set(o.key); closeFilterSheet(); renderDetail(); });
+      opts.appendChild(b);
+    });
+    filterOverlay.hidden = false;
+    var active = opts.querySelector(".is-active"); if(active) active.focus();
+  }
+  function closeFilterSheet(){ filterOverlay.hidden = true; }
+  filterOverlay.addEventListener("click", function(e){ if(e.target === filterOverlay) closeFilterSheet(); });
+  document.getElementById("filter-close").addEventListener("click", closeFilterSheet);
 
   function addItemFromInput(){
     hideSuggestions();
@@ -1783,6 +2303,9 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(!sheetOverlay.hidden) closeSheet();
     else if(!collOverlay.hidden) closeCollSheet();
     else if(!pickOverlay.hidden) pickOverlay.hidden = true;
+    else if(!fillOverlay.hidden) closeFill();
+    else if(!filterOverlay.hidden) closeFilterSheet();
+    else if(!psOverlay.hidden) closePicker();
     else if(!confirmOverlay.hidden) confirmCancelBtn.click();
   });
 
@@ -1815,6 +2338,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(itemScreen.classList.contains("is-closing")) finishItemClose();
     renderItemDetail();
     showScreen("item");
+    updateItemTopbar();
+    refreshItem(colId, itemId);
     if(from) animateItemOpen(from, coverRect);
   }
   /* Opening animation: the details screen grows out of the card that was tapped,
@@ -1840,7 +2365,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           { transform: "none" }
         ], { duration: 500, easing: OPEN_EASE });
       }
-      ["item-name", "item-subline", "item-status", "item-mode-note", "item-info"].forEach(function(id, i){
+      ["item-name", "item-subline", "item-cols"].forEach(function(id, i){
         var el = document.getElementById(id); if(!el || el.hidden) return;
         el.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }],
           { duration: 360, delay: 200 + i * 50, easing: "ease-out", fill: "backwards" });
@@ -1900,7 +2425,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
             { transform: "translate(" + dx + "px," + dy + "px) scale(" + (to.width / from.width) + ")" }
           ], { duration: 380, easing: EASE_IN, fill: "forwards" });
         }
-        ["item-name", "item-subline", "item-status", "item-mode-note", "item-info"].forEach(function(id){
+        ["item-name", "item-subline", "item-cols"].forEach(function(id){
           var el = document.getElementById(id); if(el && !el.hidden) el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: "forwards" });
         });
         var acts = itemScreen.querySelector(".bottom-actions");
@@ -1921,10 +2446,23 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.getElementById("item-edit").addEventListener("click", function(){
     if(currentItemRef) openEdit(currentItemRef.collectionId, currentItemRef.itemId);
   });
-  document.getElementById("item-notes-btn").addEventListener("click", function(){
-    itemNotes.scrollIntoView({ behavior:"smooth", block:"center" });
-    setTimeout(function(){ itemNotes.focus({ preventScroll:true }); }, 250);
-  });
+  /* Your own score / playtime on the item screen (the status picker is set up with the picker sheet) */
+  function bindMineInput(id, key, clean){
+    var el = document.getElementById(id), timer = null;
+    function commit(final){
+      var ref = currentItemRef, it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+      var v = clean(el.value);
+      if(final) el.value = v;
+      if((mineOf(it)[key] || "") === v) return;
+      setMine(it, key, v); saveCollections();
+    }
+    el.addEventListener("input", function(){ if(timer) clearTimeout(timer); timer = setTimeout(function(){ commit(false); }, 500); });
+    el.addEventListener("change", function(){ if(timer) clearTimeout(timer); commit(true); });
+    el.addEventListener("blur", function(){ if(timer) clearTimeout(timer); commit(true); });
+    el.addEventListener("keydown", function(e){ if(e.key === "Enter") el.blur(); });
+  }
+  bindMineInput("item-score", "score", cleanScore);
+  bindMineInput("item-playtime", "playtime", cleanHours);
   /* Personal notes are capped at 1,000 characters (the database enforces the same limit). */
   var NOTES_MAX = 1000, NOTES_NEAR = 100;
   function clampNotes(v){ return v ? String(v).slice(0, NOTES_MAX) : v; }
@@ -1939,37 +2477,264 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   }
   var editNotes = document.getElementById("edit-notes");
   editNotes.addEventListener("input", function(){ updateNotesMeta(editNotes); });
-  var notesTimer = null;
+  var notesTimer = null, notesPending = null;
+  var notesStateEl = document.getElementById("item-notes-state");
+  var notesDoneBtn = document.getElementById("item-notes-done");
+  function setNotesState(st){
+    notesStateEl.className = "notes-state" + (st === "saved" ? " is-saved" : "");
+    notesStateEl.innerHTML = st === "saved" ? checkSvg(2.8) + "<span>Saved</span>"
+      : st === "saving" ? "<span>Saving…</span>"
+      : st === "error" ? "<span>Not saved. Device storage is full</span>" : "";
+  }
+  function flushNotes(){
+    if(notesTimer){ clearTimeout(notesTimer); notesTimer = null; }
+    if(notesPending){ var f = notesPending; notesPending = null; f(); }
+  }
   itemNotes.addEventListener("input", function(){
     updateNotesMeta(itemNotes);
     var ref = currentItemRef, val = itemNotes.value;
-    if(notesTimer) clearTimeout(notesTimer);
-    notesTimer = setTimeout(function(){
+    notesPending = function(){
       var it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
-      it.notes = val; it.editedAt = Date.now(); saveCollections();
-    }, 400);
+      it.notes = val; it.editedAt = Date.now();
+      var ok = saveCollections();
+      if(currentItemRef && currentItemRef.itemId === ref.itemId) setNotesState(ok ? "saved" : "error");
+    };
+    setNotesState("saving");
+    if(notesTimer) clearTimeout(notesTimer);
+    notesTimer = setTimeout(flushNotes, 500);
+  });
+  itemNotes.addEventListener("focus", function(){ notesDoneBtn.hidden = false; });
+  itemNotes.addEventListener("blur", function(){ flushNotes(); setTimeout(function(){ if(document.activeElement !== itemNotes) notesDoneBtn.hidden = true; }, 180); });
+  notesDoneBtn.addEventListener("mousedown", function(e){ e.preventDefault(); });   // keep the tap from blurring first
+  notesDoneBtn.addEventListener("click", function(){ flushNotes(); itemNotes.blur(); notesDoneBtn.hidden = true; });
+
+  /* Back, edit and delete stay reachable while scrolling the item page */
+  var itemScrollEl = document.getElementById("item-scroll"), itemTopbar = document.getElementById("item-topbar");
+  function updateItemTopbar(){ itemTopbar.classList.toggle("is-stuck", itemScrollEl.scrollTop > 6); }
+  itemScrollEl.addEventListener("scroll", updateItemTopbar, { passive: true });
+
+  /* My score: the box grows with the number so "/10" sits right next to it */
+  var scoreInputEl = document.getElementById("item-score");
+  var measureCtx = null;
+  function sizeScore(){
+    var text = String(scoreInputEl.value || "–");
+    try{
+      measureCtx = measureCtx || document.createElement("canvas").getContext("2d");
+      var cs = getComputedStyle(scoreInputEl);
+      measureCtx.font = cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+      scoreInputEl.style.width = Math.ceil(measureCtx.measureText(text).width + 3) + "px";
+    }catch(e){ scoreInputEl.style.width = ""; scoreInputEl.style.setProperty("--len", Math.max(1, text.length)); }
+  }
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ sizeScore(); });
+  scoreInputEl.addEventListener("input", sizeScore);
+  scoreInputEl.addEventListener("change", sizeScore);
+  scoreInputEl.addEventListener("blur", function(){ setTimeout(sizeScore, 0); });
+
+  /* ---------- Picker sheet: rounded options instead of the system's drop-down list ---------- */
+  var psOverlay = document.getElementById("ps-overlay"), psOpts = document.getElementById("ps-opts"), psPick = null;
+  /* o: { title, sub, options:[{ value, label, sub, mark }], current, grid, doneBelow, clearLabel, cat, onPick } */
+  function openPicker(o){
+    psPick = o.onPick;
+    setCat(psOverlay, o.cat);
+    document.getElementById("ps-title").textContent = o.title;
+    var subEl = document.getElementById("ps-sub"); subEl.textContent = o.sub || ""; subEl.hidden = !o.sub;
+    psOpts.innerHTML = ""; psOpts.className = o.grid ? "ps-grid" : "sheet-opts";
+    psOpts.setAttribute("role", "radiogroup"); psOpts.setAttribute("aria-label", o.title);
+    o.options.forEach(function(opt){
+      var on = String(opt.value) === String(o.current == null ? "" : o.current);
+      var b = document.createElement("button");
+      b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", on ? "true" : "false");
+      if(o.grid){
+        b.className = "ps-num" + (opt.value === "" ? " ps-clear" : "") + (on ? " is-active" : "") +
+          (o.doneBelow && opt.value !== "" && Number(opt.value) < o.doneBelow ? " is-done" : "");
+        b.textContent = opt.label;
+      } else {
+        b.className = "sheet-opt" + (on ? " is-active" : "");
+        b.innerHTML = (opt.mark || "") + '<span class="opt-label"></span>' + (opt.sub ? '<span class="opt-sub"></span>' : "") + (on ? checkSvg(2.6) : '<span class="opt-gap"></span>');
+        b.querySelector(".opt-label").textContent = opt.label;
+        if(opt.sub) b.querySelector(".opt-sub").textContent = opt.sub;
+      }
+      b.addEventListener("click", function(){ var f = psPick; closePicker(); if(f) f(opt.value); });
+      psOpts.appendChild(b);
+    });
+    psOverlay.hidden = false;
+    var active = psOpts.querySelector(".is-active, [aria-checked=true]");
+    if(active){ active.scrollIntoView({ block: "center" }); active.focus({ preventScroll: true }); }
+  }
+  function closePicker(){ psOverlay.hidden = true; psPick = null; }
+  psOverlay.addEventListener("click", function(e){ if(e.target === psOverlay) closePicker(); });
+  document.getElementById("ps-close").addEventListener("click", closePicker);
+  function setTrigger(btn, html, empty){ btn.querySelector(".pt-label").innerHTML = html; btn.classList.toggle("is-empty", !!empty); }
+
+  /* Status picker on the item page */
+  document.getElementById("item-status").addEventListener("click", function(){
+    var ref = currentItemRef, col = ref && findCollection(ref.collectionId), it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+    var labels = THEMES[col.theme].statusLabels;
+    openPicker({ title: "Status", cat: col.theme, current: getStatus(it),
+      options: STATUS_ORDER.map(function(st){ return { value: st, label: labels[st], mark: '<span class="dot st-' + st + '"></span>' }; }),
+      onPick: function(st){ var x = findItem(ref.collectionId, ref.itemId); if(!x) return; setStatus(x, st); saveCollections(); renderItemDetail(); } });
   });
 
+  /* ---------- Season and episode progress (series, and anime shows) ---------- */
+  var progSeason = document.getElementById("prog-season"), progEpisode = document.getElementById("prog-episode");
+  function hasEpisodes(col, item){
+    if(col.theme === "series") return true;
+    if(col.theme !== "anime") return false;
+    return !/film|movie/i.test(String((item.meta && item.meta.format) || ""));
+  }
+  function seasonList(item){
+    var l = item.meta && item.meta.seasons;
+    return Array.isArray(l) && l.length ? l.filter(function(x){ return x && x.n > 0; }) : null;
+  }
+  function epsIn(item, n){ var l = seasonList(item); if(!l) return null; var x = l.find(function(z){ return z.n === n; }); return x && x.eps ? x.eps : null; }
+  function posInt(v){ var n = parseInt(v, 10); return isFinite(n) && n > 0 ? n : null; }
+  function nextEpisodeOf(item){
+    var mine = mineOf(item), se = posInt(mine.season), ep = posInt(mine.episode) || 0;
+    if(!se) return { se: 1, ep: 1 };
+    var E = epsIn(item, se);
+    if(!E || ep < E) return { se: se, ep: ep + 1 };
+    var l = seasonList(item), nx = l ? l.find(function(z){ return z.n > se; }) : null;
+    return nx ? { se: nx.n, ep: 1 } : null;   // null: that was the last episode
+  }
+  function renderProgress(col, item){
+    var box = document.getElementById("item-progress");
+    var show = hasEpisodes(col, item); box.hidden = !show; if(!show) return;
+    var mine = mineOf(item), list = seasonList(item);
+    var se = posInt(mine.season), ep = posInt(mine.episode);
+    var E = se ? epsIn(item, se) : null;
+    setTrigger(progSeason, se ? "Season " + se : "Choose", !se);
+    setTrigger(progEpisode, ep ? "Episode " + ep : se ? "Choose" : "–", !ep);
+    progEpisode.disabled = !se;
+
+    var sum = !se ? "Not started" : !ep ? "Season " + se : "S" + se + " · E" + ep + (E ? " of " + E : "");
+    var total = 0, watched = 0;
+    if(list){ list.forEach(function(z){ total += z.eps || 0; if(se && z.n < se) watched += z.eps || 0; }); watched += ep || 0; }
+    else if(E){ total = E; watched = ep || 0; }
+    var pct = total ? Math.min(100, Math.round(watched / total * 100)) : 0;
+    if(list && total && se) sum += " · " + pct + "%";
+    document.getElementById("prog-sum").textContent = sum;
+    document.getElementById("prog-meta").hidden = !se;
+    document.getElementById("prog-bar-wrap").hidden = !total;
+    document.getElementById("prog-bar").style.width = pct + "%";
+    var nx = nextEpisodeOf(item), nextBtn = document.getElementById("prog-next");
+    nextBtn.disabled = !nx;
+    nextBtn.lastChild.textContent = !se ? "Start" : nx ? "Next episode" : "Last episode";
+  }
+  function setProgress(se, ep){
+    var ref = currentItemRef, it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+    setMine(it, "season", se ? String(se) : "");
+    setMine(it, "episode", se && ep ? String(ep) : "");
+    if(se && ep && getStatus(it) === "planned" && !isStatusless(it)) setStatus(it, "progress");   // started watching
+    saveCollections(); renderItemDetail();
+  }
+  progSeason.addEventListener("click", function(){
+    var ref = currentItemRef, col = ref && findCollection(ref.collectionId), it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+    var list = seasonList(it), se = posInt(mineOf(it).season), opts = [{ value: "", label: "Not started" }];
+    if(list) list.forEach(function(z){ opts.push({ value: z.n, label: "Season " + z.n, sub: z.eps ? z.eps + (z.eps === 1 ? " episode" : " episodes") : "" }); });
+    else for(var i = 1; i <= Math.max(20, se || 0); i++) opts.push({ value: i, label: "Season " + i });
+    openPicker({ title: "Season", cat: col.theme, current: se || "", options: opts,
+      onPick: function(v){ var n = posInt(v); setProgress(n, n && n === se ? posInt(mineOf(findItem(ref.collectionId, ref.itemId)).episode) : null); } });
+  });
+  progEpisode.addEventListener("click", function(){
+    var ref = currentItemRef, col = ref && findCollection(ref.collectionId), it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+    var se = posInt(mineOf(it).season); if(!se) return;
+    var ep = posInt(mineOf(it).episode), E = epsIn(it, se), max = Math.max(E || 50, ep || 0), opts = [];
+    for(var i = 1; i <= max; i++) opts.push({ value: i, label: String(i) });
+    opts.push({ value: "", label: "Clear episode" });
+    openPicker({ title: "Season " + se + " · episode", sub: E ? E + " episodes in this season" : "", cat: col.theme, current: ep || "", grid: true, doneBelow: ep || 0, options: opts,
+      onPick: function(v){ setProgress(se, posInt(v)); } });
+  });
+  document.getElementById("prog-next").addEventListener("click", function(){
+    var ref = currentItemRef, it = ref && findItem(ref.collectionId, ref.itemId); if(!it) return;
+    var nx = nextEpisodeOf(it); if(nx) setProgress(nx.se, nx.ep);
+  });
+
+  function seasonsText(list){
+    var n = list.length, eps = list.reduce(function(a, z){ return a + (z.eps || 0); }, 0);
+    return (n === 1 ? "1 season" : n + " seasons") + (eps ? " · " + eps + (eps === 1 ? " episode" : " episodes") : "");
+  }
   function statCard(label, value, wide){
     return '<div class="stat-card'+(wide?" wide":"")+'"><span class="stat-label">'+escapeHtml(label)+'</span><span class="stat-value">'+escapeHtml(value || "—")+'</span></div>';
   }
-  /* Fetched items show every field; hand-made or edited items show only what was filled in. */
+  /* Dates show as the year only. Older game lookups stored a full release date. */
+  function gameYear(meta){
+    if(!meta) return "";
+    if(meta.year) return String(meta.year).slice(0, 4);
+    return meta.releaseDate ? String(meta.releaseDate).slice(0, 4) : "";
+  }
+  /* Where an item's official info came from: TMDB for films, series and anime, RAWG for games. */
+  function infoSource(themeKey, item){
+    var meta = item.meta || {};
+    if(meta.manual || THEMES[themeKey].manual) return "Manual";
+    if(item.edited) return "Edited";
+    if(meta.ratingSource) return meta.ratingSource;
+    return themeKey === "games" ? "RAWG" : "TMDB";
+  }
+  /* Fetched items show every field; hand-made or edited items show only what was filled in.
+     Each field is its own card, stacked in the left column. */
   function infoGrid(themeKey, item){
     var meta = item.meta || {};
     var handMade = !!(meta.manual || item.edited);
+    var src = infoSource(themeKey, item);
     var cards = "";
     (FIELDS[themeKey] || []).forEach(function(f){
       if(f.only && f.only !== meta.kind) return;
-      var v = meta[f.key];
+      var v = (themeKey === "games" && f.key === "year") ? gameYear(meta) : meta[f.key];
+      if(f.key === "episodes" && hasEpisodes({ theme: themeKey }, item)){
+        var sl = seasonList(item);
+        if(sl && ownFields(item).indexOf("episodes") === -1) v = seasonsText(sl);
+      }
       var has = v !== undefined && v !== null && String(v).trim() !== "";
-      if(handMade && !has) return;
-      var label = (f.key === "rating" && !handMade) ? "TMDB rating" : f.label;
+      // RAWG lookups don't return a rating yet, so games skip the empty card unless one was typed in.
+      if((handMade || (themeKey === "games" && f.key === "rating")) && !has) return;
+      var label = (f.key === "rating" && !handMade) ? src + " rating"
+        : (f.key === "episodes" && hasEpisodes({ theme: themeKey }, item)) ? "Seasons & episodes" : f.label;
       var shown = has ? String(v) : (f.key === "rating" ? "—" : "Unknown");
-      if(has && f.key === "rating" && /^\d+(\.\d+)?$/.test(shown.trim())) shown = shown.trim() + " / 10";
-      cards += statCard(label, shown, f.wide);
+      if(has && f.key === "rating" && /^\d+(\.\d+)?$/.test(shown.trim())) shown = shown.trim() + (src === "RAWG" ? " / 5" : " / 10");
+      cards += statCard(label, shown);
+      // Games: online games just say Multiplayer; others show the average playtime when the lookup has one.
+      if(themeKey === "games" && f.key === "year"){
+        if(meta.multiplayer === true) cards += statCard("Playtime", "Multiplayer");
+        else if(meta.avgPlaytime) cards += statCard("Avg playtime", String(meta.avgPlaytime).replace(/\s*h(ours?)?$/i, "") + " h");
+      }
     });
-    if(!cards) return '<div class="notice">No details yet. Tap Edit details to add them.</div>';
-    return '<div class="stat-grid">' + cards + '</div>';
+    if(!cards) return '<div class="notice">No details yet. Tap the pencil at the top to add them.</div>';
+    return cards;
+  }
+  /* Your own score and playtime. Kept on the item, and stored inside the synced meta as "mine". */
+  function mineOf(item){ return item.mine || {}; }
+  function setMine(item, key, val){
+    var m = {}; var old = item.mine || {};
+    Object.keys(old).forEach(function(k){ m[k] = old[k]; });
+    if(val === "" || val === null || val === undefined) delete m[key]; else m[key] = val;
+    item.mine = Object.keys(m).length ? m : undefined;
+    item.editedAt = Date.now();
+  }
+  function packMeta(it){
+    var mine = it.mine && Object.keys(it.mine).length ? it.mine : null;
+    if(!mine) return it.meta || null;
+    var m = {}; var base = it.meta || {};
+    Object.keys(base).forEach(function(k){ m[k] = base[k]; });
+    m.mine = mine;
+    return m;
+  }
+  function unpackMeta(meta){
+    if(!meta || !meta.mine) return { meta: meta || null, mine: undefined };
+    var m = {}; Object.keys(meta).forEach(function(k){ if(k !== "mine") m[k] = meta[k]; });
+    return { meta: Object.keys(m).length ? m : null, mine: meta.mine };
+  }
+  function cleanScore(v){
+    v = String(v == null ? "" : v).trim().replace(",", ".");
+    if(v === "") return "";
+    var n = parseFloat(v); if(!isFinite(n)) return "";
+    n = Math.min(10, Math.max(0, Math.round(n * 2) / 2));
+    return String(n);
+  }
+  function cleanHours(v){
+    v = String(v == null ? "" : v).trim().replace(",", ".");
+    if(v === "") return "";
+    var n = parseFloat(v); if(!isFinite(n) || n < 0) return "";
+    return String(Math.min(99999, Math.round(n)));
   }
   function renderItemDetail(){
     if(!currentItemRef) return;
@@ -1994,41 +2759,71 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var subEl = document.getElementById("item-subline");
     subEl.textContent = sub; subEl.hidden = !sub;
 
-    buildStatusGroup(document.getElementById("item-status"), col.theme, getStatus(item), function(st){
-      var it = findItem(col.id, item.id); if(!it) return;
-      setStatus(it, st); saveCollections(); renderItemDetail();
-    });
+    // Status dropdown, under My score
+    var cur = getStatus(item), statusBtn = document.getElementById("item-status");
+    setTrigger(statusBtn, '<span>' + escapeHtml(theme.statusLabels[cur]) + '</span>');
+    statusBtn.classList.toggle("is-dropped", cur === "dropped");
     var free = isStatusless(item), modeNote = document.getElementById("item-mode-note");
-    document.getElementById("item-status").hidden = free;
+    document.getElementById("item-status-field").hidden = free;
     modeNote.hidden = !free;
+
+    // My score, and My playtime for games
+    var mine = mineOf(item);
+    var scoreIn = document.getElementById("item-score"), ptIn = document.getElementById("item-playtime");
+    if(document.activeElement !== scoreIn) scoreIn.value = mine.score != null ? mine.score : "";
+    sizeScore();
+    document.getElementById("item-playtime-field").hidden = col.theme !== "games";
+    if(document.activeElement !== ptIn) ptIn.value = mine.playtime != null ? mine.playtime : "";
+
+    // Left column header: Official (with its source) or Details for hand-made items
+    var srcName = infoSource(col.theme, item), srcEl = document.getElementById("item-src");
+    var fetched = item.meta && item.meta.status === "found" && srcName !== "Manual";
+    document.getElementById("item-info-title").textContent = (srcName === "Manual") ? "Details" : "Official";
+    srcEl.textContent = srcName;
+    srcEl.hidden = !(fetched || srcName === "Manual");
     if(free){
       var isSong = item.meta.kind === "song";
       modeNote.innerHTML = modeIcon(item) + "<span></span>";
       modeNote.lastChild.textContent = isSong
-        ? (item.meta.album ? "Song from " + item.meta.album : "Song, no status to track")
-        : "Multiplayer game, no status to track";
+        ? (item.meta.album ? "Song from " + item.meta.album : "Song, no status")
+        : "Multiplayer";
     }
 
     var meta = item.meta, html = "";
-    var editHint = " Tap Edit details to fill them in yourself.";
+    var editHint = " Tap the pencil at the top to fill them in yourself.";
     if(meta && meta.status === "found") html = infoGrid(col.theme, item);
+    else if(theme.manual || item.edited) html = '<div class="notice">No details yet. Tap the pencil at the top to add them.</div>';
     else if(!meta || meta.status === "loading") html = '<div class="notice">Fetching official info…</div>';
     else if(meta.status === "nokey") html = '<div class="notice">Automatic details aren’t set up for this category yet.'+editHint+'</div>';
     else if(meta.status === "notfound") html = '<div class="notice">No match found for "'+escapeHtml(item.text)+'". Check the spelling, or it may not be listed.'+editHint+'</div>';
-    else if(meta.status === "error") html = '<div class="notice">Couldn’t reach the database just now. <a href="#" id="item-retry">Try again</a>, or tap Edit details to fill them in yourself.</div>';
+    else if(meta.status === "error") html = '<div class="notice">Couldn’t reach the database just now. <a href="#" id="item-retry">Try again</a>, or tap the pencil at the top to fill them in yourself.</div>';
     document.getElementById("item-info").innerHTML = html;
     var retry = document.getElementById("item-retry");
     if(retry) retry.addEventListener("click", function(e){ e.preventDefault(); triggerLookup(col.id, item.id); });
 
     if(document.activeElement !== itemNotes) itemNotes.value = item.notes || "";
     updateNotesMeta(itemNotes);
+    if(lastItemShown !== item.id){ lastItemShown = item.id; setNotesState(""); notesDoneBtn.hidden = document.activeElement !== itemNotes; }
+    renderProgress(col, item);
+    var ic = document.getElementById("item-credit"), viaLookup = fromLookup(item) && !THEMES[col.theme].manual;
+    ic.hidden = !viaLookup;
+    if(viaLookup){
+      var rawg = col.theme === "games";
+      ic.href = rawg ? "https://rawg.io" : "https://www.themoviedb.org";
+      ic.innerHTML = rawg ? 'Game details and images from <strong>RAWG</strong> <span aria-hidden="true">↗</span>'
+                          : 'Details and images from <strong>TMDB</strong> <span aria-hidden="true">↗</span>';
+    }
   }
+  var lastItemShown = null;
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c]; });
   }
 
   /* ---------- Add / edit item ---------- */
-  document.getElementById("detail-fab").addEventListener("click", function(){ hideSuggestions(); if(currentId) openEdit(currentId, null); });
+  document.getElementById("detail-fab").addEventListener("click", function(){ hideSuggestions(); if(currentId) openAdd(currentId); });
+  document.getElementById("detail-search-close").addEventListener("click", function(){
+    hideSuggestions(); detailInput.value = ""; detailAddBtn.hidden = true; searchOpen = false; renderDetail();
+  });
   var editState = null; // { colId, itemId|null, newBlob, newUrl, removePhoto, status }
   var editScreen = document.getElementById("screen-edit");
   var editTitle = document.getElementById("edit-title");
@@ -2066,9 +2861,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       if(f.numeric) inp.inputMode = "decimal";
       inp.dataset.key = f.key; inp.id = "edit-field-" + f.key;
       if(f.only){ box.dataset.only = f.only; }
-      var v = meta[f.key];
+      var v = (col.theme === "games" && f.key === "year") ? gameYear(meta) : meta[f.key];
       inp.value = (v === undefined || v === null) ? "" : String(v);
-      box.appendChild(lab); box.appendChild(inp);
+      box.appendChild(lab);
+      box.appendChild(f.key === "genre" ? genreCombo(inp, col.theme) : inp);
       wrap.appendChild(box);
     });
     renderEditStatus();
@@ -2079,6 +2875,81 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     renderEditPoster();
     showScreen("edit");
     if(!item) setTimeout(function(){ editTitle.focus(); }, 50);
+  }
+  /* Genre field: a dropdown of genres for the category that filters as you type.
+     Several genres can be listed with commas; suggestions complete the one being typed. */
+  function genreCombo(inp, themeKey){
+    var list = GENRES[themeKey] || [];
+    var box = document.createElement("div"); box.className = "combo";
+    var menuId = inp.id + "-menu";
+    inp.setAttribute("role", "combobox");
+    inp.setAttribute("aria-autocomplete", "list");
+    inp.setAttribute("aria-expanded", "false");
+    inp.setAttribute("aria-controls", menuId);
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "combo-toggle"; btn.setAttribute("aria-label", "Show genres"); btn.tabIndex = -1;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    var menu = document.createElement("div");
+    menu.className = "combo-menu"; menu.id = menuId; menu.setAttribute("role", "listbox"); menu.hidden = true;
+    var active = 0, shown = [];
+
+    function parts(){ return inp.value.split(","); }
+    function currentToken(){ var p = parts(); return p[p.length - 1].trim(); }
+    function chosen(){ var p = parts(); p.pop(); return p.map(function(s){ return s.trim().toLowerCase(); }).filter(Boolean); }
+    function matches(showAll){
+      var q = showAll ? "" : currentToken().toLowerCase(), taken = chosen();
+      var pool = list.filter(function(g){ return taken.indexOf(g.toLowerCase()) === -1; });
+      if(!q) return pool;
+      var starts = pool.filter(function(g){ return g.toLowerCase().indexOf(q) === 0; });
+      var inside = pool.filter(function(g){ return g.toLowerCase().indexOf(q) > 0; });
+      return starts.concat(inside);
+    }
+    function render(showAll){
+      shown = matches(showAll);
+      if(!shown.length){ close(); return; }
+      if(active >= shown.length) active = 0;
+      menu.innerHTML = "";
+      shown.forEach(function(g, i){
+        var o = document.createElement("button");
+        o.type = "button"; o.tabIndex = -1; o.id = menuId + "-" + i;
+        o.className = "combo-opt" + (i === active ? " is-active" : "");
+        o.setAttribute("role", "option"); o.setAttribute("aria-selected", i === active ? "true" : "false");
+        o.textContent = g;
+        o.addEventListener("mousedown", function(e){ e.preventDefault(); });   // keep focus in the field
+        o.addEventListener("click", function(){ pick(g); });
+        menu.appendChild(o);
+      });
+      inp.setAttribute("aria-activedescendant", menuId + "-" + active);
+      var wasHidden = menu.hidden;
+      menu.hidden = false; box.classList.add("is-open"); inp.setAttribute("aria-expanded", "true");
+      if(wasHidden && menu.scrollIntoView) setTimeout(function(){ menu.scrollIntoView({ block:"nearest", behavior:"smooth" }); }, 0);
+    }
+    function close(){
+      menu.hidden = true; box.classList.remove("is-open");
+      inp.setAttribute("aria-expanded", "false"); inp.removeAttribute("aria-activedescendant");
+    }
+    function pick(g){
+      var p = parts(); p[p.length - 1] = (p.length > 1 ? " " : "") + g;
+      inp.value = p.join(",").slice(0, inp.maxLength > 0 ? inp.maxLength : 80);
+      close(); inp.focus();
+    }
+    inp.addEventListener("input", function(){ active = 0; currentToken() ? render(false) : close(); });
+    inp.addEventListener("focus", function(){ if(!inp.value.trim()) render(true); });
+    inp.addEventListener("blur", function(){ setTimeout(close, 120); });
+    inp.addEventListener("keydown", function(e){
+      if(menu.hidden){ if(e.key === "ArrowDown"){ e.preventDefault(); active = 0; render(!currentToken()); } return; }
+      if(e.key === "ArrowDown"){ e.preventDefault(); active = (active + 1) % shown.length; render(!currentToken()); }
+      else if(e.key === "ArrowUp"){ e.preventDefault(); active = (active - 1 + shown.length) % shown.length; render(!currentToken()); }
+      else if(e.key === "Enter" || (e.key === "Tab" && currentToken())){ e.preventDefault(); pick(shown[active]); }
+      else if(e.key === "Escape"){ e.preventDefault(); close(); }
+    });
+    btn.addEventListener("mousedown", function(e){ e.preventDefault(); });
+    btn.addEventListener("click", function(){
+      if(!menu.hidden){ close(); return; }
+      active = 0; render(true); inp.focus();
+    });
+    box.appendChild(inp); box.appendChild(btn); box.appendChild(menu);
+    return box;
   }
   function editItemRef(){ return (editState && editState.itemId) ? findItem(editState.colId, editState.itemId) : null; }
   var KIND_OPTIONS = {
@@ -2202,14 +3073,19 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var meta = {};
     Object.keys(base).forEach(function(k){ meta[k] = base[k]; });
     meta.status = "found";
+    var mine = {}; ownFields(item).forEach(function(k){ mine[k] = true; });
+    function changed(k, v){ var was = (col.theme === "games" && k === "year") ? gameYear(base) : base[k]; if(String(was == null ? "" : was).trim() !== v) mine[k] = true; }
+    changed("title", title);
     meta.title = title;
     Array.prototype.forEach.call(document.querySelectorAll("#edit-fields input"), function(inp){
       var v = inp.value.trim();
       if(inp.parentElement && inp.parentElement.hidden) v = "";   // e.g. "From album" on an album
+      changed(inp.dataset.key, v);
       if(v) meta[inp.dataset.key] = v; else delete meta[inp.dataset.key];
     });
+    if(!meta.manual){ var uf = Object.keys(mine); if(uf.length) meta.userFields = uf; else delete meta.userFields; }
     if(col.theme === "music") meta.kind = editState.kind === "song" ? "song" : "album";
-    if(col.theme === "games") meta.multiplayer = editState.kind === "multi";
+    if(col.theme === "games"){ meta.multiplayer = editState.kind === "multi"; if(meta.year) delete meta.releaseDate; }
     delete meta.howLongToBeat;
     if(meta.releaseDate && !meta.year) meta.year = String(meta.releaseDate).slice(0,4);
     if(meta.length && col.theme === "music") delete meta.length;
@@ -2228,8 +3104,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   /* ---------- Collections ---------- */
   var mineList = document.getElementById("mine-list");
   var mineEmpty = document.getElementById("mine-empty");
-  document.getElementById("mine-add").addEventListener("click", function(){ openNew(mineTab !== "all" ? mineTab : null, "mine"); });
-  document.getElementById("mine-empty-cta").addEventListener("click", function(){ openNew(mineTab !== "all" ? mineTab : null, "mine"); });
+  document.getElementById("mine-add").addEventListener("click", function(){ openStart(mineTab !== "all" ? mineTab : null, "mine"); });
+  document.getElementById("mine-empty-cta").addEventListener("click", function(){ openStart(mineTab !== "all" ? mineTab : null, "mine"); });
   var MINE_TAB_KEY = "ultimateCollection:mineTab";
   var mineTab = (function(){ try{ var t = localStorage.getItem(MINE_TAB_KEY); return (t === "all" || THEMES[t]) ? t : "all"; }catch(e){ return "all"; } })();
 
@@ -2271,6 +3147,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
     mineList.innerHTML = "";
     var shown = state.collections.filter(function(c){ return mineTab === "all" || c.theme === mineTab; });
+    showCredit("mine-credit", shown.some(colUsesRawg));
     mineEmpty.hidden = shown.length !== 0;
     document.getElementById("mine-empty-text").textContent = mineTab === "all"
       ? "No collections yet. Start your first one."
@@ -2430,15 +3307,16 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     }
     return JSON.stringify(v === undefined ? null : v);
   }
-  function colKey(c){ return stable({ n: c.name, t: c.theme, p: !!c.isPublic, pa: toMs(c.pinnedAt) }); }
+  function colKey(c){ return stable({ n: c.name, t: c.theme, p: !!c.isPublic, pa: toMs(c.pinnedAt), f: c.fillMode || null }); }
   function itemKey(it, colId){
     return stable({ c: colId, t: it.text, s: getStatus(it), ps: it.prevStatus || null, sa: toMs(it.statusAt), e: !!it.edited,
-      m: it.meta || null, no: it.notes || null, pp: it.posterPath || null, a: addedAt(it) || null });
+      m: packMeta(it), no: it.notes || null, pp: it.posterPath || null, a: addedAt(it) || null });
   }
   function itemFromRow(r){
+    var um = unpackMeta(r.meta);
     return { id: r.id, text: r.text, status: r.status, done: r.status === "completed",
       prevStatus: r.prev_status || undefined, statusAt: toMs(r.status_at) || undefined, edited: !!r.edited,
-      meta: r.meta || null, notes: r.notes || "", posterPath: r.poster_path || null, addedAt: toMs(r.added_at) || Date.now() };
+      meta: um.meta, mine: um.mine, notes: r.notes || "", posterPath: r.poster_path || null, addedAt: toMs(r.added_at) || Date.now() };
   }
 
   /* ---- sync engine ---- */
@@ -2507,7 +3385,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       seenC[col.id] = true;
       var ck = colKey(col);
       if(sync.cols[col.id] !== ck){
-        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic, pinned_at: toIso(toMs(col.pinnedAt)),
+        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic, pinned_at: toIso(toMs(col.pinnedAt)), fill_mode: col.fillMode || null,
           created_at: toIso(col.createdAt) || undefined, deleted_at: null });
         done.push(["c", col.id, ck]);
       }
@@ -2517,7 +3395,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         var ik = itemKey(it, col.id);
         if(sync.items[it.id] !== ik){
           itemRows.push({ user_id: uidv, id: it.id, collection_id: col.id, text: String(it.text).slice(0, 200), status: getStatus(it),
-            prev_status: it.prevStatus || null, status_at: toIso(toMs(it.statusAt)), edited: !!it.edited, meta: it.meta || null,
+            prev_status: it.prevStatus || null, status_at: toIso(toMs(it.statusAt)), edited: !!it.edited, meta: packMeta(it),
             notes: clampNotes(it.notes) || null, poster_path: it.posterPath || null, added_at: toIso(addedAt(it)) || undefined, deleted_at: null });
           done.push(["i", it.id, ik]);
         }
@@ -2533,7 +3411,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var ic = chunks(itemRows, 200);
     for(i=0;i<ic.length;i++){ r = await SUPA.from("items").upsert(ic[i], { onConflict: "user_id,id" }); if(r.error) throw r.error; }
     var di = chunks(delI, 200);
-    for(i=0;i<di.length;i++){ r = await SUPA.from("items").update({ deleted_at: now }).eq("user_id", uidv).in("id", di[i]); if(r.error) throw r.error; }
+    for(i=0;i<di.length;i++){ r = await SUPA.from("items").update({ deleted_at: now, meta: null, notes: null }).eq("user_id", uidv).in("id", di[i]); if(r.error) throw r.error; }
     var dc = chunks(delC, 200);
     for(i=0;i<dc.length;i++){ r = await SUPA.from("collections").update({ deleted_at: now }).eq("user_id", uidv).in("id", dc[i]); if(r.error) throw r.error; }
 
@@ -2582,15 +3460,15 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       delete sync.cols[row.id];
       return !!local;
     }
-    var rk = stable({ n: row.name, t: row.theme, p: !!row.is_public, pa: toMs(row.pinned_at) });
+    var rk = stable({ n: row.name, t: row.theme, p: !!row.is_public, pa: toMs(row.pinned_at), f: row.fill_mode || null });
     if(local){
       if(sync.cols[row.id] !== undefined && colKey(local) !== sync.cols[row.id]) return false; // newer edit here; it'll be uploaded
       var same = colKey(local) === rk;
-      local.name = row.name; local.theme = row.theme; local.isPublic = !!row.is_public; local.pinnedAt = toMs(row.pinned_at);
+      local.name = row.name; local.theme = row.theme; local.isPublic = !!row.is_public; local.pinnedAt = toMs(row.pinned_at); local.fillMode = row.fill_mode || undefined;
       sync.cols[row.id] = rk;
       return !same;
     }
-    state.collections.push({ id: row.id, name: row.name, theme: row.theme, isPublic: !!row.is_public, pinnedAt: toMs(row.pinned_at), createdAt: toMs(row.created_at) || Date.now(), items: [] });
+    state.collections.push({ id: row.id, name: row.name, theme: row.theme, isPublic: !!row.is_public, pinnedAt: toMs(row.pinned_at), fillMode: row.fill_mode || undefined, createdAt: toMs(row.created_at) || Date.now(), items: [] });
     sync.cols[row.id] = rk;
     return true;
   }
@@ -2908,6 +3786,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   applyAppearance(loadAppearance());
   if(shouldShowWelcome()) openWelcome(); else goHome();
   loadSupabase();
+  setTimeout(refreshStale, 4000);
   openImgDb().then(function(db){
     imgDb = db;
     return loadAllImages();
