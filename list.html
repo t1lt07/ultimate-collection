@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shared list · CollectEon</title>
+<meta name="description" content="A collection shared from CollectEon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F5F9;--surface:#FFFFFF;--ink:#12131A;--muted:#5E6270;--line:#DADCE3;--accent:#B37A10;--chip:#ECEDF2;color-scheme:light}
+@media (prefers-color-scheme: dark){:root{--bg:#0E0F14;--surface:#1A1C24;--ink:#F1F2F5;--muted:#A3A7B4;--line:#2E313C;--accent:#E0AA47;--chip:#262934;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:28px 20px 64px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.wordmark{font-weight:800;font-size:20px;letter-spacing:-.03em;color:var(--ink);text-decoration:none}
+.wordmark span{color:var(--accent)}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:999px;background:var(--chip)}
+.nav a[aria-current]{background:var(--ink);color:var(--bg)}
+h1{font-size:34px;line-height:1.1;letter-spacing:-.03em;margin:0 0 8px;font-weight:800}
+.lead{color:var(--muted);margin:0 0 28px;font-size:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 22px 8px;margin:0 0 16px}
+h2{font-size:19px;letter-spacing:-.01em;margin:0 0 10px;font-weight:800}
+h3{font-size:16px;margin:18px 0 6px;font-weight:800}
+p,li{font-size:15.5px}
+p{margin:0 0 14px}
+ul{margin:0 0 14px;padding-left:20px}
+li{margin:0 0 6px}
+a{color:var(--accent);font-weight:700}
+.mail{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);text-decoration:none;padding:12px 18px;border-radius:999px;font-weight:800;margin:4px 0 16px}
+.muted{color:var(--muted)}
+.foot{margin-top:28px;font-size:13.5px;color:var(--muted);text-align:center}
+.foot a{color:var(--muted)}
+
+.list-head{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.owner{font-size:14px;font-weight:700;color:var(--muted)}
+.owner b{color:var(--accent)}
+.cat-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;background:var(--t1);color:var(--deep);font-size:13px;font-weight:800}
+.cat-pill svg{width:16px;height:16px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:800;text-decoration:none;border:none}
+.btn-primary{background:var(--ink);color:var(--bg)}
+.btn-ghost{background:var(--chip);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px 12px}
+.tile{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cover{position:relative;aspect-ratio:2/3;border-radius:16px;overflow:hidden;background:var(--t2);color:var(--deep);display:flex;align-items:center;justify-content:center}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover > svg{width:36%;max-width:44px}
+.pill{position:absolute;left:6px;bottom:6px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800;background:var(--surface);color:var(--ink)}
+.pill.completed{background:var(--t1);color:var(--deep)}
+.pill.dropped{background:#FBE3E1;color:#A3322B}
+.score{position:absolute;right:6px;top:6px;padding:3px 8px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(18,19,26,.78);color:#fff}
+.t-title{font-size:14px;font-weight:800;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.t-sub{font-size:12.5px;color:var(--muted);font-weight:600}
+.t-note{margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.t-note::before{content:"Note";display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.state{padding:40px 0;text-align:center;color:var(--muted)}
+.report{display:block;margin-top:26px;text-align:center;font-size:13px;color:var(--muted);font-weight:600}
+.credit{margin-top:22px;font-size:13px;color:var(--muted);text-align:center}
+.credit a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="wordmark" href="/">Collect<span>Eon</span></a>
+  <nav class="nav" aria-label="Pages"><a href="/support">Support</a><a href="/privacy">Privacy</a></nav>
+</header>
+<main>
+
+<div id="state" class="state">Loading the list…</div>
+<div id="list" hidden>
+  <div class="list-head">
+    <span class="cat-pill" id="cat"></span>
+    <h1 id="name"></h1>
+    <span class="owner">Shared by <b id="owner"></b> · <span id="count"></span></span>
+  </div>
+  <div class="actions">
+    <a class="btn btn-primary" id="add" href="/">Add to my CollectEon</a>
+    <a class="btn btn-ghost" href="/">Open CollectEon</a>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p class="credit" id="credit"></p>
+  <a class="report" id="report" href="#">Report this list</a>
+</div>
+<script>
+(function(){
+  "use strict";
+  var URL_FN = "https://vyshzvrsitibscjfurth.supabase.co/rest/v1/rpc/get_shared_list";
+  var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5c2h6dnJzaXRpYnNjamZ1cnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwMjg1MzYsImV4cCI6MjEwNjYwNDUzNn0.JoTBZ1_433Vx3rVKfcaMiq36g2G7LK1WZj_YKQw1GDw";
+  var ICONS = {
+    movie:'<path d="M3 7.5 20 4l1 4.2L4 11.7 3 7.5Z"/><path d="M4 11.5h17V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5Z"/>',
+    series:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 21h8M9 2.5 12 6l3-3.5"/>',
+    anime:'<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 2.8 12 7l3.5-4.2"/>',
+    games:'<path d="M7 9h10l2.4 7a2 2 0 0 1-3.8 1.3L14.5 15h-5l-1.1 2.3A2 2 0 0 1 4.6 16L7 9Z"/><path d="M8.5 11.5v2M7.5 12.5h2M15.5 11.3h.01M17.5 13.3h.01"/>',
+    music:'<path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
+    books:'<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15Z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19M9 7.5h6"/>'
+  };
+  var THEMES = {
+    movie:{plural:"Movies",s:{planned:"Planned",progress:"In progress",completed:"Watched",dropped:"Dropped"}},
+    series:{plural:"Series",s:{planned:"Planned",progress:"In progress",completed:"Watched",dropped:"Dropped"}},
+    anime:{plural:"Anime",s:{planned:"Planned",progress:"Watching",completed:"Watched",dropped:"Dropped"}},
+    games:{plural:"Games",s:{planned:"Planned",progress:"In progress",completed:"Completed",dropped:"Dropped"}},
+    music:{plural:"Music",s:{planned:"Planned",progress:"Listening",completed:"Listened",dropped:"Dropped"}},
+    books:{plural:"Books",s:{planned:"Planned",progress:"Reading",completed:"Read",dropped:"Dropped"}}
+  };
+  var PAL = {
+    light:{movie:["#F8E9C8","#F2D99B","#6B4500"],series:["#CDEDEF","#9FD8DD","#0B5560"],anime:["#FADDE9","#F5BBD2","#8A1C4E"],games:["#E4DAFA","#CDBBF5","#4B2A99"],music:["#D8E6FD","#AFCBFA","#1A4A9E"],books:["#DCF0D3","#B9E0A8","#2A5F1E"]},
+    dark:{movie:["#3A2C12","#4E3A15","#F2C36B"],series:["#10363A","#15484D","#79D6DE"],anime:["#3D1A2A","#55223A","#F5A6C8"],games:["#2B2248","#382C60","#C2ADF7"],music:["#172C4D","#1E3A66","#9DBFF8"],books:["#1D3519","#284822","#A3DA8F"]}
+  };
+  function svg(k){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[k] || ICONS.movie) + '</svg>'; }
+  function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+  function poster(src){
+    src = String(src || "");
+    var t = /^(https:\/\/image\.tmdb\.org\/t\/p\/)(w\d+|original)(\/.+)$/.exec(src);
+    if(t) return t[1] + "w342" + t[3];
+    var r = /^(https:\/\/media\.rawg\.io\/media\/)(?:resize\/\d+\/-\/|crop\/\d+\/\d+\/)?((?:games|screenshots)\/.+)$/.exec(src);
+    if(r) return r[1] + "resize/640/-/" + r[2];
+    return "";   // only TMDB and RAWG images are shown, never other addresses
+  }
+  function year(m){ return String((m && (m.year || m.releaseDate)) || "").slice(0, 4); }
+  function setPalette(theme){
+    var dark = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches;
+    var p = (dark ? PAL.dark : PAL.light)[theme] || PAL.light.movie;
+    document.documentElement.style.setProperty("--t1", p[0]); document.documentElement.style.setProperty("--t2", p[1]); document.documentElement.style.setProperty("--deep", p[2]);
+  }
+  var q = new URLSearchParams(location.search), shareId = q.get("l") || "", user = q.get("u") || "";
+  var stateEl = document.getElementById("state");
+  function fail(msg){ stateEl.textContent = msg; stateEl.hidden = false; document.getElementById("list").hidden = true; }
+  if(!/^[A-Za-z0-9]{8,24}$/.test(shareId)){ fail("This link doesn't look right. Ask the person who shared it to send it again."); return; }
+  fetch(URL_FN, { method: "POST", headers: { "Content-Type": "application/json", "apikey": KEY, "Authorization": "Bearer " + KEY },
+    body: JSON.stringify({ p_username: user, p_share_id: shareId }) })
+  .then(function(r){ if(!r.ok) throw new Error("http " + r.status); return r.json(); })
+  .then(function(list){
+    if(!list || !THEMES[list.theme]){ fail("This list isn't shared anymore, or the link is wrong."); return; }
+    var th = THEMES[list.theme], items = list.items || [];
+    setPalette(list.theme);
+    document.title = list.name + " by @" + list.username + " · CollectEon";
+    document.getElementById("cat").innerHTML = svg(list.theme) + "<span></span>";
+    document.getElementById("cat").lastChild.textContent = th.plural;
+    document.getElementById("name").textContent = list.name;
+    document.getElementById("owner").textContent = "@" + list.username;
+    document.getElementById("count").textContent = items.length === 1 ? "1 title" : items.length + " titles";
+    document.getElementById("add").href = "/?import=" + encodeURIComponent(shareId);
+    var grid = document.getElementById("grid");
+    items.forEach(function(x){
+      var m = x.meta || {}, t = el("div", "tile"), c = el("div", "cover"), src = poster(m.poster);
+      if(src){ var img = new Image(); img.src = src; img.alt = ""; img.loading = "lazy"; img.decoding = "async"; img.onerror = function(){ c.innerHTML = svg(list.theme); }; c.appendChild(img); }
+      else c.innerHTML = svg(list.theme);
+      var free = m.multiplayer === true || m.kind === "song";
+      var pill = el("span", "pill " + (free ? "" : (x.status || "")), free ? (m.kind === "song" ? "Song" : "Multiplayer") : (th.s[x.status] || ""));
+      if(pill.textContent) c.appendChild(pill);
+      var sc = parseFloat(x.score);
+      if(isFinite(sc)) c.appendChild(el("span", "score", (Math.round(sc * 2) / 2) + "/10"));
+      t.appendChild(c);
+      t.appendChild(el("span", "t-title", m.title || x.text || "Untitled"));
+      var sub = [year(m), m.person].filter(Boolean).join(" · ");
+      if(sub) t.appendChild(el("span", "t-sub", sub));
+      if(x.notes) t.appendChild(el("p", "t-note", String(x.notes).slice(0, 1000)));
+      grid.appendChild(t);
+    });
+    if(!items.length) grid.appendChild(el("p", "muted", "This list is empty for now."));
+    var credit = document.getElementById("credit");
+    if(list.theme === "games"){ credit.innerHTML = 'Game details and images from <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.'; }
+    else if(list.theme === "movie" || list.theme === "series" || list.theme === "anime"){ credit.innerHTML = 'Details and images from <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.'; }
+    document.getElementById("report").href = "mailto:supportcollecteon@gmail.com?subject=" + encodeURIComponent("Report a shared list") + "&body=" + encodeURIComponent("I'd like to report this list: " + location.href + "\n\nReason: ");
+    stateEl.hidden = true; document.getElementById("list").hidden = false;
+  })
+  .catch(function(){ fail("Couldn't load this list. Check your internet connection and try again."); });
+})();
+</script>
+</main>
+<p class="foot">CollectEon · <a href="/">Open the app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon uses the TMDB API but is not endorsed or certified by TMDB. Game data from <a href="https://rawg.io">RAWG</a>.</p>
+</div>
+</body>
+</html>

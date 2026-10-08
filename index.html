@@ -440,19 +440,13 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
 /* Account + sign-in */
 .auth-lead{margin:10px 0 0;font-size:15px;line-height:1.45;color:var(--muted)}
-.auth-mode{margin-top:22px}
-.auth-mode.seg{grid-template-columns:repeat(2,minmax(0,1fr))}
 .provider-btn{margin-top:12px}
 .auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0 4px;font-size:13px;font-weight:600;color:var(--muted)}
 .auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--line)}
-.pw-wrap{position:relative}
-.pw-wrap .field{padding-right:76px}
-.pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:36px;padding:0 12px;border:none;border-radius:10px;background:var(--chip);color:var(--ink);font-size:12.5px;font-weight:700}
 .auth-msg{margin:14px 0 0;font-size:14px;line-height:1.45;border-radius:14px;padding:12px 14px}
 .auth-msg.error{background:var(--drop-bg);color:var(--drop-ink)}
 .auth-msg.info{background:var(--chip);color:var(--ink)}
 .auth-submit{margin-top:18px}
-.auth-forgot{display:block;margin:14px auto 0}
 .acct-head{display:flex;align-items:center;gap:12px}
 .acct-avatar{width:44px;height:44px;border-radius:50%;background:var(--btn);color:var(--on-btn);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex:0 0 auto}
 .acct-email{font-size:15px;font-weight:700;overflow-wrap:anywhere}
@@ -607,6 +601,46 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .search-close{width:36px;height:36px;border-radius:12px;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .search-close svg{width:16px;height:16px}
 
+/* Sign in with a code */
+.auth-fine{margin:14px 2px 0;font-size:13px;line-height:1.45;color:var(--muted);text-align:center}
+.code-field{font-size:26px;font-weight:800;letter-spacing:.32em;text-align:center;font-variant-numeric:tabular-nums;padding:16px 12px}
+.code-field::placeholder{letter-spacing:.32em;color:var(--line)}
+.code-actions{display:flex;justify-content:space-between;gap:12px;margin-top:12px}
+.code-actions .linkbtn{font-size:14px;padding:8px 2px}
+.code-actions .linkbtn[disabled]{color:var(--muted);cursor:default}
+
+.about-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.about-links a{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 14px;border-radius:999px;background:var(--chip);color:var(--ink);font-size:13.5px;font-weight:700;text-decoration:none}
+
+/* Username */
+.uname-field{position:relative}
+.uname-at{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:800;color:var(--muted);pointer-events:none}
+.uname-field .field{padding-left:34px;font-weight:700}
+.uname-hint{margin:8px 2px 0;font-size:13px;line-height:1.4;color:var(--muted)}
+.uname-hint.ok{color:#2E9E5B;font-weight:700}
+.uname-hint.bad{color:var(--drop-ink);font-weight:700}
+.acct-handle{display:block;font-size:13px;font-weight:700;color:var(--accent);margin-top:1px}
+.acct-actions .linkish{flex:1 1 100%}
+
+/* Sharing */
+.share-toggle{width:100%;display:flex;align-items:center;gap:14px;margin-top:16px;padding:14px;border:1.5px solid var(--edge);border-radius:18px;background:var(--bg);color:var(--ink);text-align:left}
+.share-toggle .st-text{flex:1;display:flex;flex-direction:column;gap:3px}
+.share-toggle strong{font-size:15.5px;font-weight:800}
+.share-toggle .st-text span{font-size:13px;line-height:1.4;color:var(--muted)}
+.switch{flex:0 0 auto;width:50px;height:30px;border-radius:999px;background:var(--line);position:relative;transition:background .2s ease}
+.switch > span{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s ease}
+.share-toggle[aria-checked="true"] .switch{background:#2E9E5B}
+.share-toggle[aria-checked="true"] .switch > span{transform:translateX(20px)}
+.share-toggle.small{margin-top:10px;padding:12px 14px}
+.share-link{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--chip);font-size:13.5px;font-weight:600;overflow-wrap:anywhere;user-select:all}
+.share-actions{display:flex;gap:10px;margin-top:10px}
+.share-actions .btn{flex:1;height:48px;margin-top:0}
+.share-note{margin:10px 2px 0;font-size:12.5px;line-height:1.4;color:var(--muted)}
+.sheet .share-actions .btn{margin-top:0}
+.coll-kind .shared-tag{display:inline-flex;align-items:center;gap:3px;margin-left:6px;color:var(--muted)}
+.coll-kind .shared-tag svg{width:12px;height:12px}
+#screen-detail .topbar .itb-side{display:flex;gap:8px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -751,7 +785,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <div class="topbar">
           <button class="roundbtn" id="detail-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
           <span class="crumb" id="detail-kind"></span>
+          <span class="itb-side itb-right">
+          <button class="roundbtn" id="detail-share" aria-label="Share this list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7.5 7.5 4.5-4.5 4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg></button>
           <button class="roundbtn" id="detail-trash" aria-label="Delete collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></button>
+          </span>
         </div>
         <h1 class="display-xl coll-title" id="detail-title">Collection</h1>
         <div class="progress-row">
@@ -899,39 +936,53 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <span class="spacer"></span>
         </div>
         <h1 class="display-xl" id="auth-title" style="margin-top:16px">Welcome back</h1>
-        <p class="auth-lead" id="auth-lead">Sign in to keep your collections in sync on your phone and computer.</p>
-        <div class="seg auth-mode" id="auth-mode" role="radiogroup" aria-label="Sign in or create an account">
-          <button class="seg-opt is-active" type="button" data-mode="signin" role="radio" aria-checked="true">Sign in</button>
-          <button class="seg-opt" type="button" data-mode="signup" role="radio" aria-checked="false">Create account</button>
+        <p class="auth-lead" id="auth-lead">Enter your email and we'll send you a sign-in code.</p>
+        <div id="auth-step-email">
+          <button class="btn btn-secondary provider-btn" id="auth-google" type="button">Continue with Google</button>
+          <button class="btn btn-secondary provider-btn" id="auth-apple" type="button" hidden>Continue with Apple</button>
+          <div class="auth-divider">or use email</div>
+          <form id="auth-form" novalidate>
+            <label class="section-label" for="auth-email" style="display:block">Email</label>
+            <input class="field" id="auth-email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com" required>
+            <p class="auth-msg" id="auth-msg" role="alert" hidden></p>
+            <button class="btn btn-primary auth-submit" id="auth-submit" type="submit">Send code</button>
+          </form>
+          <p class="auth-fine">No password needed. If you're new, this creates your free account.</p>
         </div>
-        <button class="btn btn-secondary provider-btn" id="auth-google" type="button">Continue with Google</button>
-        <button class="btn btn-secondary provider-btn" id="auth-apple" type="button" hidden>Continue with Apple</button>
-        <div class="auth-divider">or use email</div>
-        <form id="auth-form" novalidate>
-          <label class="section-label" for="auth-email" style="display:block">Email</label>
-          <input class="field" id="auth-email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
-          <label class="section-label" for="auth-password" style="display:block">Password</label>
-          <div class="pw-wrap">
-            <input class="field" id="auth-password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required>
-            <button class="pw-toggle" id="auth-pw-toggle" type="button" aria-label="Show password">Show</button>
+        <div id="auth-step-code" hidden>
+          <form id="code-form" novalidate>
+            <label class="section-label" for="auth-code" style="display:block">Code</label>
+            <input class="field code-field" id="auth-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" placeholder="••••••" required>
+            <p class="auth-msg" id="code-msg" role="alert" hidden></p>
+            <button class="btn btn-primary auth-submit" id="code-submit" type="submit" disabled>Sign in</button>
+          </form>
+          <div class="code-actions">
+            <button class="linkbtn" id="code-resend" type="button">Resend code</button>
+            <button class="linkbtn" id="code-change" type="button">Use a different email</button>
           </div>
-          <p class="auth-msg" id="auth-msg" role="alert" hidden></p>
-          <button class="btn btn-primary auth-submit" id="auth-submit" type="submit">Sign in</button>
-        </form>
-        <button class="linkbtn auth-forgot" id="auth-forgot" type="button">Forgot password?</button>
+          <p class="auth-fine">Can't find it? Check your spam folder. The code works for 1 hour.</p>
+        </div>
       </div>
     </section>
 
-    <!-- NEW PASSWORD (after a reset link) -->
-    <section class="screen" id="screen-reset" hidden>
+
+    <!-- CHOOSE A USERNAME -->
+    <section class="screen" id="screen-username" hidden>
       <div class="scroll">
-        <h1 class="display-xl" style="margin-top:56px">Set a new password</h1>
-        <p class="auth-lead">Choose a new password for your account.</p>
-        <form id="reset-form" novalidate>
-          <label class="section-label" for="reset-password" style="display:block">New password</label>
-          <input class="field" id="reset-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required>
-          <p class="auth-msg" id="reset-msg" role="alert" hidden></p>
-          <button class="btn btn-primary auth-submit" id="reset-submit" type="submit">Save password</button>
+        <div class="topbar">
+          <button class="roundbtn" id="uname-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="spacer"></span>
+        </div>
+        <h1 class="display-xl" id="uname-title" style="margin-top:16px">Choose your username</h1>
+        <p class="auth-lead" id="uname-lead">It's how people see who made a list you share with them. You can change it later in Settings.</p>
+        <form id="uname-form" novalidate>
+          <label class="section-label" for="uname-input" style="display:block">Username</label>
+          <div class="uname-field"><span class="uname-at" aria-hidden="true">@</span>
+            <input class="field" id="uname-input" type="text" maxlength="20" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="yourname" required>
+          </div>
+          <p class="uname-hint" id="uname-hint" aria-live="polite">3–20 characters: letters, numbers, dots and underscores.</p>
+          <p class="auth-msg" id="uname-msg" role="alert" hidden></p>
+          <button class="btn btn-primary auth-submit" id="uname-submit" type="submit" disabled>Continue</button>
         </form>
       </div>
     </section>
@@ -949,7 +1000,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <p class="section-label">Account</p>
         <div class="soft-card" id="acct-card"></div>
         <p class="section-label">About</p>
-        <div class="soft-card muted about-card"><p class="wordmark about-mark" aria-label="CollectEon">Collect<span>Eon</span></p>Your collections are saved on this device, and in your account when you're signed in.</div>
+        <div class="soft-card muted about-card"><p class="wordmark about-mark" aria-label="CollectEon">Collect<span>Eon</span></p>Your collections are saved on this device, and in your account when you're signed in.
+          <div class="about-links">
+            <a href="https://collecteon.net/support" target="_blank" rel="noopener">Support <span aria-hidden="true">↗</span></a>
+            <a href="https://collecteon.net/privacy" target="_blank" rel="noopener">Privacy policy <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
         <p class="section-label">Data sources</p>
         <div class="soft-card credits">
           <a class="credit-row" href="https://www.themoviedb.org" target="_blank" rel="noopener">
@@ -988,6 +1044,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <div class="sheet-title" id="coll-sheet-title" style="margin-bottom:4px"></div>
         <div class="sheet-sub" id="coll-sheet-sub"></div>
         <div class="sheet-opts">
+          <button class="sheet-opt" id="coll-share" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7.5 7.5 4.5-4.5 4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg><span id="coll-share-label">Share list</span></button>
           <button class="sheet-opt" id="coll-pin" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 4 3v2H6v-2l4-3-1-6Z"/><path d="M12 15v6"/></svg><span id="coll-pin-label">Pin to top</span></button>
           <button class="sheet-opt danger" id="coll-delete" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg><span>Delete collection</span></button>
         </div>
@@ -1013,6 +1070,31 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           </button>
         </div>
         <button class="btn btn-ghost" id="fill-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="share-overlay" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
+        <span class="sheet-handle"></span>
+        <div class="sheet-title" id="share-title">Share list</div>
+        <div class="sheet-sub" id="share-sub"></div>
+        <button class="share-toggle" id="share-toggle" type="button" role="switch" aria-checked="false">
+          <span class="st-text"><strong>Share with a link</strong><span id="share-desc">Anyone with the link can see the titles, statuses and your scores. Your notes stay private.</span></span>
+          <span class="switch" aria-hidden="true"><span></span></span>
+        </button>
+        <div id="share-on" hidden>
+          <button class="share-toggle small" id="share-notes" type="button" role="switch" aria-checked="false">
+            <span class="st-text"><strong>Show my notes</strong><span>Your personal notes appear under each title on the shared page.</span></span>
+            <span class="switch" aria-hidden="true"><span></span></span>
+          </button>
+          <div class="share-link"><span id="share-url"></span></div>
+          <div class="share-actions">
+            <button class="btn btn-primary" id="share-copy" type="button">Copy link</button>
+            <button class="btn btn-secondary" id="share-native" type="button" hidden>Share…</button>
+          </div>
+          <p class="share-note" id="share-note"></p>
+        </div>
+        <button class="btn btn-ghost" id="share-close" type="button">Done</button>
       </div>
     </div>
 
@@ -1414,7 +1496,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   }
 
   /* ---------- Screens + tab bar ---------- */
-  var SCREENS = ["welcome","home","new","detail","item","mine","settings","edit","auth","reset"];
+  var SCREENS = ["welcome","home","new","detail","item","mine","settings","edit","auth","username"];
   var TAB_FOR = { home:"home", mine:"mine", detail:"mine", settings:"settings" };
   var phoneEl = document.getElementById("phone");
   var tabbar = document.getElementById("tabbar");
@@ -1810,7 +1892,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   }
   document.getElementById("welcome-signup").addEventListener("click", function(){ openAuth("signup", "welcome"); });
   document.getElementById("welcome-signin").addEventListener("click", function(){ openAuth("signin", "welcome"); });
-  document.getElementById("welcome-guest").addEventListener("click", function(){ setEntry("guest"); goHome(); });
+  document.getElementById("welcome-guest").addEventListener("click", function(){ setEntry("guest"); goHome(); if(typeof runPendingImport === "function") runPendingImport(); });
 
   /* ---------- Start a collection: Autofill or Manual ---------- */
   /* Autofill looks titles up (movies, series, anime, games); Manual means typing everything in.
@@ -2306,6 +2388,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     else if(!fillOverlay.hidden) closeFill();
     else if(!filterOverlay.hidden) closeFilterSheet();
     else if(!psOverlay.hidden) closePicker();
+    else if(!shareOverlay.hidden) closeShare();
     else if(!confirmOverlay.hidden) confirmCancelBtn.click();
   });
 
@@ -2314,10 +2397,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var confirmOkBtn = document.getElementById("confirm-ok");
   var confirmCancelBtn = document.getElementById("confirm-cancel");
   var confirmResolver = null;
-  function askConfirm(title, body, okLabel){
+  function askConfirm(title, body, okLabel, positive){
     document.getElementById("confirm-title").textContent = title;
     document.getElementById("confirm-body").textContent = body;
     confirmOkBtn.textContent = okLabel || "Delete";
+    confirmOkBtn.className = "btn " + (positive ? "btn-primary" : "btn-danger");
     confirmOverlay.hidden = false;
     confirmCancelBtn.focus();
     return new Promise(function(resolve){ confirmResolver = resolve; });
@@ -3175,6 +3259,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       if(col.pinnedAt){ nameEl.innerHTML = '<span class="pin-mark" title="Pinned">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 4 3v2H6v-2l4-3-1-6Z"/><path d="M12 15v6"/></svg>'+'</span>'; }
       nameEl.appendChild(document.createTextNode(col.name));
       card.querySelector(".coll-kind").textContent = theme.plural;
+      if(col.isPublic && col.shareId){
+        var tag = document.createElement("span"); tag.className = "shared-tag";
+        tag.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7.5 7.5 4.5-4.5 4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg>Shared';
+        card.querySelector(".coll-kind").appendChild(tag);
+      }
       card.querySelector(".coll-progress").textContent = col.items.length ? progressText(col) : "No items yet";
       card.querySelector(".coll-open").addEventListener("click", function(){ openDetail(col.id, "mine"); });
       card.querySelector(".coll-more").setAttribute("aria-label", "Options for " + col.name);
@@ -3197,6 +3286,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     document.getElementById("coll-sheet-title").textContent = col.name;
     document.getElementById("coll-sheet-sub").textContent = THEMES[col.theme].plural + ", " + (col.items.length === 1 ? "1 item" : col.items.length + " items");
     document.getElementById("coll-pin-label").textContent = col.pinnedAt ? "Unpin" : "Pin to top";
+    document.getElementById("coll-share-label").textContent = col.isPublic && col.shareId ? "Sharing options" : "Share list";
     collOverlay.hidden = false;
     document.getElementById("coll-pin").focus();
   }
@@ -3279,6 +3369,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         });
         supaState = "ready";
         initAuth();
+        setTimeout(function(){ if(!currentUser) runPendingImport(); }, 600);
       }catch(e){ supaState = "failed"; }
       if(currentScreen() === "settings") renderAccount();
     };
@@ -3307,7 +3398,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     }
     return JSON.stringify(v === undefined ? null : v);
   }
-  function colKey(c){ return stable({ n: c.name, t: c.theme, p: !!c.isPublic, pa: toMs(c.pinnedAt), f: c.fillMode || null }); }
+  function colKey(c){ return stable({ n: c.name, t: c.theme, p: !!c.isPublic, pa: toMs(c.pinnedAt), f: c.fillMode || null, sh: c.shareId || null, sn: !!c.shareNotes }); }
   function itemKey(it, colId){
     return stable({ c: colId, t: it.text, s: getStatus(it), ps: it.prevStatus || null, sa: toMs(it.statusAt), e: !!it.edited,
       m: packMeta(it), no: it.notes || null, pp: it.posterPath || null, a: addedAt(it) || null });
@@ -3385,7 +3476,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       seenC[col.id] = true;
       var ck = colKey(col);
       if(sync.cols[col.id] !== ck){
-        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic, pinned_at: toIso(toMs(col.pinnedAt)), fill_mode: col.fillMode || null,
+        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic, share_id: col.shareId || null, share_notes: !!col.shareNotes, pinned_at: toIso(toMs(col.pinnedAt)), fill_mode: col.fillMode || null,
           created_at: toIso(col.createdAt) || undefined, deleted_at: null });
         done.push(["c", col.id, ck]);
       }
@@ -3460,15 +3551,15 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       delete sync.cols[row.id];
       return !!local;
     }
-    var rk = stable({ n: row.name, t: row.theme, p: !!row.is_public, pa: toMs(row.pinned_at), f: row.fill_mode || null });
+    var rk = stable({ n: row.name, t: row.theme, p: !!row.is_public, pa: toMs(row.pinned_at), f: row.fill_mode || null, sh: row.share_id || null, sn: !!row.share_notes });
     if(local){
       if(sync.cols[row.id] !== undefined && colKey(local) !== sync.cols[row.id]) return false; // newer edit here; it'll be uploaded
       var same = colKey(local) === rk;
-      local.name = row.name; local.theme = row.theme; local.isPublic = !!row.is_public; local.pinnedAt = toMs(row.pinned_at); local.fillMode = row.fill_mode || undefined;
+      local.name = row.name; local.theme = row.theme; local.isPublic = !!row.is_public; local.pinnedAt = toMs(row.pinned_at); local.fillMode = row.fill_mode || undefined; local.shareId = row.share_id || undefined; local.shareNotes = !!row.share_notes;
       sync.cols[row.id] = rk;
       return !same;
     }
-    state.collections.push({ id: row.id, name: row.name, theme: row.theme, isPublic: !!row.is_public, pinnedAt: toMs(row.pinned_at), fillMode: row.fill_mode || undefined, createdAt: toMs(row.created_at) || Date.now(), items: [] });
+    state.collections.push({ id: row.id, name: row.name, theme: row.theme, isPublic: !!row.is_public, shareId: row.share_id || undefined, shareNotes: !!row.share_notes, pinnedAt: toMs(row.pinned_at), fillMode: row.fill_mode || undefined, createdAt: toMs(row.created_at) || Date.now(), items: [] });
     sync.cols[row.id] = rk;
     return true;
   }
@@ -3566,6 +3657,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     runSync().then(function(){
       if(merged) showToast("Your collections on this device are now saved to your account.");
     });
+    loadProfile().then(function(){
+      if(currentUser && profileLoaded && !currentProfile.username) openUsername("required");
+      else runPendingImport();
+    });
   }
   function handleSignedOutElsewhere(){
     // Session ended without the user pressing Sign out (e.g. expired): keep the data, stop syncing.
@@ -3581,7 +3676,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       if(!force) return;
     }
     try{ await SUPA.auth.signOut(); }catch(e){}
-    stopRealtime(); currentUser = null;
+    stopRealtime(); currentUser = null; currentProfile = {}; profileLoaded = false;
     clearLocalData(); sync = emptySync(null); saveSync(); setEntry(null);
     renderAccount(); openWelcome();
     showToast("You're signed out.");
@@ -3639,109 +3734,362 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       : syncStatus === "offline" ? "Offline. Changes will sync when you're back online"
       : syncStatus === "error" ? "Couldn't sync just now. We'll keep trying"
       : lastSyncedAt ? "Synced" : "Ready to sync";
-    card.innerHTML = '<div class="acct-head"><span class="acct-avatar" aria-hidden="true"></span><span style="min-width:0"><span class="acct-email"></span>' +
+    card.innerHTML = '<div class="acct-head"><span class="acct-avatar" aria-hidden="true"></span><span style="min-width:0"><span class="acct-email"></span><span class="acct-handle" hidden></span>' +
       '<span class="acct-sync ' + syncStatus + '"><span class="sdot"></span><span class="acct-sync-text"></span></span></span></div>' +
       '<div class="acct-actions"><button class="btn btn-ghost btn-small" id="acct-sync-now" type="button">Sync now</button>' +
-      '<button class="btn btn-ghost btn-small" id="acct-signout" type="button">Sign out</button></div>' +
+      '<button class="btn btn-ghost btn-small" id="acct-signout" type="button">Sign out</button>' +
+      '<button class="btn btn-ghost btn-small linkish" id="acct-username" type="button">Change username</button></div>' +
       '<button class="danger-link" id="acct-delete" type="button">Delete account</button>';
     card.querySelector(".acct-avatar").textContent = email.charAt(0).toUpperCase();
     card.querySelector(".acct-email").textContent = email;
+    var handle = card.querySelector(".acct-handle");
+    handle.hidden = !currentProfile.username; handle.textContent = currentProfile.username ? "@" + currentProfile.username : "";
+    var unameBtn = document.getElementById("acct-username");
+    unameBtn.textContent = currentProfile.username ? "Change username" : "Choose a username";
+    unameBtn.addEventListener("click", function(){ openUsername("settings"); });
     card.querySelector(".acct-sync-text").textContent = label;
     document.getElementById("acct-sync-now").addEventListener("click", function(){ runSync(); });
     document.getElementById("acct-signout").addEventListener("click", signOut);
     document.getElementById("acct-delete").addEventListener("click", deleteAccount);
   }
 
-  /* ---- Sign in / create account screen ---- */
-  var authMode = "signin", authBack = "settings";
+  /* ---- Profile and username ---- */
+  var currentProfile = {}, profileLoaded = false;
+  async function loadProfile(){
+    if(!SUPA || !currentUser) return;
+    try{
+      var r = await SUPA.from("profiles").select("username, display_name").eq("id", currentUser.id).maybeSingle();
+      if(r.error) throw r.error;
+      currentProfile = r.data || {}; profileLoaded = true;
+      if(currentScreen() === "settings") renderAccount();
+    }catch(e){ profileLoaded = false; }
+  }
+  var unameMode = "required", unameAfter = null, unameTimer = null, unameSeq = 0, unameOk = false;
+  var unameInput = document.getElementById("uname-input"), unameHint = document.getElementById("uname-hint");
+  var unameSubmit = document.getElementById("uname-submit"), unameMsg = document.getElementById("uname-msg");
+  var UNAME_RE = /^[a-z0-9][a-z0-9._]{1,18}[a-z0-9]$/;
+  function suggestUsername(){
+    var base = String((currentUser && currentUser.email) || "").split("@")[0].toLowerCase().replace(/[^a-z0-9._]/g, "").replace(/[._]{2,}/g, ".").replace(/^[._]+|[._]+$/g, "");
+    if(base.length < 3) base = (base + "user").slice(0, 8);
+    return base.slice(0, 20).replace(/[._]+$/, "");
+  }
+  /* mode: "required" (right after signing up), "settings" (change it), "share" (needed before sharing) */
+  function openUsername(mode, after){
+    unameMode = mode; unameAfter = after || null;
+    var has = !!currentProfile.username;
+    document.getElementById("uname-title").textContent = has ? "Change your username" : "Choose your username";
+    document.getElementById("uname-lead").textContent = mode === "share" && !has
+      ? "Pick a username first. It's how people see who made the list you share."
+      : has ? "Your shared links keep working after you change it."
+      : "It's how people see who made a list you share with them. You can change it later in Settings.";
+    document.getElementById("uname-back").hidden = mode === "required";
+    unameInput.value = has ? currentProfile.username : suggestUsername();
+    unameSubmit.textContent = has ? "Save" : "Continue";
+    showAuthMsg("", "", unameMsg);
+    showScreen("username");
+    checkUsername();
+    setTimeout(function(){ unameInput.focus(); unameInput.select(); }, 60);
+  }
+  function setUnameHint(text, kind){ unameHint.textContent = text; unameHint.className = "uname-hint" + (kind ? " " + kind : ""); }
+  function usernameProblem(v){
+    if(v.length < 3) return "At least 3 characters.";
+    if(v.length > 20) return "At most 20 characters.";
+    if(!/^[a-z0-9._]+$/.test(v)) return "Only letters, numbers, dots and underscores.";
+    if(/^[._]|[._]$/.test(v)) return "Start and end with a letter or number.";
+    if(/[._]{2}/.test(v)) return "No two dots or underscores in a row.";
+    return "";
+  }
+  function checkUsername(){
+    var v = unameInput.value.trim().toLowerCase();
+    unameOk = false; unameSubmit.disabled = true;
+    if(unameTimer) clearTimeout(unameTimer);
+    if(!v){ setUnameHint("3–20 characters: letters, numbers, dots and underscores.", ""); return; }
+    var bad = usernameProblem(v);
+    if(bad){ setUnameHint(bad, "bad"); return; }
+    if(v === currentProfile.username){ setUnameHint("That's your current username.", "ok"); unameOk = true; unameSubmit.disabled = false; return; }
+    setUnameHint("Checking…", "");
+    var seq = ++unameSeq;
+    unameTimer = setTimeout(async function(){
+      if(!SUPA) return;
+      try{
+        var r = await SUPA.rpc("username_available", { p_username: v });
+        if(seq !== unameSeq) return;
+        if(r.error) throw r.error;
+        if(r.data){ setUnameHint("@" + v + " is available.", "ok"); unameOk = true; unameSubmit.disabled = false; }
+        else setUnameHint("That username isn't available. Try another.", "bad");
+      }catch(e){ if(seq === unameSeq){ setUnameHint("Couldn't check right now. You can still try.", ""); unameOk = true; unameSubmit.disabled = false; } }
+    }, 350);
+  }
+  unameInput.addEventListener("input", function(){
+    var low = unameInput.value.toLowerCase().replace(/\s+/g, "");
+    if(low !== unameInput.value) unameInput.value = low;
+    showAuthMsg("", "", unameMsg);
+    checkUsername();
+  });
+  document.getElementById("uname-form").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var v = unameInput.value.trim().toLowerCase();
+    if(!unameOk || usernameProblem(v) || !SUPA || !currentUser) return;
+    unameSubmit.disabled = true; var label = unameSubmit.textContent; unameSubmit.textContent = "Saving…";
+    try{
+      if(v !== currentProfile.username){
+        var r = await SUPA.from("profiles").update({ username: v }).eq("id", currentUser.id).select("username").maybeSingle();
+        if(r.error) throw r.error;
+        if(!r.data) throw new Error("not_saved");
+      }
+      currentProfile.username = v; profileLoaded = true;
+      leaveUsername(true);
+    }catch(err){
+      var m = String((err && (err.code || err.message)) || "");
+      showAuthMsg(/23505|duplicate|unique/i.test(m) ? "Someone just took that username. Please pick another."
+        : /23514|check/i.test(m) ? "That username isn't allowed. Please pick another."
+        : friendlyAuthError(err), "error", unameMsg);
+      unameSubmit.disabled = false;
+    }finally{ unameSubmit.textContent = label; }
+  });
+  function leaveUsername(saved){
+    var after = unameAfter; unameAfter = null;
+    if(unameMode === "settings"){ renderAccount(); showScreen("settings"); if(saved) showToast("Username saved."); return; }
+    if(after){ after(); return; }
+    goHome(); runPendingImport();
+  }
+  document.getElementById("uname-back").addEventListener("click", function(){
+    if(unameMode === "settings"){ renderAccount(); showScreen("settings"); }
+    else { unameAfter = null; if(currentId && findCollection(currentId)){ renderDetail(); showScreen("detail"); } else goCollections(); }
+  });
+
+  /* ---- Sharing a list with a link ---- */
+  var SHARE_BASE = "https://collecteon.net/list";
+  var shareOverlay = document.getElementById("share-overlay"), shareColId = null;
+  function newShareId(){
+    var abc = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789", out = "", buf = new Uint8Array(12);
+    (window.crypto || window.msCrypto).getRandomValues(buf);
+    for(var i = 0; i < buf.length; i++) out += abc[buf[i] % abc.length];
+    return out;
+  }
+  function shareUrl(col){ return SHARE_BASE + "?u=" + encodeURIComponent(currentProfile.username || "") + "&l=" + encodeURIComponent(col.shareId); }
+  function openShare(colId){
+    var col = findCollection(colId); if(!col) return;
+    if(!currentUser){
+      askConfirm("Sign in to share", "Sharing a list needs a free account, so your list can be seen from a link. Your lists on this device come with you.", "Sign in", true).then(function(ok){ if(ok) openAuth("signup", "settings"); });
+      return;
+    }
+    if(!currentProfile.username){
+      if(!profileLoaded){ loadProfile().then(function(){ if(profileLoaded) openShare(colId); else showToast("Couldn't connect. Check your internet and try again."); }); return; }
+      openUsername("share", function(){ renderDetail(); showScreen("detail"); openShare(colId); });
+      return;
+    }
+    shareColId = colId;
+    renderShare();
+    shareOverlay.hidden = false;
+  }
+  function renderShare(){
+    var col = findCollection(shareColId); if(!col){ closeShare(); return; }
+    setCat(shareOverlay, col.theme);
+    var on = !!(col.isPublic && col.shareId);
+    document.getElementById("share-title").textContent = "Share \u201c" + col.name + "\u201d";
+    document.getElementById("share-sub").textContent = THEMES[col.theme].plural + ", " + (col.items.length === 1 ? "1 title" : col.items.length + " titles");
+    var t = document.getElementById("share-toggle"); t.setAttribute("aria-checked", on ? "true" : "false");
+    document.getElementById("share-notes").setAttribute("aria-checked", col.shareNotes ? "true" : "false");
+    document.getElementById("share-desc").textContent = "Anyone with the link can see the titles, statuses and your scores. " +
+      (col.shareNotes ? "Your notes are shown too." : "Your notes stay private.");
+    document.getElementById("share-on").hidden = !on;
+    if(on) document.getElementById("share-url").textContent = shareUrl(col);
+    document.getElementById("share-native").hidden = !navigator.share;
+    document.getElementById("share-note").textContent = on ? "Turning sharing off makes this link stop working." : "";
+  }
+  function closeShare(){ shareOverlay.hidden = true; shareColId = null; }
+  document.getElementById("share-toggle").addEventListener("click", function(){
+    var col = findCollection(shareColId); if(!col) return;
+    if(col.isPublic && col.shareId){ col.isPublic = false; col.shareId = undefined; col.shareNotes = false; showToast("Sharing is off. The old link no longer works."); }
+    else { col.isPublic = true; col.shareId = newShareId(); }
+    saveCollections(); scheduleSync(0); renderShare(); refreshViews();
+  });
+  document.getElementById("share-notes").addEventListener("click", function(){
+    var col = findCollection(shareColId); if(!col) return;
+    col.shareNotes = !col.shareNotes;
+    saveCollections(); scheduleSync(0); renderShare();
+  });
+  document.getElementById("share-copy").addEventListener("click", function(){
+    var col = findCollection(shareColId); if(!col) return;
+    var url = shareUrl(col), btn = this;
+    function done(){ btn.textContent = "Copied ✓"; setTimeout(function(){ btn.textContent = "Copy link"; }, 1600); }
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function(){ selectShareText(); });
+    else selectShareText();
+  });
+  function selectShareText(){ var el = document.getElementById("share-url"), r = document.createRange(); r.selectNodeContents(el); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); showToast("Link selected. Copy it to share."); }
+  document.getElementById("share-native").addEventListener("click", function(){
+    var col = findCollection(shareColId); if(!col || !navigator.share) return;
+    navigator.share({ title: col.name + " on CollectEon", text: "My " + THEMES[col.theme].plural.toLowerCase() + " list on CollectEon", url: shareUrl(col) }).catch(function(){});
+  });
+  document.getElementById("share-close").addEventListener("click", closeShare);
+  shareOverlay.addEventListener("click", function(e){ if(e.target === shareOverlay) closeShare(); });
+  document.getElementById("detail-share").addEventListener("click", function(){ hideSuggestions(); if(currentId) openShare(currentId); });
+  document.getElementById("coll-share").addEventListener("click", function(){ var id = collSheetId; closeCollSheet(); if(id) openShare(id); });
+
+  /* ---- "Add to my CollectEon": copy a shared list (titles only) ---- */
+  function trustedImage(u){ return typeof u === "string" && /^https:\/\/(image\.tmdb\.org\/t\/p\/|media\.rawg\.io\/media\/)/.test(u); }
+  var pendingImport = (function(){
+    try{
+      var q = new URLSearchParams(location.search), id = q.get("import");
+      return id && /^[A-Za-z0-9]{8,24}$/.test(id) ? id : null;
+    }catch(e){ return null; }
+  })();
+  if(pendingImport){ try{ history.replaceState(null, "", location.pathname); }catch(e){} }
+  var importRunning = false;
+  async function runPendingImport(){
+    if(!pendingImport || importRunning) return;
+    if(currentScreen() === "welcome" || currentScreen() === "username" || currentScreen() === "auth") return;
+    if(!SUPA){ if(supaState === "failed"){ showToast("Couldn't open the shared list. Check your internet."); pendingImport = null; } return; }
+    importRunning = true;
+    var id = pendingImport; pendingImport = null;
+    try{
+      var r = await SUPA.rpc("get_shared_list", { p_username: "", p_share_id: id });
+      if(r.error) throw r.error;
+      var list = r.data;
+      if(!list || !THEMES[list.theme]){ showToast("That list isn't shared anymore."); return; }
+      var n = (list.items || []).length;
+      var ok = await askConfirm("Add \u201c" + list.name + "\u201d?",
+        "This copies " + (n === 1 ? "1 title" : n + " titles") + " from @" + list.username + " into a new list of your own. Their scores and statuses aren't copied.", "Add list", true);
+      if(!ok) return;
+      var col = { id: uid(), name: String(list.name).slice(0, 48), theme: list.theme, createdAt: Date.now(), items: [], fillMode: canAutofill(list.theme) ? "auto" : "manual" };
+      var t0 = Date.now();
+      (list.items || []).forEach(function(x, k){
+        var meta = x.meta && typeof x.meta === "object" ? Object.assign({}, x.meta) : null;
+        if(meta && meta.status !== "found") meta = null;
+        if(meta && !trustedImage(meta.poster)) delete meta.poster;   // only TMDB / RAWG images from other people's lists
+        col.items.push({ id: uid(), text: String((meta && meta.title) || x.text || "Untitled").slice(0, 200), done: false, status: "planned",
+          addedAt: t0 + k, meta: meta, edited: !!(meta && meta.manual) });
+      });
+      state.collections.unshift(col); saveCollections();
+      openDetail(col.id, "mine");
+      showToast("Added \u201c" + col.name + "\u201d to your collections.");
+      setTimeout(refreshStale, 1500);
+    }catch(e){ showToast("Couldn't open the shared list. Check your internet and try again."); }
+    finally{ importRunning = false; }
+  }
+
+  /* ---- Sign in / create account: email, then a one-time code ----
+     No passwords. Supabase emails a code; typing it in signs you in, and creates the account the first time. */
+  var authBack = "settings", codeEmail = "", resendTimer = null, resendAt = 0;
   var authForm = document.getElementById("auth-form");
   var authEmail = document.getElementById("auth-email");
-  var authPassword = document.getElementById("auth-password");
   var authSubmit = document.getElementById("auth-submit");
   var authMsg = document.getElementById("auth-msg");
+  var codeForm = document.getElementById("code-form");
+  var codeInput = document.getElementById("auth-code");
+  var codeSubmit = document.getElementById("code-submit");
+  var codeMsg = document.getElementById("code-msg");
+  var resendBtn = document.getElementById("code-resend");
+  var RESEND_WAIT = 60;
   document.getElementById("auth-apple").hidden = !APPLE_ENABLED;
   function openAuth(mode, backTo){
     authBack = backTo || "settings";
-    setAuthMode(mode || "signin");
-    authPassword.value = "";
-    showAuthMsg("", "");
+    var signup = mode === "signup";
+    document.getElementById("auth-title").textContent = signup ? "Create your account" : "Welcome back";
+    authLead(signup ? "It's free. Enter your email and we'll send you a code. No password needed."
+                    : "Enter your email and we'll send you a sign-in code.");
+    showEmailStep();
     showScreen("auth");
   }
-  function setAuthMode(mode){
-    authMode = mode;
-    Array.prototype.forEach.call(document.getElementById("auth-mode").children, function(b){
-      var on = b.dataset.mode === mode;
-      b.classList.toggle("is-active", on); b.setAttribute("aria-checked", on ? "true" : "false");
-    });
-    document.getElementById("auth-title").textContent = mode === "signin" ? "Welcome back" : "Create your account";
-    document.getElementById("auth-lead").textContent = mode === "signin"
-      ? "Sign in to keep your collections in sync on your phone and computer."
-      : "It's free. Your collections, covers and notes will sync to every device you sign in on.";
-    authSubmit.textContent = mode === "signin" ? "Sign in" : "Create account";
-    authPassword.setAttribute("autocomplete", mode === "signin" ? "current-password" : "new-password");
-    document.getElementById("auth-forgot").hidden = mode !== "signin";
-    showAuthMsg("", "");
+  function authLead(t){ document.getElementById("auth-lead").textContent = t; }
+  function showEmailStep(){
+    document.getElementById("auth-step-email").hidden = false;
+    document.getElementById("auth-step-code").hidden = true;
+    showAuthMsg("", ""); showAuthMsg("", "", codeMsg);
   }
-  Array.prototype.forEach.call(document.getElementById("auth-mode").children, function(b){
-    b.addEventListener("click", function(){ setAuthMode(b.dataset.mode); });
-  });
+  function showCodeStep(email){
+    codeEmail = email;
+    document.getElementById("auth-title").textContent = "Check your email";
+    authLead("We sent a code to " + email + ". Enter it below to sign in.");
+    document.getElementById("auth-step-email").hidden = true;
+    document.getElementById("auth-step-code").hidden = false;
+    codeInput.value = ""; codeSubmit.disabled = true; showAuthMsg("", "", codeMsg);
+    startResendWait();
+    setTimeout(function(){ codeInput.focus(); }, 60);
+  }
+  function startResendWait(){
+    resendAt = Date.now() + RESEND_WAIT * 1000;
+    if(resendTimer) clearInterval(resendTimer);
+    function tick(){
+      var left = Math.ceil((resendAt - Date.now()) / 1000);
+      if(left <= 0){ clearInterval(resendTimer); resendTimer = null; resendBtn.disabled = false; resendBtn.textContent = "Resend code"; return; }
+      resendBtn.disabled = true; resendBtn.textContent = "Resend code in " + left + "s";
+    }
+    tick(); resendTimer = setInterval(tick, 1000);
+  }
   document.getElementById("auth-back").addEventListener("click", function(){
+    if(!document.getElementById("auth-step-code").hidden){ showEmailStep(); openAuth("signin", authBack); return; }
     if(authBack === "welcome") openWelcome();
     else if(authBack === "home") goHome();
     else { renderAccount(); showScreen("settings"); }
   });
-  document.getElementById("auth-pw-toggle").addEventListener("click", function(){
-    var show = authPassword.type === "password";
-    authPassword.type = show ? "text" : "password";
-    this.textContent = show ? "Hide" : "Show";
-    this.setAttribute("aria-label", show ? "Hide password" : "Show password");
+  document.getElementById("code-change").addEventListener("click", function(){
+    var keep = authEmail.value; openAuth("signin", authBack); authEmail.value = keep;
+    setTimeout(function(){ authEmail.focus(); authEmail.select(); }, 60);
   });
   function showAuthMsg(text, kind, el){
     var box = el || authMsg;
     box.textContent = text; box.className = "auth-msg " + (kind || ""); box.hidden = !text;
   }
   function friendlyAuthError(err){
-    var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
+    var m = String((err && (err.message || err.error_description || err.code)) || "").toLowerCase();
     if(navigator.onLine === false || m.indexOf("failed to fetch") > -1 || m.indexOf("network") > -1) return "No connection. Check your internet and try again.";
-    if(m.indexOf("invalid login") > -1) return "That email and password don't match.";
-    if(m.indexOf("not confirmed") > -1) return "Please confirm your email first. Check your inbox for the link.";
-    if(m.indexOf("already registered") > -1 || m.indexOf("already been registered") > -1) return "An account with this email already exists. Try signing in instead.";
+    if(m.indexOf("expired") > -1 || m.indexOf("invalid") > -1 || m.indexOf("otp") > -1 || m.indexOf("token") > -1) return "That code is incorrect or has expired. Check it, or tap Resend code.";
+    var wait = /after (\d+) seconds?/.exec(m);
+    if(wait) return "Please wait " + wait[1] + " seconds before asking for another code.";
     if(m.indexOf("rate limit") > -1 || m.indexOf("too many") > -1 || m.indexOf("security purposes") > -1) return "Too many attempts. Please wait a minute and try again.";
-    if(m.indexOf("password") > -1 && (m.indexOf("weak") > -1 || m.indexOf("at least") > -1)) return "Please choose a stronger password (at least 8 characters).";
+    if(m.indexOf("signups not allowed") > -1 || m.indexOf("signup is disabled") > -1) return "New accounts can't be created right now. Please try again later.";
     if(m.indexOf("provider is not enabled") > -1 || m.indexOf("unsupported provider") > -1) return "This sign-in option isn't switched on yet.";
     return "Something went wrong. Please try again.";
   }
   function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function needSupa(box){
+    if(SUPA) return true;
+    showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error", box);
+    if(supaState === "failed") loadSupabase();
+    return false;
+  }
+  async function sendCode(email, box){
+    var r = await SUPA.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true, emailRedirectTo: SITE_URL } });
+    if(r.error) throw r.error;
+  }
   authForm.addEventListener("submit", async function(e){
     e.preventDefault();
-    if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
-    var email = authEmail.value.trim(), pw = authPassword.value;
+    if(!needSupa()) return;
+    var email = authEmail.value.trim().toLowerCase();
     if(!validEmail(email)){ showAuthMsg("Please enter a valid email address.", "error"); authEmail.focus(); return; }
-    if(pw.length < 8){ showAuthMsg("Your password needs at least 8 characters.", "error"); authPassword.focus(); return; }
-    authSubmit.disabled = true; showAuthMsg("", "");
-    try{
-      if(authMode === "signin"){
-        var r = await SUPA.auth.signInWithPassword({ email: email, password: pw });
-        if(r.error) throw r.error;
-      } else {
-        var s2 = await SUPA.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: SITE_URL } });
-        if(s2.error) throw s2.error;
-        if(!s2.data || !s2.data.session){
-          showAuthMsg("Almost done! We sent a confirmation link to " + email + ". Open it on this device to finish creating your account.", "info");
-        }
-      }
-    }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
-    finally{ authSubmit.disabled = false; }
+    authSubmit.disabled = true; authSubmit.textContent = "Sending…"; showAuthMsg("", "");
+    try{ await sendCode(email); showCodeStep(email); }
+    catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
+    finally{ authSubmit.disabled = false; authSubmit.textContent = "Send code"; }
   });
-  document.getElementById("auth-forgot").addEventListener("click", async function(){
-    var email = authEmail.value.trim();
-    if(!validEmail(email)){ showAuthMsg("Type your email above first, then tap Forgot password.", "error"); authEmail.focus(); return; }
-    if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); return; }
+  codeInput.addEventListener("input", function(){
+    var digits = codeInput.value.replace(/\D/g, "").slice(0, 10);
+    if(codeInput.value !== digits) codeInput.value = digits;
+    codeSubmit.disabled = digits.length < 6;
+    showAuthMsg("", "", codeMsg);
+  });
+  codeForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+    if(!needSupa(codeMsg)) return;
+    var token = codeInput.value.replace(/\D/g, "");
+    if(token.length < 6){ showAuthMsg("Enter the full code from the email.", "error", codeMsg); codeInput.focus(); return; }
+    codeSubmit.disabled = true; codeSubmit.textContent = "Checking…"; showAuthMsg("", "", codeMsg);
     try{
-      var r = await SUPA.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL });
+      var r = await SUPA.auth.verifyOtp({ email: codeEmail, token: token, type: "email" });
       if(r.error) throw r.error;
-      showAuthMsg("If there's an account for " + email + ", we've sent a link to reset the password.", "info");
-    }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
+      // Signed in: onAuthStateChange takes it from here and leaves this screen.
+    }catch(err){
+      showAuthMsg(friendlyAuthError(err), "error", codeMsg);
+      codeInput.focus(); codeInput.select();
+    }finally{ codeSubmit.textContent = "Sign in"; codeSubmit.disabled = codeInput.value.replace(/\D/g, "").length < 6; }
+  });
+  resendBtn.addEventListener("click", async function(){
+    if(resendBtn.disabled || !needSupa(codeMsg)) return;
+    resendBtn.disabled = true;
+    try{ await sendCode(codeEmail); startResendWait(); showAuthMsg("We sent a new code to " + codeEmail + ".", "info", codeMsg); codeInput.value = ""; codeSubmit.disabled = true; codeInput.focus(); }
+    catch(err){ resendBtn.disabled = false; showAuthMsg(friendlyAuthError(err), "error", codeMsg); }
   });
   async function oauth(provider){
     if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
@@ -3753,18 +4101,6 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.getElementById("auth-google").addEventListener("click", function(){ oauth("google"); });
   document.getElementById("auth-apple").addEventListener("click", function(){ oauth("apple"); });
 
-  /* ---- New password after a reset link ---- */
-  document.getElementById("reset-form").addEventListener("submit", async function(e){
-    e.preventDefault();
-    var pw = document.getElementById("reset-password").value, msg = document.getElementById("reset-msg");
-    if(pw.length < 8){ showAuthMsg("Your password needs at least 8 characters.", "error", msg); return; }
-    try{
-      var r = await SUPA.auth.updateUser({ password: pw });
-      if(r.error) throw r.error;
-      document.getElementById("reset-password").value = "";
-      goHome(); showToast("Your new password is saved.");
-    }catch(err){ showAuthMsg(friendlyAuthError(err), "error", msg); }
-  });
 
   function initAuth(){
     if(!SUPA) return;
@@ -3773,13 +4109,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     var linkError = q.get("error_description") || hsh.get("error_description");
     SUPA.auth.onAuthStateChange(function(event, session){
       setTimeout(function(){
-        if(event === "PASSWORD_RECOVERY"){ if(session && session.user) currentUser = session.user; showScreen("reset"); return; }
         if(session && session.user) handleSignedIn(session.user);
         else if(event === "SIGNED_OUT" && currentUser) handleSignedOutElsewhere();
         if(location.search || location.hash){ try{ history.replaceState(null, "", SITE_URL); }catch(e){} }
       }, 0);
     });
-    if(linkError) setTimeout(function(){ showToast(/expired|invalid/i.test(linkError) ? "That link has expired. Please request a new one." : linkError); }, 400);
+    if(linkError) setTimeout(function(){ showToast(/expired|invalid/i.test(linkError) ? "That sign-in link has expired. Please sign in again." : linkError); }, 400);
   }
 
   /* ---------- Boot ---------- */
