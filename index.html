@@ -432,6 +432,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .modal-title{margin:0 0 8px;font-family:var(--font-display);font-size:20px;font-weight:700}
 .modal-body{font-size:14px;color:var(--muted);margin:0 0 18px;line-height:1.45}
 .modal-actions{display:flex;gap:10px}
+.modal-report{display:block;margin:-8px 0 16px;font-size:13.5px;font-weight:600;color:var(--muted);text-decoration:underline}
 .modal-actions .btn{flex:1;height:48px}
 .toast{position:absolute;left:22px;right:22px;bottom:calc(22px + env(safe-area-inset-bottom, 0px));background:var(--btn);color:var(--on-btn);border-radius:16px;padding:12px 16px;
   display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;box-shadow:var(--shadow-strong);z-index:50}
@@ -603,6 +604,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 
 /* Sign in with a code */
 .auth-fine{margin:14px 2px 0;font-size:13px;line-height:1.45;color:var(--muted);text-align:center}
+.auth-terms{margin-top:8px;font-size:12.5px}
+.auth-captcha{display:flex;justify-content:center;margin-top:16px}
+.auth-captcha:empty{display:none}
+.auth-terms a{color:var(--ink);font-weight:600;text-decoration:underline}
 .code-field{font-size:26px;font-weight:800;letter-spacing:.32em;text-align:center;font-variant-numeric:tabular-nums;padding:16px 12px}
 .code-field::placeholder{letter-spacing:.32em;color:var(--line)}
 .code-actions{display:flex;justify-content:space-between;gap:12px;margin-top:12px}
@@ -948,6 +953,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
             <button class="btn btn-primary auth-submit" id="auth-submit" type="submit">Send code</button>
           </form>
           <p class="auth-fine">No password needed. If you're new, this creates your free account.</p>
+          <p class="auth-fine auth-terms">By continuing, you agree to our <a href="https://collecteon.net/terms" target="_blank" rel="noopener">Terms of Use</a> and <a href="https://collecteon.net/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
         </div>
         <div id="auth-step-code" hidden>
           <form id="code-form" novalidate>
@@ -962,6 +968,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           </div>
           <p class="auth-fine">Can't find it? Check your spam folder. The code works for 1 hour.</p>
         </div>
+        <div class="auth-captcha" id="auth-captcha" aria-live="polite"></div>
       </div>
     </section>
 
@@ -1004,6 +1011,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
           <div class="about-links">
             <a href="https://collecteon.net/support" target="_blank" rel="noopener">Support <span aria-hidden="true">↗</span></a>
             <a href="https://collecteon.net/privacy" target="_blank" rel="noopener">Privacy policy <span aria-hidden="true">↗</span></a>
+            <a href="https://collecteon.net/terms" target="_blank" rel="noopener">Terms of Use <span aria-hidden="true">↗</span></a>
           </div>
         </div>
         <p class="section-label">Data sources</p>
@@ -1136,6 +1144,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       <div class="modal-card" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
         <h3 class="modal-title" id="confirm-title">Delete collection?</h3>
         <p class="modal-body" id="confirm-body"></p>
+        <a class="modal-report" id="confirm-report" href="#" target="_blank" rel="noopener" hidden>Report this list</a>
         <div class="modal-actions">
           <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
           <button class="btn btn-danger" id="confirm-ok">Delete</button>
@@ -2397,7 +2406,9 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var confirmOkBtn = document.getElementById("confirm-ok");
   var confirmCancelBtn = document.getElementById("confirm-cancel");
   var confirmResolver = null;
-  function askConfirm(title, body, okLabel, positive){
+  function askConfirm(title, body, okLabel, positive, reportHref){
+    var rep = document.getElementById("confirm-report");
+    rep.hidden = !reportHref; if(reportHref) rep.href = reportHref; else rep.removeAttribute("href");
     document.getElementById("confirm-title").textContent = title;
     document.getElementById("confirm-body").textContent = body;
     confirmOkBtn.textContent = okLabel || "Delete";
@@ -3476,7 +3487,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       seenC[col.id] = true;
       var ck = colKey(col);
       if(sync.cols[col.id] !== ck){
-        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic, share_id: col.shareId || null, share_notes: !!col.shareNotes, pinned_at: toIso(toMs(col.pinnedAt)), fill_mode: col.fillMode || null,
+        colRows.push({ user_id: uidv, id: col.id, name: col.name, theme: col.theme, is_public: !!col.isPublic && !hasBadWords(col.name), share_id: col.shareId || null, share_notes: !!col.shareNotes, pinned_at: toIso(toMs(col.pinnedAt)), fill_mode: col.fillMode || null,
           created_at: toIso(col.createdAt) || undefined, deleted_at: null });
         done.push(["c", col.id, ck]);
       }
@@ -3768,6 +3779,19 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   var unameInput = document.getElementById("uname-input"), unameHint = document.getElementById("uname-hint");
   var unameSubmit = document.getElementById("uname-submit"), unameMsg = document.getElementById("uname-msg");
   var UNAME_RE = /^[a-z0-9][a-z0-9._]{1,18}[a-z0-9]$/;
+  /* Offensive-word filter for usernames and shared list names (also used by list.html). */
+  var BAD_PARTS = /(fuck|cunt|nigger|nigga|faggot|motherf|bullshit|shithead|pornhub|хуй|пизд|бляд|блят|ебан|ебат|їбан|їбат|єбан|підор|пидор|пидар|підар)/;
+  var BAD_WORDS = ["ass","asshole","arse","bitch","bitches","bastard","dildo","fag","fags","slut","sluts",
+    "whore","whores","porn","porno","tits","titties","twat","wank","wanker","shit","shits","shitty","rapist","kkk",
+    "retard","retarded","сука","суки","сучка","гандон","мудак","шлюха","курва"];
+  /* Extra words only blocked in usernames: they appear in real titles ("Moby Dick", "Philip K. Dick", WWII lists). */
+  var BAD_NAME_WORDS = ["dick","dicks","cock","cocks","cum","rape","nazi","nazis","hitler"];
+  function hasBadWords(t, strict){
+    var map = { "0":"o", "1":"i", "3":"e", "4":"a", "5":"s", "7":"t", "@":"a", "$":"s", "ё":"е" };
+    var s = String(t || "").toLowerCase().replace(/[013457@$ё]/g, function(c){ return map[c]; });
+    if(BAD_PARTS.test(s.replace(/[^a-zа-яіїєґ]/g, ""))) return true;
+    return s.split(/[^a-zа-яіїєґ]+/).some(function(w){ return BAD_WORDS.indexOf(w) !== -1 || (strict && BAD_NAME_WORDS.indexOf(w) !== -1); });
+  }
   function suggestUsername(){
     var base = String((currentUser && currentUser.email) || "").split("@")[0].toLowerCase().replace(/[^a-z0-9._]/g, "").replace(/[._]{2,}/g, ".").replace(/^[._]+|[._]+$/g, "");
     if(base.length < 3) base = (base + "user").slice(0, 8);
@@ -3797,6 +3821,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(!/^[a-z0-9._]+$/.test(v)) return "Only letters, numbers, dots and underscores.";
     if(/^[._]|[._]$/.test(v)) return "Start and end with a letter or number.";
     if(/[._]{2}/.test(v)) return "No two dots or underscores in a row.";
+    if(hasBadWords(v, true)) return "That username isn't allowed. Please pick another.";
     return "";
   }
   function checkUsername(){
@@ -3902,7 +3927,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   document.getElementById("share-toggle").addEventListener("click", function(){
     var col = findCollection(shareColId); if(!col) return;
     if(col.isPublic && col.shareId){ col.isPublic = false; col.shareId = undefined; col.shareNotes = false; showToast("Sharing is off. The old link no longer works."); }
-    else { col.isPublic = true; col.shareId = newShareId(); }
+    else {
+      if(hasBadWords(col.name)){ showToast("This list's name isn't allowed in shared lists. Please create it under another name."); return; }
+      col.isPublic = true; col.shareId = newShareId();
+    }
     saveCollections(); scheduleSync(0); renderShare(); refreshViews();
   });
   document.getElementById("share-notes").addEventListener("click", function(){
@@ -3937,6 +3965,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   })();
   if(pendingImport){ try{ history.replaceState(null, "", location.pathname); }catch(e){} }
   var importRunning = false;
+  function reportLink(shareId, list){
+    var body = "I'd like to report this shared list.\n\nList: " + (list && list.name || "") + "\nShared by: @" + (list && list.username || "") +
+      "\nLink: " + SHARE_BASE + "?l=" + shareId + "\n\nWhat's wrong with it:\n";
+    return "mailto:supportcollecteon@gmail.com?subject=" + encodeURIComponent("Report a shared list (" + shareId + ")") + "&body=" + encodeURIComponent(body);
+  }
   async function runPendingImport(){
     if(!pendingImport || importRunning) return;
     if(currentScreen() === "welcome" || currentScreen() === "username" || currentScreen() === "auth") return;
@@ -3947,10 +3980,10 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
       var r = await SUPA.rpc("get_shared_list", { p_username: "", p_share_id: id });
       if(r.error) throw r.error;
       var list = r.data;
-      if(!list || !THEMES[list.theme]){ showToast("That list isn't shared anymore."); return; }
+      if(!list || !THEMES[list.theme] || hasBadWords(list.name) || hasBadWords(list.username, true)){ showToast("That list isn't shared anymore."); return; }
       var n = (list.items || []).length;
       var ok = await askConfirm("Add \u201c" + list.name + "\u201d?",
-        "This copies " + (n === 1 ? "1 title" : n + " titles") + " from @" + list.username + " into a new list of your own. Their scores and statuses aren't copied.", "Add list", true);
+        "This copies " + (n === 1 ? "1 title" : n + " titles") + " from @" + list.username + " into a new list of your own. Their scores and statuses aren't copied.", "Add list", true, reportLink(id, list));
       if(!ok) return;
       var col = { id: uid(), name: String(list.name).slice(0, 48), theme: list.theme, createdAt: Date.now(), items: [], fillMode: canAutofill(list.theme) ? "auto" : "manual" };
       var t0 = Date.now();
@@ -3991,6 +4024,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
                     : "Enter your email and we'll send you a sign-in code.");
     showEmailStep();
     showScreen("auth");
+    prepareCaptcha().catch(function(){});
   }
   function authLead(t){ document.getElementById("auth-lead").textContent = t; }
   function showEmailStep(){
@@ -4035,6 +4069,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   function friendlyAuthError(err){
     var m = String((err && (err.message || err.error_description || err.code)) || "").toLowerCase();
     if(navigator.onLine === false || m.indexOf("failed to fetch") > -1 || m.indexOf("network") > -1) return "No connection. Check your internet and try again.";
+    if(m.indexOf("captcha") > -1) return "We couldn't confirm you're not a robot. Check your internet and try again.";
     if(m.indexOf("expired") > -1 || m.indexOf("invalid") > -1 || m.indexOf("otp") > -1 || m.indexOf("token") > -1) return "That code is incorrect or has expired. Check it, or tap Resend code.";
     var wait = /after (\d+) seconds?/.exec(m);
     if(wait) return "Please wait " + wait[1] + " seconds before asking for another code.";
@@ -4050,8 +4085,55 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
     if(supaState === "failed") loadSupabase();
     return false;
   }
+  /* ---- Bot protection (Cloudflare Turnstile) for "Send code" ----
+     Usually invisible; it only shows a checkbox if Cloudflare isn't sure you're a person.
+     Leave the site key empty to switch it off. */
+  var TURNSTILE_SITEKEY = "0x4AAAAAAFRk_8VcHnGZjbOq";
+  var ts = { loading: null, id: null, token: null, failed: false, waiters: [] };
+  function loadTurnstile(){
+    if(!TURNSTILE_SITEKEY) return Promise.resolve(null);
+    if(window.turnstile) return Promise.resolve(window.turnstile);
+    if(ts.loading) return ts.loading;
+    ts.loading = new Promise(function(resolve, reject){
+      window.__ceTurnstileReady = function(){ resolve(window.turnstile); };
+      var sc = document.createElement("script");
+      sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__ceTurnstileReady";
+      sc.async = true;
+      sc.onerror = function(){ ts.loading = null; sc.remove(); reject(new Error("captcha_unavailable")); };
+      document.head.appendChild(sc);
+    });
+    return ts.loading;
+  }
+  function settleCaptcha(token, err){
+    var w = ts.waiters; ts.waiters = [];
+    w.forEach(function(x){ clearTimeout(x.timer); if(err) x.reject(err); else x.resolve(token); });
+  }
+  async function prepareCaptcha(){
+    var t = await loadTurnstile();
+    if(!t || ts.id !== null) return t;
+    ts.id = t.render("#auth-captcha", {
+      sitekey: TURNSTILE_SITEKEY, appearance: "interaction-only", theme: document.documentElement.getAttribute("data-theme") || "auto", action: "send-code",
+      callback: function(tok){ ts.failed = false; if(ts.waiters.length){ settleCaptcha(tok); resetCaptcha(); } else ts.token = tok; },
+      "expired-callback": function(){ ts.token = null; resetCaptcha(); },
+      "error-callback": function(){ ts.token = null; ts.failed = true; settleCaptcha(null, new Error("captcha_failed")); return true; }
+    });
+    return t;
+  }
+  function resetCaptcha(){ ts.token = null; try{ if(window.turnstile && ts.id !== null) window.turnstile.reset(ts.id); }catch(e){} }
+  async function getCaptchaToken(){
+    if(!TURNSTILE_SITEKEY) return undefined;
+    await prepareCaptcha();
+    if(ts.token){ var tok = ts.token; resetCaptcha(); return tok; }   // each token works once; start the next one now
+    if(ts.failed){ ts.failed = false; resetCaptcha(); }               // the last check failed: try again
+    return new Promise(function(resolve, reject){
+      var w = { resolve: resolve, reject: reject };
+      w.timer = setTimeout(function(){ ts.waiters = ts.waiters.filter(function(x){ return x !== w; }); resetCaptcha(); reject(new Error("captcha_timeout")); }, 30000);
+      ts.waiters.push(w);
+    });
+  }
   async function sendCode(email, box){
-    var r = await SUPA.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true, emailRedirectTo: SITE_URL } });
+    var captchaToken = await getCaptchaToken();
+    var r = await SUPA.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true, emailRedirectTo: SITE_URL, captchaToken: captchaToken } });
     if(r.error) throw r.error;
   }
   authForm.addEventListener("submit", async function(e){
