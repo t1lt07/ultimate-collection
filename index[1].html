@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CollectEon · Build your personal collection</title>
+<meta name="description" content="Track every movie, series, anime, game, album and book you love. Free, with no ads. On iPhone and in your browser.">
+<meta name="theme-color" content="#F4F5F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E0F14" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="CollectEon · Build your personal collection">
+<meta property="og:description" content="Movies, series, anime, games, music and books in one place. Free, with no ads.">
+<meta property="og:url" content="https://collecteon.net/">
+<meta property="og:type" content="website">
+<script>
+/* People who already use CollectEon go straight to the app. Links meant for the app
+   (shared-list imports, sign-in emails, Google/Apple sign-in) that arrive here are passed on too. */
+(function(){
+  try{
+    var q = location.search, h = location.hash;
+    var forApp = /[?&](import|code|token_hash|error|error_description)=/.test(q) || /(access_token|refresh_token|error)=/.test(h);
+    var known = false;
+    try{
+      known = !!localStorage.getItem("sb-vyshzvrsitibscjfurth-auth-token") ||
+              localStorage.getItem("ultimateCollection:entry") === "guest";
+    }catch(e){}
+    if(/[?&]about\b/.test(q)) known = false;   // collecteon.net/?about always shows this page
+    if(forApp || known) location.replace("/app" + q + h);
+  }catch(e){}
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F5F9; --surface:#FFFFFF; --ink:#12131A; --muted:#5E6270; --line:#DADCE3; --edge:#D3D6DF; --tab-border:#E6E8EE;
+  --btn:#12131A; --on-btn:#FFFFFF; --accent:#B37A10;
+  --shadow:0 10px 26px -18px rgba(18,19,26,0.35); --lift:0 30px 60px -20px rgba(15,18,22,0.35), 0 2px 10px rgba(15,18,22,0.08);
+  --band:#12131A; --band-ink:#F1F2F5; --band-muted:#A3A7B4; --band-card:#1A1C24; --band-edge:#2E313C; --band-chip:#262934; --band-accent:#E0AA47;
+  --movie-1:#F8E9C8; --movie-2:#F2D99B; --movie-d:#6B4500;
+  --series-1:#CDEDEF; --series-2:#9FD8DD; --series-d:#0B5560;
+  --anime-1:#FADDE9; --anime-2:#F5BBD2; --anime-d:#8A1C4E;
+  --games-1:#E4DAFA; --games-2:#CDBBF5; --games-d:#4B2A99;
+  --music-1:#D8E6FD; --music-2:#AFCBFA; --music-d:#1A4A9E;
+  --books-1:#DCF0D3; --books-2:#B9E0A8; --books-d:#2A5F1E;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0E0F14; --surface:#1A1C24; --ink:#F1F2F5; --muted:#A3A7B4; --line:#2E313C; --edge:#3A3E4D; --tab-border:#262934;
+    --btn:#F1F2F5; --on-btn:#12131A; --accent:#E0AA47;
+    --shadow:0 10px 26px -18px rgba(0,0,0,0.7); --lift:0 30px 60px -20px rgba(0,0,0,0.7), 0 2px 10px rgba(0,0,0,0.3);
+    --band:#1A1C24; --band-card:#12131A;
+    --movie-1:#3A2C12; --movie-2:#4E3A15; --movie-d:#F2C36B;
+    --series-1:#10363A; --series-2:#15484D; --series-d:#79D6DE;
+    --anime-1:#3D1A2A; --anime-2:#55223A; --anime-d:#F5A6C8;
+    --games-1:#2B2248; --games-2:#382C60; --games-d:#C2ADF7;
+    --music-1:#172C4D; --music-2:#1E3A66; --music-d:#9DBFF8;
+    --books-1:#1D3519; --books-2:#284822; --books-d:#A3DA8F;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.4}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:24px;padding-right:24px}
+.wordmark{font-size:20px;font-weight:800;letter-spacing:-0.02em}
+.wordmark span{color:var(--accent)}
+
+/* Header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:22px;padding-bottom:22px;flex-wrap:wrap}
+.top nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;font-size:14px;font-weight:600}
+.top nav a:not(.pill):hover{color:var(--muted)}
+.pill{height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--edge);background:var(--surface);display:inline-flex;align-items:center;font-weight:700}
+.pill:hover{border-color:var(--ink)}
+
+/* Buttons */
+.btn{height:56px;padding:0 26px;border-radius:999px;font-size:15px;font-weight:700;display:inline-flex;align-items:center;gap:10px;transition:transform .15s ease}
+.btn:active{transform:scale(.97)}
+.btn svg{width:18px;height:18px;flex:0 0 auto}
+.btn-primary{background:var(--btn);color:var(--on-btn)}
+.btn-soon{background:var(--surface);border:1.5px solid var(--edge);color:var(--muted);cursor:default}
+
+/* Hero */
+.hero{display:flex;flex-wrap:wrap;align-items:center;gap:48px;padding-top:56px;padding-bottom:72px}
+.hero-text{flex:1 1 460px;display:flex;flex-direction:column;gap:24px;min-width:0}
+.badge{align-self:flex-start;font-size:13px;font-weight:700;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:6px 14px}
+h1{margin:0;font-size:clamp(46px, 7vw, 76px);font-weight:800;letter-spacing:-0.045em;line-height:0.98}
+h1 span,.h2 span{color:var(--accent)}
+.lead{margin:0;font-size:19px;line-height:1.55;color:var(--muted);max-width:520px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.fan{flex:1 1 420px;height:440px;position:relative;min-width:0}
+.card{position:absolute;width:190px;height:285px;border-radius:22px;box-shadow:var(--lift);padding:18px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s ease}
+.card b{font-size:12px;font-weight:800;letter-spacing:.06em}
+.card i{font-style:normal;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1}
+.c1{left:2%;top:110px;transform:rotate(-14deg);background:var(--books-2);color:var(--books-d)}
+.c2{left:16%;top:60px;transform:rotate(-8deg);background:var(--music-2);color:var(--music-d)}
+.c3{left:30%;top:30px;transform:rotate(-2deg);background:var(--anime-2);color:var(--anime-d)}
+.c4{left:44%;top:40px;transform:rotate(5deg);background:var(--games-2);color:var(--games-d)}
+.c5{left:56%;top:80px;transform:rotate(11deg);background:var(--series-2);color:var(--series-d)}
+.c6{left:38%;top:150px;transform:rotate(1deg);background:var(--movie-2);color:var(--movie-d)}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .fan:hover .c1{transform:rotate(-17deg) translateX(-10px)}
+  .fan:hover .c5{transform:rotate(14deg) translateX(10px)}
+}
+
+/* Category strip */
+.strip{background:var(--surface);border-top:1px solid var(--tab-border);border-bottom:1px solid var(--tab-border)}
+.strip .wrap{padding-top:28px;padding-bottom:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.cat{height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:800}
+.cat svg{width:20px;height:20px}
+.k-movie{background:var(--movie-1);color:var(--movie-d)} .k-series{background:var(--series-1);color:var(--series-d)}
+.k-anime{background:var(--anime-1);color:var(--anime-d)} .k-games{background:var(--games-1);color:var(--games-d)}
+.k-music{background:var(--music-1);color:var(--music-d)} .k-books{background:var(--books-1);color:var(--books-d)}
+
+/* How it works */
+.how{padding-top:88px;padding-bottom:40px;display:flex;flex-direction:column;gap:40px}
+.h2{margin:0;font-size:clamp(34px, 5vw, 48px);font-weight:800;letter-spacing:-0.035em;line-height:1.05;max-width:720px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.step{background:var(--surface);border:1px solid var(--edge);border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+.num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
+.step h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-0.02em}
+.step p{margin:0;font-size:15.5px;line-height:1.55;color:var(--muted)}
+
+/* Phone + web */
+.sync{padding-top:48px;padding-bottom:88px}
+.band{background:var(--band);color:var(--band-ink);border-radius:40px;padding:clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px);display:flex;flex-wrap:wrap;align-items:center;gap:48px}
+@media (prefers-color-scheme: dark){ .band{border:1px solid var(--line)} }
+.band-text{flex:1 1 380px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--band-accent)}
+.band .h2{color:var(--band-ink)}
+.band p{margin:0;font-size:17px;line-height:1.55;color:var(--band-muted)}
+.devices{flex:1 1 380px;display:flex;align-items:flex-end;justify-content:center;gap:20px;min-width:0}
+.laptop{flex:1 1 300px;max-width:360px;height:230px;border-radius:18px;background:var(--band-card);border:1px solid var(--band-edge);padding:14px;display:flex;gap:12px}
+.laptop .side{width:64px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+.laptop .grid{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-content:start}
+.ln{height:22px;border-radius:8px;background:var(--band-chip)}
+.ln.on{background:var(--band-ink)}
+.mark{height:10px;width:46px;border-radius:4px;background:var(--band-accent)}
+.cv{aspect-ratio:2/3;border-radius:8px}
+.phone{width:110px;height:220px;border-radius:26px;background:var(--band-card);border:1px solid var(--band-edge);padding:10px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+.phone .big{height:84px;border-radius:12px}
+.d1{background:#4E3A15}.d2{background:#15484D}.d3{background:#382C60}.d4{background:#55223A}.d5{background:#1E3A66}.d6{background:#284822}.d7{background:#6A4E18}.d8{background:#1C6067}
+
+/* Final call */
+.final{padding-bottom:96px;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+.final .h2{font-size:clamp(38px, 6vw, 56px);letter-spacing:-0.04em;max-width:none}
+.final p{margin:0;font-size:17px;color:var(--muted)}
+
+/* Footer */
+footer{border-top:1px solid var(--tab-border);background:var(--surface)}
+footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;font-size:13.5px}
+.credit{margin:8px 0 0;max-width:520px;color:var(--muted);line-height:1.5}
+.credit a{text-decoration:underline;font-weight:600;color:var(--ink)}
+.links{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;font-weight:600}
+.links a:hover{color:var(--muted)}
+
+@media (max-width:640px){
+  .top nav .hide-s{display:none}
+  .hero{padding-top:28px;gap:36px}
+  .ctas .btn{width:100%;justify-content:center}
+  .fan{height:300px;flex-basis:100%}
+  .card{width:128px;height:192px;padding:12px;border-radius:16px}
+  .card i{font-size:16px}
+  .card b{font-size:10.5px}
+  .c1{top:70px}.c2{top:36px}.c3{top:14px}.c4{top:22px}.c5{top:50px}.c6{top:100px}
+  .devices{gap:12px}
+  .laptop{height:190px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="wrap top">
+  <a class="wordmark" href="/?about" aria-label="CollectEon home">Collect<span>Eon</span></a>
+  <nav aria-label="Site">
+    <a class="hide-s" href="#how">How it works</a>
+    <a class="hide-s" href="#sync">Phone + web</a>
+    <a class="hide-s" href="/support">Support</a>
+    <a class="pill" href="/app">Sign in</a>
+  </nav>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div class="hero-text">
+      <span class="badge">Free · No ads · No passwords</span>
+      <h1>Build your personal <span>collection</span></h1>
+      <p class="lead">Movies, series, anime, games, music and books: one place for everything you've loved, dropped or still plan to start. On your iPhone and in your browser.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="/app">Open the web app
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <span class="btn btn-soon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Coming soon to iPhone</span>
+      </div>
+    </div>
+    <div class="fan" aria-hidden="true">
+      <div class="card c1"><b>BOOKS</b><i>Project Hail Mary</i></div>
+      <div class="card c2"><b>MUSIC</b><i>In Rainbows</i></div>
+      <div class="card c3"><b>ANIME</b><i>Frieren</i></div>
+      <div class="card c4"><b>GAMES</b><i>Balatro</i></div>
+      <div class="card c5"><b>SERIES</b><i>Severance</i></div>
+      <div class="card c6"><b>MOVIES</b><i>Past Lives</i></div>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="What you can collect">
+    <ul class="wrap" style="list-style:none;margin:0 auto">
+      <li class="cat k-movie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 8l2.5-4h13L21 8M8 4l2 4M13 4l2 4"/></svg>Movies</li>
+      <li class="cat k-series"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/></svg>Series</li>
+      <li class="cat k-anime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/><path d="M12 10.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5 2.2-.3z"/></svg>Anime</li>
+      <li class="cat k-games"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a4 4 0 0 1 4 4.5l-.6 4.2a2.4 2.4 0 0 1-4.2 1.2L14.5 15h-5l-1.7 1.9a2.4 2.4 0 0 1-4.2-1.2L3 11.5A4 4 0 0 1 7 7z"/><path d="M8 10v3M6.5 11.5h3M15.5 11h.01M17 12.5h.01"/></svg>Games</li>
+      <li class="cat k-music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>Music</li>
+      <li class="cat k-books"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg>Books</li>
+    </ul>
+  </section>
+
+  <section class="wrap how" id="how">
+    <h2 class="h2">Three steps from “what was that called?” to <span>saved</span>.</h2>
+    <div class="steps">
+      <article class="step">
+        <span class="num k-movie">1</span>
+        <h3>Search or add by hand</h3>
+        <p>Find movies, series, anime and games with the details filled in for you. Add music and books yourself, your way.</p>
+      </article>
+      <article class="step">
+        <span class="num k-games">2</span>
+        <h3>Mark where you are</h3>
+        <p>Planned, in progress, finished or dropped. Track seasons and episodes, hours played, and give your own score.</p>
+      </article>
+      <article class="step">
+        <span class="num k-books">3</span>
+        <h3>Share a list</h3>
+        <p>Send a link to any list, with or without your notes. Friends can add it to their own CollectEon in one tap.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap sync" id="sync">
+    <div class="band">
+      <div class="band-text">
+        <span class="eyebrow">PHONE + WEB</span>
+        <h2 class="h2">Add it on the couch. Sort it at your desk.</h2>
+        <p>Your collection syncs between the iPhone app and collecteon.net. Sign in with a 6-digit code sent to your email, or with Google or Apple. There's no password to remember.</p>
+      </div>
+      <div class="devices" aria-hidden="true">
+        <div class="laptop">
+          <div class="side"><span class="mark"></span><span class="ln on"></span><span class="ln"></span><span class="ln"></span></div>
+          <div class="grid">
+            <span class="cv d1"></span><span class="cv d2"></span><span class="cv d3"></span><span class="cv d4"></span>
+            <span class="cv d5"></span><span class="cv d6"></span><span class="cv d7"></span><span class="cv d8"></span>
+          </div>
+        </div>
+        <div class="phone"><span class="mark" style="width:40px;height:8px"></span><span class="big d1"></span><span class="ln" style="height:18px"></span><span class="ln" style="height:18px"></span><span class="ln" style="margin-top:auto"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap final">
+    <h2 class="h2">Start your collection.</h2>
+    <p>Free, with no ads. It takes about a minute.</p>
+    <a class="btn btn-primary" href="/app">Open the web app</a>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="wordmark" style="font-size:16px">Collect<span>Eon</span></div>
+      <p class="credit">Movie, series and anime details from <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>. Game details and images from <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+    </div>
+    <nav class="links" aria-label="Legal and help">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/support">Support</a>
+      <a href="mailto:supportcollecteon@gmail.com">Contact</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
