@@ -852,6 +852,11 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
   .cc-step:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 }
 .wm-mark{display:inline-block;width:1.3em;height:1.3em;vertical-align:-0.3em;margin-right:.36em;border-radius:22%}
+/* Inside the phone app: buttons, cards and covers behave like an app, not a web page
+   (no text selection or "Copy / Look Up" menu on a long press). Typing and the share link still work as usual. */
+.in-app body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.in-app input,.in-app textarea,.in-app [contenteditable="true"],.in-app .share-link{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+.in-app img{-webkit-user-drag:none}
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://vyshzvrsitibscjfurth.supabase.co" crossorigin>
@@ -1391,6 +1396,16 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
 (function(){
   "use strict";
 
+  /* ---------- Inside the iPhone/Android app ----------
+     The CollectEon app sets window.CE_NATIVE before this page loads (see App.js in the Expo project).
+     There, sign-in, sharing, copying and haptics use the phone's own features. On the website
+     NATIVE is null and none of this changes anything. */
+  var NATIVE = (window.CE_NATIVE && window.ReactNativeWebView) ? window.CE_NATIVE : null;
+  function toNative(msg){ try{ window.ReactNativeWebView.postMessage(JSON.stringify(msg)); }catch(e){} }
+  /* kind: "select" (a choice changed), "light" / "medium" (a tap), "success", "warning" */
+  function haptic(kind){ if(NATIVE) toNative({ type: "haptic", kind: kind || "select" }); }
+  if(NATIVE) document.documentElement.classList.add("in-app");
+
   /* ---------- Icons ---------- */
   function svg(path){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+path+'</svg>'; }
   var ICONS = {
@@ -1567,7 +1582,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
       b.type = "button"; b.className = "seg-opt" + (st === current ? " is-active" : "");
       b.setAttribute("role", "radio"); b.setAttribute("aria-checked", st === current ? "true" : "false");
       b.textContent = labels[st];
-      b.addEventListener("click", function(){ onPick(st); });
+      b.addEventListener("click", function(){ if(st !== current) haptic("select"); onPick(st); });
       el.appendChild(b);
     });
     fitSegRows(el);
@@ -2277,6 +2292,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     setMine(it, "season", String(nx.se));
     setMine(it, "episode", String(nx.ep));
     if(getStatus(it) === "planned" && !isStatusless(it)) setStatus(it, "progress");
+    haptic("light");
     saveCollections(); renderHome();
     showToast(displayTitle(it) + " · " + tr("S{s} · E{e}", { s: nx.se, e: nx.ep }));
   }
@@ -2315,6 +2331,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
   function doPick(){
     var pool = plannedPool();
     if(!pool.length){ pickOverlay.hidden = true; return; }
+    haptic("medium");
     var choices = pool.length > 1 && pickRef ? pool.filter(function(x){ return x.item.id !== pickRef.itemId; }) : pool;
     var x = choices[Math.floor(Math.random() * choices.length)];
     pickRef = { colId: x.col.id, itemId: x.item.id };
@@ -2497,6 +2514,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     var col = { id: uid(), name: nameInput.value.trim(), theme: pendingTheme, createdAt: Date.now(), items: [],
       fillMode: canAutofill(pendingTheme) ? "auto" : "manual" };
     state.collections.unshift(col); saveCollections();
+    haptic("success");
     openDetail(col.id, "mine");
   }
 
@@ -2567,6 +2585,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     var item = { id: uid(), text: hit.title, done:false, status:"planned", addedAt: Date.now(), meta:{ status:"loading" } };
     col.items.push(item);
     saveCollections();
+    haptic("success");
     renderDetail();
     resolveById(col.id, item.id, col.theme, hit.id);
   }
@@ -2784,6 +2803,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     var item = { id: uid(), text: text, done: false, status: "planned", addedAt: Date.now(), meta: null };
     col.items.push(item);
     saveCollections();
+    haptic("success");
     detailInput.value = ""; detailAddBtn.hidden = true;
     renderDetail();
     triggerLookup(col.id, item.id);
@@ -2850,6 +2870,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
       b.children[1].textContent = theme.statusLabels[st];
       b.addEventListener("click", function(){
         var it = findItem(sheetRef.colId, sheetRef.itemId); if(!it) return closeSheet();
+        if(st !== cur) haptic("select");
         setStatus(it, st); saveCollections(); closeSheet(); refreshViews();
       });
       opts.appendChild(b);
@@ -3021,6 +3042,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
       var v = clean(el.value);
       if(final) el.value = v;
       if((mineOf(it)[key] || "") === v) return;
+      if(final) haptic("select");
       setMine(it, key, v); saveCollections();
     }
     el.addEventListener("input", function(){ if(timer) clearTimeout(timer); timer = setTimeout(function(){ commit(false); }, 500); });
@@ -3204,6 +3226,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     setMine(it, "season", se ? String(se) : "");
     setMine(it, "episode", se && ep ? String(ep) : "");
     if(se && ep && getStatus(it) === "planned" && !isStatusless(it)) setStatus(it, "progress");   // started watching
+    haptic("select");
     saveCollections(); renderItemDetail();
   }
   progSeason.addEventListener("click", function(){
@@ -3678,6 +3701,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
 
     if(isNew) col.items.push(item);
     if(!saveCollections()) showToast("Not enough space on this device to save. Remove some photos and try again.");
+    else haptic(isNew ? "success" : "light");
     closeEdit();
   }
 
@@ -3869,9 +3893,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
      Accounts + sync (Supabase). Everything works without an account;
      signing in adds a copy in the cloud that every device keeps in step with.
      ===================================================================== */
-  /* Set by the iPhone/Android app before this page loads (see App.js in the Expo project).
-     In the app, Google and Apple sign-in use the phone's own sign-in sheets instead of web redirects. */
-  var NATIVE = window.CE_NATIVE || null;
+  /* In the app, Google and Apple sign-in use the phone's own sign-in sheets instead of web redirects (NATIVE: see the top). */
   var APPLE_ENABLED = !!(NATIVE && NATIVE.apple); // native Sign in with Apple on iPhone; the website keeps Google + email
   var SITE_URL = location.origin + location.pathname;
   var SUPA = null;
@@ -3880,21 +3902,24 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
   /* The sign-in library loads in the background so the app appears straight away, even on a slow connection. */
   function loadSupabase(){
     supaState = "loading";
+    // The phone app bundles the library in the page (so it works offline); the website loads it here.
+    if(window.supabase && window.supabase.createClient){ setTimeout(supaReady, 0); return; }
     var tag = document.createElement("script");
     tag.src = SUPA_LIB; tag.async = true;
-    tag.onload = function(){
-      try{
-        SUPA = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-        });
-        supaState = "ready";
-        initAuth();
-        setTimeout(function(){ if(!currentUser) runPendingImport(); }, 600);
-      }catch(e){ supaState = "failed"; }
-      if(currentScreen() === "settings") renderAccount();
-    };
+    tag.onload = supaReady;
     tag.onerror = function(){ supaState = "failed"; tag.remove(); if(currentScreen() === "settings") renderAccount(); };
     document.head.appendChild(tag);
+  }
+  function supaReady(){
+    try{
+      SUPA = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
+      supaState = "ready";
+      initAuth();
+      setTimeout(function(){ if(!currentUser) runPendingImport(); }, 600);
+    }catch(e){ supaState = "failed"; }
+    if(currentScreen() === "settings") renderAccount();
   }
   window.addEventListener("online", function(){ if(supaState === "failed") loadSupabase(); });
   var currentUser = null;
@@ -4435,7 +4460,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
       (col.shareNotes ? tr("Your notes are shown too.") : tr("Your notes stay private."));
     document.getElementById("share-on").hidden = !on;
     if(on) document.getElementById("share-url").textContent = shareUrl(col);
-    document.getElementById("share-native").hidden = !navigator.share;
+    document.getElementById("share-native").hidden = !(NATIVE || navigator.share);
     document.getElementById("share-note").textContent = on ? tr("Turning sharing off makes this link stop working.") : "";
   }
   function closeShare(){ shareOverlay.hidden = true; shareColId = null; }
@@ -4457,13 +4482,17 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     var col = findCollection(shareColId); if(!col) return;
     var url = shareUrl(col), btn = this;
     function done(){ btn.textContent = tr("Copied ✓"); setTimeout(function(){ btn.textContent = tr("Copy link"); }, 1600); }
+    if(NATIVE){ toNative({ type: "copy", text: url }); haptic("light"); done(); return; }
     if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function(){ selectShareText(); });
     else selectShareText();
   });
   function selectShareText(){ var el = document.getElementById("share-url"), r = document.createRange(); r.selectNodeContents(el); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); showToast("Link selected. Copy it to share."); }
   document.getElementById("share-native").addEventListener("click", function(){
-    var col = findCollection(shareColId); if(!col || !navigator.share) return;
-    navigator.share({ title: tr("{name} on CollectEon", { name: col.name }), text: tr("My {kind} list on CollectEon", { kind: THEMES[col.theme].plural.toLowerCase(), Kind: THEMES[col.theme].plural }), url: shareUrl(col) }).catch(function(){});
+    var col = findCollection(shareColId); if(!col) return;
+    var data = { title: tr("{name} on CollectEon", { name: col.name }), text: tr("My {kind} list on CollectEon", { kind: THEMES[col.theme].plural.toLowerCase(), Kind: THEMES[col.theme].plural }), url: shareUrl(col) };
+    if(NATIVE){ toNative({ type: "share", title: data.title, text: data.text, url: data.url }); return; }   // the iPhone's own share sheet
+    if(!navigator.share) return;
+    navigator.share(data).catch(function(){});
   });
   document.getElementById("share-close").addEventListener("click", closeShare);
   shareOverlay.addEventListener("click", function(e){ if(e.target === shareOverlay) closeShare(); });
@@ -4692,13 +4721,13 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
     showAuthMsg("", "");
     try{
-      if(NATIVE && window.ReactNativeWebView){
+      if(NATIVE){
         // In the app: Apple uses the system sheet; Google opens in the secure sign-in sheet and
         // comes back to the app. The answer arrives in window.__ceNativeAuth below.
-        if(provider === "apple"){ window.ReactNativeWebView.postMessage(JSON.stringify({ type: "auth-apple" })); return; }
+        if(provider === "apple"){ toNative({ type: "auth-apple" }); return; }
         var n = await SUPA.auth.signInWithOAuth({ provider: provider, options: { redirectTo: NATIVE.authCallback, skipBrowserRedirect: true } });
         if(n.error) throw n.error;
-        window.ReactNativeWebView.postMessage(JSON.stringify({ type: "auth-oauth", url: n.data.url }));
+        toNative({ type: "auth-oauth", url: n.data.url });
         return;
       }
       var r = await SUPA.auth.signInWithOAuth({ provider: provider, options: { redirectTo: SITE_URL } });
