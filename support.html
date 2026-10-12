@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Support · CollectEon</title>
 <meta name="description" content="Get help with CollectEon.">
@@ -35,15 +38,22 @@ a{color:var(--accent);font-weight:700}
 .muted{color:var(--muted)}
 .foot{margin-top:28px;font-size:13.5px;color:var(--muted);text-align:center}
 .foot a{color:var(--muted)}
+
+.top{flex-wrap:wrap}
+.right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lang-pick{display:inline-flex;align-items:center}
+.lang-pick select{font:inherit;font-size:14px;font-weight:700;color:var(--ink);height:36px;border-radius:999px;border:none;background:var(--chip);padding:0 10px}
+.tr-note{font-size:13.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:10px 14px;margin:0 0 20px}
+.wm-mark{display:inline-block;width:1.3em;height:1.3em;vertical-align:-0.3em;margin-right:.36em;border-radius:22%}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <a class="wordmark" href="/">Collect<span>Eon</span></a>
-  <nav class="nav" aria-label="Pages"><a href="/support" aria-current="page">Support</a><a href="/privacy">Privacy</a></nav>
+  <a class="wordmark" href="/"><svg class="wm-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" rx="22.4" fill="#12131A"/><path d="M71.2 28.8A30 30 0 1 0 71.2 71.2" fill="none" stroke="#E0AA47" stroke-width="11" stroke-linecap="round"/><rect x="39" y="36" width="36" height="7" rx="3.5" fill="#3FB6C2"/><rect x="39" y="46.5" width="26" height="7" rx="3.5" fill="#E86FA5"/><rect x="39" y="57" width="36" height="7" rx="3.5" fill="#86C46F"/></svg>Collect<span>Eon</span></a>
+  <div class="right"><nav class="nav" aria-label="Pages"><a data-nav="support" href="/support" aria-current="page">Support</a><a data-nav="privacy" href="/privacy">Privacy</a><a data-nav="terms" href="/terms">Terms</a></nav><label class="lang-pick"><select id="lang-select" aria-label="Language"></select></label></div>
 </header>
-<main>
+<main id="page-main">
 <h1>Support</h1>
 <p class="lead">Questions, problems or ideas? We're happy to help.</p>
 
@@ -84,7 +94,248 @@ a{color:var(--accent);font-weight:700}
 <p>Read how we handle your data in our <a href="/privacy">privacy policy</a>.</p>
 </section>
 </main>
-<p class="foot">CollectEon · <a href="/">Open the app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon uses the TMDB API but is not endorsed or certified by TMDB. Game data from <a href="https://rawg.io">RAWG</a>.</p>
+<p class="foot" id="page-foot">CollectEon · <a href="/app">Open the app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon uses the TMDB API but is not endorsed or certified by TMDB. Game data from <a href="https://rawg.io">RAWG</a>.</p>
 </div>
+<template data-lang="uk" data-title="Підтримка · CollectEon" data-desc="Отримайте допомогу з CollectEon або зв’яжіться з нами."><div data-part="main">
+<h1>Підтримка</h1>
+<p class="lead">Запитання, проблеми чи ідеї? Ми раді допомогти.</p>
+
+<section class="card">
+<h2>Зв’язатися з нами</h2>
+<p>Напишіть нам — зазвичай ми відповідаємо протягом кількох днів.</p>
+<a class="mail" href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>
+<p class="muted">Якщо щось не працює, напишіть, яким пристроєм ви користуєтеся, застосунком чи сайтом, і що бачите на екрані. Знімок екрана дуже допомагає.</p>
+</section>
+
+<section class="card">
+<h2>Часті запитання</h2>
+
+<h3>Як увійти?</h3>
+<p>Введіть свою пошту й натисніть <strong>Надіслати код</strong>. Ми надішлемо вам код листом; введіть його в застосунку — і готово. Пароля немає. Якщо ви новий користувач, так само створюється ваш безкоштовний акаунт. Також можна продовжити з Google.</p>
+
+<h3>Мені не прийшов код</h3>
+<p>Перевірте папки «Спам» і «Промоакції»: шукайте лист від CollectEon. Новий код можна запросити через 60 секунд кнопкою <strong>Надіслати код ще раз</strong>. Коди діють 1 годину, і чинний лише останній.</p>
+
+<h3>Чи потрібен мені акаунт?</h3>
+<p>Ні. Можна продовжити як гість, і ваші списки залишаться на пристрої. Акаунт дає змогу синхронізувати їх між телефоном і комп’ютером і зберегти, якщо ви зміните телефон.</p>
+
+<h3>Мої списки не синхронізуються</h3>
+<p>Переконайтеся, що на обох пристроях ви ввійшли з тією самою поштою і маєте доступ до інтернету. У <strong>Налаштуваннях</strong> видно стан синхронізації, а кнопка <strong>Синхронізувати</strong> запускає її вручну.</p>
+
+<h3>Подробиці про назву неправильні</h3>
+<p>Подробиці про фільми, серіали й аніме надходять із TMDB, а про ігри — з RAWG. Ви можете змінити їх для себе: відкрийте назву й натисніть олівець угорі. Кожне змінене поле залишиться таким, як ви його встановили.</p>
+
+<h3>Як видалити свої дані?</h3>
+<p>Якщо ви ввійшли: <strong>Налаштування → Видалити акаунт</strong> видаляє ваш акаунт і все в ньому на всіх пристроях. Якщо ви гість: <strong>Налаштування → Видалити всі дані на цьому пристрої</strong>. Також можна написати нам, щоб ми видалили ваш акаунт.</p>
+
+<h3>CollectEon безкоштовний?</h3>
+<p>Так. І без реклами.</p>
+</section>
+
+<section class="card">
+<h2>Більше</h2>
+<p>Як ми поводимося з вашими даними, читайте в нашій <a href="/privacy">політиці конфіденційності</a>.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Відкрити застосунок</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon використовує API TMDB, але не схвалений і не сертифікований TMDB. Дані про ігри — з <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Підтримка" data-privacy="Конфіденційність" data-terms="Умови" data-language="Мова"></div></template>
+<template data-lang="fr" data-title="Assistance · CollectEon" data-desc="Obtenez de l’aide pour CollectEon ou contactez-nous."><div data-part="main">
+<h1>Assistance</h1>
+<p class="lead">Des questions, un problème ou une idée ? Nous sommes là pour vous aider.</p>
+
+<section class="card">
+<h2>Nous contacter</h2>
+<p>Écrivez-nous ; nous répondons généralement en quelques jours.</p>
+<a class="mail" href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>
+<p class="muted">Si quelque chose ne fonctionne pas, indiquez-nous votre appareil, si vous utilisez l’app ou le site, et ce que vous voyez à l’écran. Une capture d’écran aide beaucoup.</p>
+</section>
+
+<section class="card">
+<h2>Questions fréquentes</h2>
+
+<h3>Comment me connecter ?</h3>
+<p>Saisissez votre e-mail et appuyez sur <strong>Envoyer le code</strong>. Nous vous envoyons un code par e-mail ; tapez-le dans l’app et c’est fait. Il n’y a pas de mot de passe. Si vous êtes nouveau, cela crée aussi votre compte gratuit. Vous pouvez aussi continuer avec Google.</p>
+
+<h3>Je n’ai pas reçu le code</h3>
+<p>Vérifiez votre dossier spam ou promotions pour un e-mail de CollectEon. Vous pouvez demander un nouveau code au bout de 60 secondes avec <strong>Renvoyer le code</strong>. Les codes sont valables 1 heure, et seul le plus récent compte.</p>
+
+<h3>Ai-je besoin d’un compte ?</h3>
+<p>Non. Vous pouvez continuer en invité et vos listes restent sur votre appareil. Un compte permet de les synchroniser entre votre téléphone et votre ordinateur, et de les garder si vous changez de téléphone.</p>
+
+<h3>Mes listes ne se synchronisent pas</h3>
+<p>Vérifiez que vous êtes connecté avec le même e-mail sur les deux appareils et que vous avez accès à Internet. Dans <strong>Réglages</strong>, vous voyez l’état de la synchronisation et pouvez appuyer sur <strong>Synchroniser</strong>.</p>
+
+<h3>Les détails d’un titre sont faux</h3>
+<p>Les détails des films, séries et animés viennent de TMDB, et ceux des jeux de RAWG. Vous pouvez les modifier pour vous : ouvrez le titre et appuyez sur le crayon en haut. Chaque champ que vous modifiez reste tel que vous l’avez défini.</p>
+
+<h3>Comment supprimer mes données ?</h3>
+<p>Connecté : <strong>Réglages → Supprimer le compte</strong> supprime votre compte et tout son contenu, sur tous vos appareils. En invité : <strong>Réglages → Supprimer toutes les données de cet appareil</strong>. Vous pouvez aussi nous écrire pour supprimer votre compte.</p>
+
+<h3>CollectEon est-il gratuit ?</h3>
+<p>Oui. Et sans publicité.</p>
+</section>
+
+<section class="card">
+<h2>En savoir plus</h2>
+<p>Découvrez comment nous traitons vos données dans notre <a href="/privacy">politique de confidentialité</a>.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Ouvrir l’app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon utilise l’API de TMDB mais n’est ni approuvé ni certifié par TMDB. Données des jeux fournies par <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Assistance" data-privacy="Confidentialité" data-terms="Conditions" data-language="Langue"></div></template>
+<template data-lang="de" data-title="Support · CollectEon" data-desc="Hilfe zu CollectEon und Kontakt."><div data-part="main">
+<h1>Support</h1>
+<p class="lead">Fragen, Probleme oder Ideen? Wir helfen gern.</p>
+
+<section class="card">
+<h2>Kontakt</h2>
+<p>Schreib uns eine E-Mail, wir antworten meist innerhalb weniger Tage.</p>
+<a class="mail" href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>
+<p class="muted">Wenn etwas nicht funktioniert, sag uns, welches Gerät du nutzt, ob du in der App oder auf der Website bist und was du auf dem Bildschirm siehst. Ein Screenshot hilft sehr.</p>
+</section>
+
+<section class="card">
+<h2>Häufige Fragen</h2>
+
+<h3>Wie melde ich mich an?</h3>
+<p>Gib deine E-Mail-Adresse ein und tippe auf <strong>Code senden</strong>. Wir schicken dir einen Code per E-Mail; gib ihn in der App ein und du bist drin. Es gibt kein Passwort. Wenn du neu bist, wird damit auch dein kostenloses Konto erstellt. Du kannst auch mit Google fortfahren.</p>
+
+<h3>Ich habe keinen Code bekommen</h3>
+<p>Sieh im Spam- oder Werbeordner nach einer E-Mail von CollectEon. Nach 60 Sekunden kannst du mit <strong>Code erneut senden</strong> einen neuen Code anfordern. Codes gelten 1 Stunde, und nur der neueste zählt.</p>
+
+<h3>Brauche ich ein Konto?</h3>
+<p>Nein. Du kannst als Gast fortfahren, dann bleiben deine Listen auf deinem Gerät. Mit einem Konto kannst du sie zwischen Handy und Computer synchronisieren, und sie bleiben erhalten, wenn du das Handy wechselst.</p>
+
+<h3>Meine Listen werden nicht synchronisiert</h3>
+<p>Achte darauf, dass du auf beiden Geräten mit derselben E-Mail-Adresse angemeldet und mit dem Internet verbunden bist. Unter <strong>Einstellungen</strong> siehst du den Synchronisierungsstatus und kannst auf <strong>Jetzt synchronisieren</strong> tippen.</p>
+
+<h3>Die Details eines Titels sind falsch</h3>
+<p>Details zu Filmen, Serien und Animes kommen von TMDB, zu Spielen von RAWG. Du kannst sie für dich ändern: Öffne den Titel und tippe oben auf den Stift. Jedes Feld, das du änderst, bleibt so, wie du es eingestellt hast.</p>
+
+<h3>Wie lösche ich meine Daten?</h3>
+<p>Angemeldet: <strong>Einstellungen → Konto löschen</strong> löscht dein Konto und alles darin auf allen Geräten. Als Gast: <strong>Einstellungen → Alle Daten auf diesem Gerät löschen</strong>. Du kannst uns auch schreiben, damit wir dein Konto löschen.</p>
+
+<h3>Ist CollectEon kostenlos?</h3>
+<p>Ja. Und ohne Werbung.</p>
+</section>
+
+<section class="card">
+<h2>Mehr</h2>
+<p>Wie wir mit deinen Daten umgehen, steht in unserer <a href="/privacy">Datenschutzerklärung</a>.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">App öffnen</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert. Spieldaten von <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Support" data-privacy="Datenschutz" data-terms="Bedingungen" data-language="Sprache"></div></template>
+<template data-lang="pt" data-title="Suporte · CollectEon" data-desc="Ajuda com o CollectEon e contato."><div data-part="main">
+<h1>Suporte</h1>
+<p class="lead">Dúvidas, problemas ou ideias? Estamos aqui para ajudar.</p>
+
+<section class="card">
+<h2>Fale conosco</h2>
+<p>Mande um e-mail; normalmente respondemos em poucos dias.</p>
+<a class="mail" href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>
+<p class="muted">Se algo não estiver funcionando, conte qual aparelho você usa, se está no app ou no site e o que aparece na tela. Uma captura de tela ajuda muito.</p>
+</section>
+
+<section class="card">
+<h2>Perguntas frequentes</h2>
+
+<h3>Como eu entro?</h3>
+<p>Digite seu e-mail e toque em <strong>Enviar código</strong>. Enviaremos um código por e-mail; digite-o no app e pronto. Não há senha. Se você é novo, isso também cria sua conta gratuita. Você também pode continuar com o Google.</p>
+
+<h3>Não recebi o código</h3>
+<p>Procure um e-mail do CollectEon na pasta de spam ou de promoções. Você pode pedir um novo código depois de 60 segundos em <strong>Reenviar código</strong>. Os códigos valem por 1 hora, e só o mais recente funciona.</p>
+
+<h3>Preciso de uma conta?</h3>
+<p>Não. Você pode continuar como convidado e suas listas ficam no seu aparelho. Uma conta permite sincronizá-las entre o celular e o computador, e mantê-las seguras se você trocar de celular.</p>
+
+<h3>Minhas listas não estão sincronizando</h3>
+<p>Verifique se você entrou com o mesmo e-mail nos dois aparelhos e se está conectado à internet. Em <strong>Configurações</strong>, você vê o status da sincronização e pode tocar em <strong>Sincronizar agora</strong>.</p>
+
+<h3>Os detalhes de um título estão errados</h3>
+<p>Os detalhes de filmes, séries e animes vêm do TMDB, e os de jogos, do RAWG. Você pode alterá-los para você: abra o título e toque no lápis no topo. Todo campo que você alterar fica do jeito que você definiu.</p>
+
+<h3>Como excluo meus dados?</h3>
+<p>Com login: <strong>Configurações → Excluir conta</strong> exclui sua conta e tudo nela, em todos os aparelhos. Como convidado: <strong>Configurações → Excluir todos os dados deste aparelho</strong>. Você também pode nos mandar um e-mail para excluir sua conta.</p>
+
+<h3>O CollectEon é grátis?</h3>
+<p>Sim. E não tem anúncios.</p>
+</section>
+
+<section class="card">
+<h2>Mais</h2>
+<p>Veja como tratamos seus dados na nossa <a href="/privacy">política de privacidade</a>.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Abrir o app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>O CollectEon usa a API do TMDB, mas não é endossado nem certificado pelo TMDB. Dados de jogos do <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Suporte" data-privacy="Privacidade" data-terms="Termos" data-language="Idioma"></div></template>
+<template data-lang="es" data-title="Ayuda · CollectEon" data-desc="Ayuda con CollectEon y contacto."><div data-part="main">
+<h1>Ayuda</h1>
+<p class="lead">¿Preguntas, problemas o ideas? Estaremos encantados de ayudarte.</p>
+
+<section class="card">
+<h2>Contacto</h2>
+<p>Escríbenos y normalmente te responderemos en un par de días.</p>
+<a class="mail" href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>
+<p class="muted">Si algo no funciona, cuéntanos qué dispositivo usas, si estás en la app o en la web, y qué ves en pantalla. Una captura de pantalla ayuda mucho.</p>
+</section>
+
+<section class="card">
+<h2>Preguntas frecuentes</h2>
+
+<h3>¿Cómo inicio sesión?</h3>
+<p>Escribe tu correo y toca <strong>Enviar código</strong>. Te enviaremos un código por correo; escríbelo en la app y listo. No hay contraseña. Si eres nuevo, así también se crea tu cuenta gratuita. También puedes continuar con Google.</p>
+
+<h3>No me ha llegado el código</h3>
+<p>Busca un correo de CollectEon en la carpeta de spam o de promociones. Puedes pedir un código nuevo pasados 60 segundos con <strong>Reenviar código</strong>. Los códigos valen durante 1 hora, y solo cuenta el más reciente.</p>
+
+<h3>¿Necesito una cuenta?</h3>
+<p>No. Puedes seguir como invitado y tus listas se quedan en tu dispositivo. Con una cuenta puedes sincronizarlas entre el móvil y el ordenador, y no las pierdes si cambias de móvil.</p>
+
+<h3>Mis listas no se sincronizan</h3>
+<p>Comprueba que has iniciado sesión con el mismo correo en los dos dispositivos y que tienes conexión a internet. En <strong>Ajustes</strong> puedes ver el estado de la sincronización y tocar <strong>Sincronizar ahora</strong>.</p>
+
+<h3>Los detalles de un título están mal</h3>
+<p>Los detalles de películas, series y anime vienen de TMDB, y los de juegos, de RAWG. Puedes cambiarlos para ti: abre el título y toca el lápiz de arriba. Cada campo que cambies se queda tal como lo pusiste.</p>
+
+<h3>¿Cómo elimino mis datos?</h3>
+<p>Con sesión iniciada: <strong>Ajustes → Eliminar cuenta</strong> elimina tu cuenta y todo lo que contiene, en todos tus dispositivos. Como invitado: <strong>Ajustes → Eliminar todos los datos de este dispositivo</strong>. También puedes escribirnos para que eliminemos tu cuenta.</p>
+
+<h3>¿CollectEon es gratis?</h3>
+<p>Sí. Y no tiene anuncios.</p>
+</section>
+
+<section class="card">
+<h2>Más</h2>
+<p>Consulta cómo tratamos tus datos en nuestra <a href="/privacy">política de privacidad</a>.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Abrir la app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon usa la API de TMDB, pero no está respaldado ni certificado por TMDB. Datos de juegos de <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Ayuda" data-privacy="Privacidad" data-terms="Condiciones" data-language="Idioma"></div></template>
+<script>
+/* Page language: ?lang=, then the language saved by the app or another page, then the browser's.
+   English is the page itself; other languages come from the templates below. */
+(function(){
+  var KEY = "ultimateCollection:lang", NAMES = {"en": "English", "uk": "Українська", "fr": "Français", "de": "Deutsch", "pt": "Português (Brasil)", "es": "Español"}, HTML_LANG = { en:"en", uk:"uk", fr:"fr", de:"de", pt:"pt-BR", es:"es" };
+  function pick(){
+    try{ var q = new URLSearchParams(location.search).get("lang"); if(q && NAMES[q]){ try{ localStorage.setItem(KEY, q); }catch(e){} return q; } }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(s && NAMES[s]) return s; }catch(e){}
+    var l = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
+    for(var i = 0; i < l.length; i++){ var b = String(l[i] || "").toLowerCase().slice(0, 2); if(NAMES[b]) return b; }
+    return "en";
+  }
+  var lang = pick();
+  window.CE_PAGE_LANG = lang;
+  document.documentElement.lang = HTML_LANG[lang];
+  var tpl = document.querySelector('template[data-lang="' + lang + '"]');
+  if(tpl){
+    var frag = tpl.content;
+    var main = frag.querySelector('[data-part="main"]'), foot = frag.querySelector('[data-part="foot"]'), nav = frag.querySelector('[data-part="nav"]');
+    if(main && document.getElementById("page-main")) document.getElementById("page-main").innerHTML = main.innerHTML;
+    if(foot && document.getElementById("page-foot")) document.getElementById("page-foot").innerHTML = foot.innerHTML;
+    if(nav){ Array.prototype.forEach.call(document.querySelectorAll("[data-nav]"), function(a){ var v = nav.getAttribute("data-" + a.getAttribute("data-nav")); if(v) a.textContent = v; }); }
+    if(tpl.getAttribute("data-title")) document.title = tpl.getAttribute("data-title");
+    var md = document.querySelector('meta[name="description"]'); if(md && tpl.getAttribute("data-desc")) md.setAttribute("content", tpl.getAttribute("data-desc"));
+  }
+  var sel = document.getElementById("lang-select");
+  if(sel){
+    Object.keys(NAMES).forEach(function(k){ var o = document.createElement("option"); o.value = k; o.textContent = NAMES[k]; if(k === lang) o.selected = true; sel.appendChild(o); });
+    if(tpl && tpl.content.querySelector('[data-part="nav"]')) sel.setAttribute("aria-label", tpl.content.querySelector('[data-part="nav"]').getAttribute("data-language"));
+    sel.addEventListener("change", function(){
+      try{ localStorage.setItem(KEY, sel.value); }catch(e){}
+      var u = new URL(location.href); u.searchParams.delete("lang"); location.replace(u.pathname + u.search + u.hash);
+    });
+  }
+})();
+</script>
 </body>
 </html>

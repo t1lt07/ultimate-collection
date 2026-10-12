@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy policy · CollectEon</title>
-<meta name="description" content="How CollectEon handles your data.">
+<meta name="description" content="How CollectEon collects, uses and protects your data.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,15 +38,22 @@ a{color:var(--accent);font-weight:700}
 .muted{color:var(--muted)}
 .foot{margin-top:28px;font-size:13.5px;color:var(--muted);text-align:center}
 .foot a{color:var(--muted)}
+
+.top{flex-wrap:wrap}
+.right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lang-pick{display:inline-flex;align-items:center}
+.lang-pick select{font:inherit;font-size:14px;font-weight:700;color:var(--ink);height:36px;border-radius:999px;border:none;background:var(--chip);padding:0 10px}
+.tr-note{font-size:13.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:10px 14px;margin:0 0 20px}
+.wm-mark{display:inline-block;width:1.3em;height:1.3em;vertical-align:-0.3em;margin-right:.36em;border-radius:22%}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <a class="wordmark" href="/">Collect<span>Eon</span></a>
-  <nav class="nav" aria-label="Pages"><a href="/support">Support</a><a href="/privacy" aria-current="page">Privacy</a></nav>
+  <a class="wordmark" href="/"><svg class="wm-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" rx="22.4" fill="#12131A"/><path d="M71.2 28.8A30 30 0 1 0 71.2 71.2" fill="none" stroke="#E0AA47" stroke-width="11" stroke-linecap="round"/><rect x="39" y="36" width="36" height="7" rx="3.5" fill="#3FB6C2"/><rect x="39" y="46.5" width="26" height="7" rx="3.5" fill="#E86FA5"/><rect x="39" y="57" width="36" height="7" rx="3.5" fill="#86C46F"/></svg>Collect<span>Eon</span></a>
+  <div class="right"><nav class="nav" aria-label="Pages"><a data-nav="support" href="/support">Support</a><a data-nav="privacy" href="/privacy" aria-current="page">Privacy</a><a data-nav="terms" href="/terms">Terms</a></nav><label class="lang-pick"><select id="lang-select" aria-label="Language"></select></label></div>
 </header>
-<main>
+<main id="page-main">
 <h1>Privacy policy</h1>
 <p class="lead">Effective October 8, 2026. In short: CollectEon only keeps what it needs to save your lists, never shows ads, and never sells or shares your data for marketing.</p>
 
@@ -72,7 +82,7 @@ a{color:var(--accent);font-weight:700}
 <section class="card">
 <h2>Usernames and shared lists</h2>
 <p>Your lists are private unless you choose to share one. When you turn on sharing for a list, anyone with its link can see your username, the list's name, and its titles, statuses and your scores. Your notes are shown only if you also turn on <em>Show my notes</em> for that list. Your playtime, progress, email address and uploaded photos are never shown.</p>
-<p>You can turn sharing off at any time, and the link stops working straight away. Someone who used <em>Add to my CollectEon</em> keeps their own copy of the titles, but not your scores, statuses or notes. If you see a shared list that shouldn't be there, use <em>Report this list</em> on its page or email us.</p>
+<p>You can turn sharing off at any time, and the link stops working straight away. Someone who used <em>Add to my CollectEon</em> keeps their own copy of the titles, but not your scores, statuses or notes. If you see a shared list that shouldn't be there, use <em>Report this list</em> on its page or in the app, or email us. We review reports within 48 hours and may remove a list or disable an account that breaks our <a href="/terms">Terms of Use</a>.</p>
 </section>
 
 <section class="card">
@@ -93,7 +103,7 @@ a{color:var(--accent);font-weight:700}
 
 <section class="card">
 <h2>Service providers</h2>
-<p>We use a small number of trusted providers to run CollectEon. They process data only on our behalf:</p>
+<p>We use a small number of trusted providers to run CollectEon. They process data only on our behalf and only to provide their part of the service:</p>
 <ul>
 <li><strong>Supabase</strong>: our database, sign-in and file storage. Your account data is stored in the EU (Frankfurt, Germany).</li>
 <li><strong>Resend</strong>: delivers sign-in emails.</li>
@@ -102,7 +112,7 @@ a{color:var(--accent);font-weight:700}
 <li><strong>Google</strong>: Google sign-in, if you choose it, and the web font the app uses.</li>
 <li><strong>jsDelivr</strong>: delivers part of the app's code.</li>
 </ul>
-<p>Some of these providers may process data outside your country, including in the United States. Where that happens, they use safeguards required by law, such as standard contractual clauses. We never sell your personal data.</p>
+<p>Some of these providers may process data outside your country, including in the United States. Where that happens, they use safeguards required by law, such as standard contractual clauses. We only work with providers that protect your data at least as well as this policy describes and as the law requires. We never sell your personal data.</p>
 </section>
 
 <section class="card">
@@ -118,6 +128,7 @@ a{color:var(--accent);font-weight:700}
 <section class="card">
 <h2>Your rights</h2>
 <p>Depending on where you live, you have the right to access, correct, export or delete your personal data, to object to or restrict how we use it, and to complain to your local data protection authority. To use any of these rights, email <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>. We'll reply within 30 days.</p>
+<p>Where we rely on your consent, you can withdraw it at any time. To stop us using your data altogether, delete your account in <em>Settings → Delete account</em>. To stop sharing a list, turn sharing off for it. If you signed in with Google, you can also remove CollectEon's access to your Google account at any time in your <a href="https://myaccount.google.com/connections">Google Account settings</a>. Withdrawing consent doesn't affect what we did before you withdrew it.</p>
 </section>
 
 <section class="card">
@@ -135,7 +146,513 @@ a{color:var(--accent);font-weight:700}
 <p>If we change this policy, we'll update the date at the top and, for important changes, let you know in the app.</p>
 </section>
 </main>
-<p class="foot">CollectEon · <a href="/">Open the app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon uses the TMDB API but is not endorsed or certified by TMDB. Game data from <a href="https://rawg.io">RAWG</a>.</p>
+<p class="foot" id="page-foot">CollectEon · <a href="/app">Open the app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon uses the TMDB API but is not endorsed or certified by TMDB. Game data from <a href="https://rawg.io">RAWG</a>.</p>
 </div>
+<template data-lang="uk" data-title="Політика конфіденційності · CollectEon" data-desc="Як CollectEon збирає, використовує та захищає ваші дані."><div data-part="main">
+<h1>Політика конфіденційності</h1>
+<p class="lead">Діє з 8 жовтня 2026 року. Коротко: CollectEon зберігає лише те, що потрібно для ваших списків, ніколи не показує рекламу і ніколи не продає й не передає ваші дані для маркетингу.</p>
+<p class="tr-note">Це переклад для вашої зручності. Якщо між ним і <a href="?lang=en">англійською версією</a> є розбіжності, діє англійська версія.</p>
+
+<section class="card">
+<h2>Хто ми</h2>
+<p>CollectEon — це застосунок для відстеження фільмів, серіалів, аніме, ігор, музики й книжок, які ви любите. Його створює та підтримує незалежний розробник Денис («ми», «нас»). Ви можете будь-коли написати нам на <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>.</p>
+</section>
+
+<section class="card">
+<h2>Користування CollectEon без акаунта</h2>
+<p>Якщо ви продовжуєте як гість, ваші колекції, оцінки, нотатки, прогрес і обкладинки зберігаються лише на вашому пристрої (у локальному сховищі застосунку). Ми їх не отримуємо. Їх можна видалити, видаливши застосунок або скориставшись пунктом <em>Налаштування → Видалити всі дані на цьому пристрої</em>.</p>
+</section>
+
+<section class="card">
+<h2>Що ми збираємо, коли ви створюєте акаунт</h2>
+<ul>
+<li><strong>Вашу адресу електронної пошти</strong> — щоб ви могли входити за одноразовим кодом і щоб ідентифікувати ваш акаунт.</li>
+<li><strong>Ваше ім’я користувача</strong>, яке ви обираєте самі. Воно показується в списках, якими ви ділитеся.</li>
+<li><strong>Якщо ви входите через Google:</strong> базовий профіль, який передає нам Google (вашу адресу пошти, а також ім’я та фото профілю, якщо Google їх надає).</li>
+<li><strong>Ваші колекції та все, що ви до них додаєте:</strong> назви, статуси, ваші оцінки, час у грі, прогрес за сезонами й серіями, нотатки та обкладинки, які ви завантажуєте. Ми зберігаємо їх, щоб вони синхронізувалися між вашими пристроями.</li>
+<li><strong>Технічні дані, потрібні для роботи сервісу</strong>, як-от час входу та IP-адресу вашого пристрою в журналах безпеки нашого постачальника послуг.</li>
+</ul>
+<p>Ми не використовуємо інструменти аналітики, реклами чи відстеження і не складаємо ваших профілів.</p>
+</section>
+
+<section class="card">
+<h2>Імена користувачів і спільні списки</h2>
+<p>Ваші списки приватні, доки ви самі не поділитеся одним із них. Коли ви вмикаєте доступ до списку, будь-хто з посиланням бачить ваше ім’я користувача, назву списку, його назви, статуси та ваші оцінки. Ваші нотатки показуються, лише якщо ви також увімкнете для цього списку <em>Показати мої нотатки</em>. Ваш час у грі, прогрес, адреса пошти та завантажені фото ніколи не показуються.</p>
+<p>Ви можете будь-коли вимкнути доступ, і посилання одразу перестане працювати. Хто скористався кнопкою <em>Додати до мого CollectEon</em>, зберігає власну копію назв, але не ваших оцінок, статусів чи нотаток. Якщо ви бачите спільний список, якого не має бути, натисніть <em>Поскаржитися на список</em> на його сторінці або в застосунку чи напишіть нам. Ми розглядаємо скарги протягом 48 годин і можемо видалити список або заблокувати акаунт, що порушує наші <a href="/terms">Умови використання</a>.</p>
+</section>
+
+<section class="card">
+<h2>Як ми їх використовуємо</h2>
+<ul>
+<li>Щоб ви могли входити й ваш акаунт був захищений.</li>
+<li>Щоб зберігати ваші колекції та синхронізувати їх між пристроями.</li>
+<li>Щоб надсилати листи, потрібні застосунку, наприклад код для входу. Маркетингових листів ми не надсилаємо.</li>
+<li>Щоб відповідати вам, коли ви звертаєтеся до підтримки.</li>
+</ul>
+<p>Ми обробляємо ці дані, щоб надавати сервіс, про який ви просили, а журнали безпеки — на підставі нашого законного інтересу підтримувати безпеку сервісу.</p>
+</section>
+
+<section class="card">
+<h2>Пошук назв</h2>
+<p>Коли ви шукаєте назву, введений текст надсилається на наш сервер, який шукає її в <a href="https://www.themoviedb.org">TMDB</a> (фільми, серіали й аніме) або <a href="https://rawg.io">RAWG</a> (ігри). Ми не передаємо їм вашу адресу пошти чи дані акаунта. Постери й зображення потім завантажуються безпосередньо із серверів TMDB і RAWG, тому ці сервіси можуть бачити IP-адресу вашого пристрою, як і з будь-яким зображенням на сайті. Отримані подробиці регулярно оновлюються і зберігаються лише як частина ваших списків.</p>
+</section>
+
+<section class="card">
+<h2>Постачальники послуг</h2>
+<p>Для роботи CollectEon ми користуємося послугами невеликої кількості надійних постачальників. Вони обробляють дані лише від нашого імені й лише для своєї частини сервісу:</p>
+<ul>
+<li><strong>Supabase</strong>: наша база даних, вхід і сховище файлів. Дані вашого акаунта зберігаються в ЄС (Франкфурт, Німеччина).</li>
+<li><strong>Resend</strong>: доставляє листи з кодами для входу.</li>
+<li><strong>GitHub Pages</strong>: розміщує сайт collecteon.net.</li>
+<li><strong>TMDB і RAWG</strong>: інформація про назви та зображення, як описано вище.</li>
+<li><strong>Google</strong>: вхід через Google, якщо ви його обираєте, і вебшрифт, який використовує застосунок.</li>
+<li><strong>jsDelivr</strong>: доставляє частину коду застосунку.</li>
+</ul>
+<p>Деякі з цих постачальників можуть обробляти дані за межами вашої країни, зокрема у США. У таких випадках вони застосовують передбачені законом гарантії, наприклад стандартні договірні положення. Ми співпрацюємо лише з постачальниками, які захищають ваші дані не гірше, ніж описано в цій політиці та вимагає закон. Ми ніколи не продаємо ваші персональні дані.</p>
+</section>
+
+<section class="card">
+<h2>Як довго ми їх зберігаємо</h2>
+<p>Ми зберігаємо дані вашого акаунта, доки ви його не видалите. Коли ви видаляєте назву, її подробиці й нотатки стираються з копії у вашому акаунті. Журнали входу, які ведуть наші постачальники, автоматично видаляються через обмежений час.</p>
+</section>
+
+<section class="card">
+<h2>Видалення акаунта</h2>
+<p>Ви можете будь-коли видалити акаунт у застосунку: <em>Налаштування → Видалити акаунт</em>. Це назавжди видаляє ваш акаунт, колекції, нотатки й завантажені фото на всіх пристроях. Також ви можете написати нам, і ми зробимо це за вас.</p>
+</section>
+
+<section class="card">
+<h2>Ваші права</h2>
+<p>Залежно від того, де ви живете, ви маєте право отримати доступ до своїх персональних даних, виправити, експортувати чи видалити їх, заперечити проти їх використання або обмежити його, а також подати скаргу до місцевого органу із захисту даних. Щоб скористатися будь-яким із цих прав, напишіть на <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>. Ми відповімо протягом 30 днів.</p>
+<p>Якщо ми покладаємося на вашу згоду, ви можете будь-коли її відкликати. Щоб ми повністю припинили використовувати ваші дані, видаліть акаунт у <em>Налаштування → Видалити акаунт</em>. Щоб припинити ділитися списком, вимкніть для нього доступ. Якщо ви входили через Google, ви також можете будь-коли скасувати доступ CollectEon до вашого акаунта Google у <a href="https://myaccount.google.com/connections">налаштуваннях акаунта Google</a>. Відкликання згоди не впливає на те, що ми робили до цього.</p>
+</section>
+
+<section class="card">
+<h2>Діти</h2>
+<p>CollectEon не призначений для дітей до 13 років, і ми свідомо не збираємо їхніх персональних даних. Якщо ви вважаєте, що дитина надала нам персональні дані, зв’яжіться з нами, і ми їх видалимо.</p>
+</section>
+
+<section class="card">
+<h2>Безпека</h2>
+<p>Дані передаються зашифрованими з’єднаннями (HTTPS). Кожен акаунт має доступ лише до власних даних, і це забезпечує сама база даних. Жодна система не захищена ідеально, але ми вживаємо розумних заходів, щоб захистити ваші дані.</p>
+</section>
+
+<section class="card">
+<h2>Зміни в цій політиці</h2>
+<p>Якщо ми змінимо цю політику, ми оновимо дату вгорі, а про важливі зміни повідомимо в застосунку.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Відкрити застосунок</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon використовує API TMDB, але не схвалений і не сертифікований TMDB. Дані про ігри — з <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Підтримка" data-privacy="Конфіденційність" data-terms="Умови" data-language="Мова"></div></template>
+<template data-lang="fr" data-title="Politique de confidentialité · CollectEon" data-desc="Comment CollectEon collecte, utilise et protège vos données."><div data-part="main">
+<h1>Politique de confidentialité</h1>
+<p class="lead">En vigueur depuis le 8 octobre 2026. En bref : CollectEon ne conserve que ce dont il a besoin pour enregistrer vos listes, n’affiche jamais de publicité, et ne vend ni ne partage jamais vos données à des fins marketing.</p>
+<p class="tr-note">Cette traduction vous est fournie pour plus de commodité. En cas de différence avec la <a href="?lang=en">version anglaise</a>, c’est la version anglaise qui fait foi.</p>
+
+<section class="card">
+<h2>Qui nous sommes</h2>
+<p>CollectEon est une app pour suivre les films, séries, animés, jeux, musiques et livres que vous aimez. Elle est créée et gérée par un développeur indépendant, Denys (« nous »). Vous pouvez nous écrire à tout moment à <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>.</p>
+</section>
+
+<section class="card">
+<h2>Utiliser CollectEon sans compte</h2>
+<p>Si vous continuez en invité, vos collections, notes, commentaires, progressions et photos de couverture sont stockées uniquement sur votre appareil (dans le stockage local de l’app). Nous ne les recevons pas. Supprimer l’app ou utiliser <em>Réglages → Supprimer toutes les données de cet appareil</em> les efface.</p>
+</section>
+
+<section class="card">
+<h2>Ce que nous collectons lorsque vous créez un compte</h2>
+<ul>
+<li><strong>Votre adresse e-mail</strong>, pour vous connecter avec un code à usage unique et identifier votre compte.</li>
+<li><strong>Votre nom d’utilisateur</strong>, que vous choisissez. Il apparaît sur les listes que vous partagez.</li>
+<li><strong>Si vous vous connectez avec Google :</strong> le profil de base que Google nous transmet (votre adresse e-mail, ainsi que votre nom et votre photo de profil si Google les fournit).</li>
+<li><strong>Vos collections et ce que vous y ajoutez :</strong> titres, statuts, vos notes, temps de jeu, progression par saison et épisode, commentaires et photos de couverture que vous importez. Nous les conservons pour les synchroniser entre vos appareils.</li>
+<li><strong>Les données techniques nécessaires au service</strong>, comme les heures de connexion et l’adresse IP de votre appareil dans les journaux de sécurité de notre prestataire.</li>
+</ul>
+<p>Nous n’utilisons aucun outil d’analyse, de publicité ou de suivi, et nous ne créons pas de profil à votre sujet.</p>
+</section>
+
+<section class="card">
+<h2>Noms d’utilisateur et listes partagées</h2>
+<p>Vos listes sont privées tant que vous n’en partagez pas une. Lorsque vous activez le partage d’une liste, toute personne disposant du lien peut voir votre nom d’utilisateur, le nom de la liste, ses titres, statuts et vos notes. Vos commentaires ne sont visibles que si vous activez aussi <em>Afficher mes commentaires</em> pour cette liste. Votre temps de jeu, votre progression, votre adresse e-mail et vos photos importées ne sont jamais affichés.</p>
+<p>Vous pouvez désactiver le partage à tout moment, et le lien cesse aussitôt de fonctionner. Une personne qui a utilisé <em>Ajouter à mon CollectEon</em> garde sa propre copie des titres, mais pas vos notes, statuts ou commentaires. Si vous voyez une liste partagée qui ne devrait pas exister, utilisez <em>Signaler cette liste</em> sur sa page ou dans l’app, ou écrivez-nous. Nous examinons les signalements sous 48 heures et pouvons supprimer une liste ou désactiver un compte qui enfreint nos <a href="/terms">Conditions d’utilisation</a>.</p>
+</section>
+
+<section class="card">
+<h2>Comment nous les utilisons</h2>
+<ul>
+<li>Pour vous connecter et sécuriser votre compte.</li>
+<li>Pour enregistrer vos collections et les synchroniser entre vos appareils.</li>
+<li>Pour envoyer les e-mails dont l’app a besoin, comme votre code de connexion. Nous n’envoyons pas d’e-mails marketing.</li>
+<li>Pour vous répondre lorsque vous contactez l’assistance.</li>
+</ul>
+<p>Nous traitons ces données pour fournir le service que vous avez demandé et, pour les journaux de sécurité, sur la base de notre intérêt légitime à assurer la sécurité du service.</p>
+</section>
+
+<section class="card">
+<h2>Recherche de titres</h2>
+<p>Lorsque vous cherchez un titre, le texte saisi est envoyé à notre serveur, qui le recherche auprès de <a href="https://www.themoviedb.org">TMDB</a> (films, séries et animés) ou de <a href="https://rawg.io">RAWG</a> (jeux). Nous ne leur transmettons ni votre e-mail ni les informations de votre compte. Les affiches et images sont ensuite chargées directement depuis les serveurs d’images de TMDB et RAWG ; ces services peuvent donc voir l’adresse IP de votre appareil, comme pour toute image d’un site web. Les détails reçus sont actualisés régulièrement et conservés uniquement dans vos listes.</p>
+</section>
+
+<section class="card">
+<h2>Prestataires</h2>
+<p>Nous faisons appel à un petit nombre de prestataires de confiance pour faire fonctionner CollectEon. Ils traitent les données uniquement pour notre compte et uniquement pour assurer leur partie du service :</p>
+<ul>
+<li><strong>Supabase</strong> : notre base de données, la connexion et le stockage des fichiers. Les données de votre compte sont stockées dans l’UE (Francfort, Allemagne).</li>
+<li><strong>Resend</strong> : envoie les e-mails de connexion.</li>
+<li><strong>GitHub Pages</strong> : héberge le site collecteon.net.</li>
+<li><strong>TMDB et RAWG</strong> : informations sur les titres et images, comme décrit ci-dessus.</li>
+<li><strong>Google</strong> : la connexion avec Google si vous la choisissez, et la police web utilisée par l’app.</li>
+<li><strong>jsDelivr</strong> : fournit une partie du code de l’app.</li>
+</ul>
+<p>Certains de ces prestataires peuvent traiter des données hors de votre pays, notamment aux États-Unis. Dans ce cas, ils appliquent les garanties exigées par la loi, comme les clauses contractuelles types. Nous ne travaillons qu’avec des prestataires qui protègent vos données au moins aussi bien que le décrit cette politique et que l’exige la loi. Nous ne vendons jamais vos données personnelles.</p>
+</section>
+
+<section class="card">
+<h2>Durée de conservation</h2>
+<p>Nous conservons les données de votre compte jusqu’à ce que vous le supprimiez. Lorsque vous retirez un titre, ses détails et commentaires sont effacés de la copie de votre compte. Les journaux de connexion conservés par nos prestataires sont supprimés automatiquement après une durée limitée.</p>
+</section>
+
+<section class="card">
+<h2>Supprimer votre compte</h2>
+<p>Vous pouvez supprimer votre compte à tout moment dans l’app : <em>Réglages → Supprimer le compte</em>. Cela supprime définitivement votre compte, vos collections, commentaires et photos importées sur tous vos appareils. Vous pouvez aussi nous écrire et nous le ferons pour vous.</p>
+</section>
+
+<section class="card">
+<h2>Vos droits</h2>
+<p>Selon votre lieu de résidence, vous avez le droit d’accéder à vos données personnelles, de les rectifier, de les exporter ou de les supprimer, de vous opposer à leur utilisation ou de la limiter, et de porter plainte auprès de votre autorité locale de protection des données. Pour exercer l’un de ces droits, écrivez à <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>. Nous répondrons sous 30 jours.</p>
+<p>Lorsque nous nous appuyons sur votre consentement, vous pouvez le retirer à tout moment. Pour que nous cessions totalement d’utiliser vos données, supprimez votre compte dans <em>Réglages → Supprimer le compte</em>. Pour ne plus partager une liste, désactivez son partage. Si vous vous êtes connecté avec Google, vous pouvez aussi retirer à tout moment l’accès de CollectEon à votre compte Google dans les <a href="https://myaccount.google.com/connections">paramètres de votre compte Google</a>. Le retrait du consentement n’affecte pas ce que nous avons fait auparavant.</p>
+</section>
+
+<section class="card">
+<h2>Enfants</h2>
+<p>CollectEon ne s’adresse pas aux enfants de moins de 13 ans, et nous ne collectons pas sciemment leurs données personnelles. Si vous pensez qu’un enfant nous a transmis des données personnelles, contactez-nous et nous les supprimerons.</p>
+</section>
+
+<section class="card">
+<h2>Sécurité</h2>
+<p>Les données transitent par des connexions chiffrées (HTTPS). Chaque compte ne peut accéder qu’à ses propres données, ce qui est imposé par la base de données elle-même. Aucun système n’est parfaitement sûr, mais nous prenons des mesures raisonnables pour protéger vos données.</p>
+</section>
+
+<section class="card">
+<h2>Modifications de cette politique</h2>
+<p>Si nous modifions cette politique, nous mettrons à jour la date en haut de la page et, pour les changements importants, nous vous en informerons dans l’app.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Ouvrir l’app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon utilise l’API de TMDB mais n’est ni approuvé ni certifié par TMDB. Données des jeux fournies par <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Assistance" data-privacy="Confidentialité" data-terms="Conditions" data-language="Langue"></div></template>
+<template data-lang="de" data-title="Datenschutzerklärung · CollectEon" data-desc="Wie CollectEon deine Daten erhebt, nutzt und schützt."><div data-part="main">
+<h1>Datenschutzerklärung</h1>
+<p class="lead">Gültig ab 8. Oktober 2026. Kurz gesagt: CollectEon speichert nur, was es für deine Listen braucht, zeigt nie Werbung und verkauft oder teilt deine Daten nie für Marketingzwecke.</p>
+<p class="tr-note">Diese Übersetzung dient nur deiner Orientierung. Bei Abweichungen von der <a href="?lang=en">englischen Fassung</a> gilt die englische Fassung.</p>
+
+<section class="card">
+<h2>Wer wir sind</h2>
+<p>CollectEon ist eine App, mit der du die Filme, Serien, Animes, Spiele, Musik und Bücher festhältst, die du liebst. Sie wird von einem unabhängigen Entwickler, Denys („wir“, „uns“), entwickelt und betrieben. Du erreichst uns jederzeit unter <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>.</p>
+</section>
+
+<section class="card">
+<h2>CollectEon ohne Konto nutzen</h2>
+<p>Wenn du als Gast fortfährst, werden deine Sammlungen, Bewertungen, Notizen, dein Fortschritt und deine Cover-Fotos nur auf deinem Gerät gespeichert (im lokalen Speicher der App). Wir erhalten sie nicht. Wenn du die App löschst oder <em>Einstellungen → Alle Daten auf diesem Gerät löschen</em> verwendest, werden sie entfernt.</p>
+</section>
+
+<section class="card">
+<h2>Was wir erheben, wenn du ein Konto erstellst</h2>
+<ul>
+<li><strong>Deine E-Mail-Adresse</strong>, um dich mit einem Einmalcode anzumelden und dein Konto zu identifizieren.</li>
+<li><strong>Deinen Benutzernamen</strong>, den du selbst wählst. Er wird bei Listen angezeigt, die du teilst.</li>
+<li><strong>Wenn du dich mit Google anmeldest:</strong> das Basisprofil, das Google mit uns teilt (deine E-Mail-Adresse sowie, falls Google sie bereitstellt, deinen Namen und dein Profilbild).</li>
+<li><strong>Deine Sammlungen und was du hinzufügst:</strong> Titel, Status, deine Bewertungen, Spielzeit, Fortschritt bei Staffeln und Folgen, Notizen und Cover-Fotos, die du hochlädst. Wir speichern sie, damit sie zwischen deinen Geräten synchronisiert werden.</li>
+<li><strong>Technische Daten, die für den Betrieb nötig sind</strong>, etwa Anmeldezeiten und die IP-Adresse deines Geräts in den Sicherheitsprotokollen unseres Dienstleisters.</li>
+</ul>
+<p>Wir nutzen keine Analyse-, Werbe- oder Tracking-Tools und erstellen keine Profile über dich.</p>
+</section>
+
+<section class="card">
+<h2>Benutzernamen und geteilte Listen</h2>
+<p>Deine Listen sind privat, bis du eine davon teilst. Wenn du das Teilen für eine Liste aktivierst, kann jeder mit dem Link deinen Benutzernamen, den Namen der Liste sowie ihre Titel, Status und deine Bewertungen sehen. Deine Notizen werden nur angezeigt, wenn du für diese Liste zusätzlich <em>Meine Notizen zeigen</em> aktivierst. Deine Spielzeit, dein Fortschritt, deine E-Mail-Adresse und hochgeladene Fotos werden nie angezeigt.</p>
+<p>Du kannst das Teilen jederzeit beenden; der Link funktioniert dann sofort nicht mehr. Wer <em>Zu meinem CollectEon hinzufügen</em> verwendet hat, behält eine eigene Kopie der Titel, aber nicht deine Bewertungen, Status oder Notizen. Wenn du eine geteilte Liste siehst, die nicht da sein sollte, nutze <em>Liste melden</em> auf ihrer Seite oder in der App, oder schreib uns. Wir prüfen Meldungen innerhalb von 48 Stunden und können eine Liste entfernen oder ein Konto sperren, das gegen unsere <a href="/terms">Nutzungsbedingungen</a> verstößt.</p>
+</section>
+
+<section class="card">
+<h2>Wofür wir sie nutzen</h2>
+<ul>
+<li>Um dich anzumelden und dein Konto zu schützen.</li>
+<li>Um deine Sammlungen zu speichern und zwischen deinen Geräten zu synchronisieren.</li>
+<li>Um die E-Mails zu senden, die die App braucht, etwa deinen Anmeldecode. Wir senden keine Werbe-E-Mails.</li>
+<li>Um dir zu antworten, wenn du den Support kontaktierst.</li>
+</ul>
+<p>Wir verarbeiten diese Daten, um den von dir gewünschten Dienst zu erbringen, und bei Sicherheitsprotokollen aufgrund unseres berechtigten Interesses, den Dienst sicher zu halten.</p>
+</section>
+
+<section class="card">
+<h2>Titelsuche</h2>
+<p>Wenn du nach einem Titel suchst, wird der eingegebene Text an unseren Server gesendet, der ihn bei <a href="https://www.themoviedb.org">TMDB</a> (Filme, Serien und Animes) oder <a href="https://rawg.io">RAWG</a> (Spiele) nachschlägt. Wir geben ihnen weder deine E-Mail-Adresse noch deine Kontodaten weiter. Poster und Bilder werden anschließend direkt von den Bildservern von TMDB und RAWG geladen, sodass diese Dienste die IP-Adresse deines Geräts sehen können, wie bei jedem Bild auf einer Website. Die erhaltenen Details werden regelmäßig aktualisiert und nur als Teil deiner Listen gespeichert.</p>
+</section>
+
+<section class="card">
+<h2>Dienstleister</h2>
+<p>Für den Betrieb von CollectEon nutzen wir eine kleine Zahl vertrauenswürdiger Dienstleister. Sie verarbeiten Daten nur in unserem Auftrag und nur für ihren Teil des Dienstes:</p>
+<ul>
+<li><strong>Supabase</strong>: unsere Datenbank, Anmeldung und Dateispeicherung. Deine Kontodaten werden in der EU gespeichert (Frankfurt, Deutschland).</li>
+<li><strong>Resend</strong>: versendet die Anmelde-E-Mails.</li>
+<li><strong>GitHub Pages</strong>: hostet die Website collecteon.net.</li>
+<li><strong>TMDB und RAWG</strong>: Titelinformationen und Bilder, wie oben beschrieben.</li>
+<li><strong>Google</strong>: die Google-Anmeldung, falls du sie wählst, und die Webschrift, die die App verwendet.</li>
+<li><strong>jsDelivr</strong>: liefert einen Teil des App-Codes aus.</li>
+</ul>
+<p>Einige dieser Dienstleister können Daten außerhalb deines Landes verarbeiten, auch in den USA. In diesem Fall nutzen sie die gesetzlich vorgeschriebenen Garantien, etwa Standardvertragsklauseln. Wir arbeiten nur mit Dienstleistern zusammen, die deine Daten mindestens so gut schützen, wie es diese Erklärung beschreibt und das Gesetz verlangt. Wir verkaufen deine personenbezogenen Daten niemals.</p>
+</section>
+
+<section class="card">
+<h2>Wie lange wir sie aufbewahren</h2>
+<p>Wir bewahren deine Kontodaten auf, bis du dein Konto löschst. Wenn du einen Titel entfernst, werden seine Details und Notizen aus der Kopie in deinem Konto gelöscht. Anmeldeprotokolle unserer Dienstleister werden nach begrenzter Zeit automatisch gelöscht.</p>
+</section>
+
+<section class="card">
+<h2>Dein Konto löschen</h2>
+<p>Du kannst dein Konto jederzeit in der App löschen: <em>Einstellungen → Konto löschen</em>. Dadurch werden dein Konto, deine Sammlungen, Notizen und hochgeladenen Fotos auf allen Geräten dauerhaft gelöscht. Du kannst uns auch schreiben, und wir erledigen das für dich.</p>
+</section>
+
+<section class="card">
+<h2>Deine Rechte</h2>
+<p>Je nachdem, wo du lebst, hast du das Recht, auf deine personenbezogenen Daten zuzugreifen, sie zu berichtigen, zu exportieren oder zu löschen, ihrer Nutzung zu widersprechen oder sie einzuschränken und dich bei deiner örtlichen Datenschutzbehörde zu beschweren. Um eines dieser Rechte auszuüben, schreib an <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>. Wir antworten innerhalb von 30 Tagen.</p>
+<p>Wenn wir uns auf deine Einwilligung stützen, kannst du sie jederzeit widerrufen. Damit wir deine Daten gar nicht mehr nutzen, lösche dein Konto unter <em>Einstellungen → Konto löschen</em>. Um eine Liste nicht mehr zu teilen, beende das Teilen für sie. Wenn du dich mit Google angemeldet hast, kannst du CollectEon außerdem jederzeit in deinen <a href="https://myaccount.google.com/connections">Google-Kontoeinstellungen</a> den Zugriff auf dein Google-Konto entziehen. Ein Widerruf berührt nicht, was wir vorher getan haben.</p>
+</section>
+
+<section class="card">
+<h2>Kinder</h2>
+<p>CollectEon richtet sich nicht an Kinder unter 13 Jahren, und wir erheben wissentlich keine personenbezogenen Daten von ihnen. Wenn du glaubst, dass ein Kind uns personenbezogene Daten gegeben hat, kontaktiere uns und wir löschen sie.</p>
+</section>
+
+<section class="card">
+<h2>Sicherheit</h2>
+<p>Daten werden über verschlüsselte Verbindungen (HTTPS) übertragen. Jedes Konto kann nur auf seine eigenen Daten zugreifen; das setzt die Datenbank selbst durch. Kein System ist vollkommen sicher, aber wir treffen angemessene Maßnahmen, um deine Daten zu schützen.</p>
+</section>
+
+<section class="card">
+<h2>Änderungen dieser Erklärung</h2>
+<p>Wenn wir diese Erklärung ändern, aktualisieren wir das Datum oben und informieren dich bei wichtigen Änderungen in der App.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">App öffnen</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert. Spieldaten von <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Support" data-privacy="Datenschutz" data-terms="Bedingungen" data-language="Sprache"></div></template>
+<template data-lang="pt" data-title="Política de Privacidade · CollectEon" data-desc="Como o CollectEon coleta, usa e protege seus dados."><div data-part="main">
+<h1>Política de Privacidade</h1>
+<p class="lead">Em vigor desde 8 de outubro de 2026. Resumindo: o CollectEon guarda só o que precisa para salvar suas listas, nunca mostra anúncios e nunca vende nem compartilha seus dados para marketing.</p>
+<p class="tr-note">Esta tradução é oferecida para sua conveniência. Se houver diferença em relação à <a href="?lang=en">versão em inglês</a>, prevalece a versão em inglês.</p>
+
+<section class="card">
+<h2>Quem somos</h2>
+<p>O CollectEon é um app para acompanhar os filmes, séries, animes, jogos, músicas e livros que você ama. Ele é feito e mantido por um desenvolvedor independente, Denys (“nós”). Você pode falar conosco a qualquer momento em <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>.</p>
+</section>
+
+<section class="card">
+<h2>Usar o CollectEon sem conta</h2>
+<p>Se você continuar como convidado, suas coleções, notas, anotações, progresso e fotos de capa ficam salvos apenas no seu aparelho (no armazenamento local do app). Nós não os recebemos. Excluir o app ou usar <em>Configurações → Excluir todos os dados deste aparelho</em> apaga tudo.</p>
+</section>
+
+<section class="card">
+<h2>O que coletamos quando você cria uma conta</h2>
+<ul>
+<li><strong>Seu endereço de e-mail</strong>, para você entrar com um código de uso único e para identificar sua conta.</li>
+<li><strong>Seu nome de usuário</strong>, que você escolhe. Ele aparece nas listas que você compartilha.</li>
+<li><strong>Se você entrar com o Google:</strong> o perfil básico que o Google compartilha conosco (seu e-mail e, se o Google fornecer, seu nome e foto de perfil).</li>
+<li><strong>Suas coleções e o que você adiciona a elas:</strong> títulos, status, suas notas, tempo de jogo, progresso de temporadas e episódios, anotações e fotos de capa que você envia. Guardamos isso para sincronizar entre seus aparelhos.</li>
+<li><strong>Dados técnicos necessários para o serviço funcionar</strong>, como horários de login e o endereço IP do seu aparelho nos registros de segurança do nosso provedor.</li>
+</ul>
+<p>Não usamos ferramentas de análise, publicidade ou rastreamento, e não criamos perfis sobre você.</p>
+</section>
+
+<section class="card">
+<h2>Nomes de usuário e listas compartilhadas</h2>
+<p>Suas listas são privadas, a menos que você escolha compartilhar uma. Quando você ativa o compartilhamento de uma lista, qualquer pessoa com o link pode ver seu nome de usuário, o nome da lista, seus títulos, status e suas notas. Suas anotações só aparecem se você também ativar <em>Mostrar minhas anotações</em> para aquela lista. Seu tempo de jogo, progresso, e-mail e fotos enviadas nunca são mostrados.</p>
+<p>Você pode desativar o compartilhamento a qualquer momento, e o link para de funcionar na hora. Quem usou <em>Adicionar ao meu CollectEon</em> mantém a própria cópia dos títulos, mas não suas notas, status ou anotações. Se você vir uma lista compartilhada que não deveria estar lá, use <em>Denunciar esta lista</em> na página dela ou no app, ou mande um e-mail. Analisamos as denúncias em até 48 horas e podemos remover uma lista ou desativar uma conta que viole nossos <a href="/terms">Termos de Uso</a>.</p>
+</section>
+
+<section class="card">
+<h2>Como usamos esses dados</h2>
+<ul>
+<li>Para você entrar e manter sua conta segura.</li>
+<li>Para salvar suas coleções e sincronizá-las entre seus aparelhos.</li>
+<li>Para enviar os e-mails de que o app precisa, como seu código de acesso. Não enviamos e-mails de marketing.</li>
+<li>Para responder quando você entra em contato com o suporte.</li>
+</ul>
+<p>Tratamos esses dados para prestar o serviço que você solicitou e, no caso dos registros de segurança, com base no nosso legítimo interesse em manter o serviço seguro.</p>
+</section>
+
+<section class="card">
+<h2>Busca de títulos</h2>
+<p>Quando você pesquisa um título, o texto digitado é enviado ao nosso servidor, que o busca no <a href="https://www.themoviedb.org">TMDB</a> (filmes, séries e animes) ou no <a href="https://rawg.io">RAWG</a> (jogos). Não enviamos a eles seu e-mail nem os dados da sua conta. Pôsteres e imagens são carregados diretamente dos servidores de imagem do TMDB e do RAWG, então esses serviços podem ver o endereço IP do seu aparelho, como acontece com qualquer imagem de um site. Os detalhes recebidos são atualizados regularmente e guardados apenas como parte das suas listas.</p>
+</section>
+
+<section class="card">
+<h2>Provedores de serviço</h2>
+<p>Usamos um pequeno número de provedores confiáveis para manter o CollectEon funcionando. Eles tratam dados apenas em nosso nome e só para fornecer a sua parte do serviço:</p>
+<ul>
+<li><strong>Supabase</strong>: nosso banco de dados, login e armazenamento de arquivos. Os dados da sua conta ficam na UE (Frankfurt, Alemanha).</li>
+<li><strong>Resend</strong>: entrega os e-mails de acesso.</li>
+<li><strong>GitHub Pages</strong>: hospeda o site collecteon.net.</li>
+<li><strong>TMDB e RAWG</strong>: informações de títulos e imagens, como descrito acima.</li>
+<li><strong>Google</strong>: login com Google, se você escolher, e a fonte web que o app usa.</li>
+<li><strong>jsDelivr</strong>: entrega parte do código do app.</li>
+</ul>
+<p>Alguns desses provedores podem tratar dados fora do seu país, inclusive nos Estados Unidos. Quando isso acontece, eles usam as salvaguardas exigidas por lei, como cláusulas contratuais padrão. Só trabalhamos com provedores que protegem seus dados pelo menos tão bem quanto descrito nesta política e exigido por lei. Nunca vendemos seus dados pessoais.</p>
+</section>
+
+<section class="card">
+<h2>Por quanto tempo guardamos</h2>
+<p>Guardamos os dados da sua conta até você excluí-la. Quando você remove um título, os detalhes e as anotações dele são apagados da cópia na sua conta. Os registros de login mantidos pelos nossos provedores são apagados automaticamente após um tempo limitado.</p>
+</section>
+
+<section class="card">
+<h2>Excluir sua conta</h2>
+<p>Você pode excluir sua conta a qualquer momento no app: <em>Configurações → Excluir conta</em>. Isso apaga para sempre sua conta, coleções, anotações e fotos enviadas em todos os aparelhos. Você também pode nos mandar um e-mail e nós fazemos isso por você.</p>
+</section>
+
+<section class="card">
+<h2>Seus direitos</h2>
+<p>Dependendo de onde você mora, você tem o direito de acessar, corrigir, exportar ou excluir seus dados pessoais, de se opor ao uso deles ou restringi-lo, e de reclamar à autoridade de proteção de dados local. Para exercer qualquer um desses direitos, escreva para <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>. Responderemos em até 30 dias.</p>
+<p>Quando dependemos do seu consentimento, você pode retirá-lo a qualquer momento. Para que deixemos de usar seus dados por completo, exclua sua conta em <em>Configurações → Excluir conta</em>. Para parar de compartilhar uma lista, desative o compartilhamento dela. Se você entrou com o Google, também pode remover a qualquer momento o acesso do CollectEon à sua Conta do Google nas <a href="https://myaccount.google.com/connections">configurações da Conta do Google</a>. Retirar o consentimento não afeta o que fizemos antes disso.</p>
+</section>
+
+<section class="card">
+<h2>Crianças</h2>
+<p>O CollectEon não é voltado para crianças com menos de 13 anos, e não coletamos dados pessoais delas intencionalmente. Se você acredita que uma criança nos forneceu dados pessoais, fale conosco e nós os excluiremos.</p>
+</section>
+
+<section class="card">
+<h2>Segurança</h2>
+<p>Os dados são enviados por conexões criptografadas (HTTPS). Cada conta só acessa os próprios dados, e isso é garantido pelo próprio banco de dados. Nenhum sistema é perfeitamente seguro, mas tomamos medidas razoáveis para proteger seus dados.</p>
+</section>
+
+<section class="card">
+<h2>Mudanças nesta política</h2>
+<p>Se mudarmos esta política, atualizaremos a data no topo e, em caso de mudanças importantes, avisaremos você no app.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Abrir o app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>O CollectEon usa a API do TMDB, mas não é endossado nem certificado pelo TMDB. Dados de jogos do <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Suporte" data-privacy="Privacidade" data-terms="Termos" data-language="Idioma"></div></template>
+<template data-lang="es" data-title="Política de privacidad · CollectEon" data-desc="Cómo CollectEon recopila, usa y protege tus datos."><div data-part="main">
+<h1>Política de privacidad</h1>
+<p class="lead">Vigente desde el 8 de octubre de 2026. En resumen: CollectEon solo guarda lo que necesita para tus listas, nunca muestra anuncios y nunca vende ni comparte tus datos con fines de marketing.</p>
+<p class="tr-note">Esta traducción se ofrece para tu comodidad. Si hay alguna diferencia con la <a href="?lang=en">versión en inglés</a>, prevalece la versión en inglés.</p>
+
+<section class="card">
+<h2>Quiénes somos</h2>
+<p>CollectEon es una app para llevar el control de las películas, series, anime, juegos, música y libros que te gustan. La crea y gestiona un desarrollador independiente, Denys («nosotros»). Puedes escribirnos cuando quieras a <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>.</p>
+</section>
+
+<section class="card">
+<h2>Usar CollectEon sin cuenta</h2>
+<p>Si sigues como invitado, tus colecciones, puntuaciones, notas, progreso y fotos de portada se guardan solo en tu dispositivo (en el almacenamiento local de la app). Nosotros no los recibimos. Si eliminas la app o usas <em>Ajustes → Eliminar todos los datos de este dispositivo</em>, se borran.</p>
+</section>
+
+<section class="card">
+<h2>Qué recopilamos cuando creas una cuenta</h2>
+<ul>
+<li><strong>Tu dirección de correo</strong>, para que inicies sesión con un código de un solo uso y para identificar tu cuenta.</li>
+<li><strong>Tu nombre de usuario</strong>, que eliges tú. Se muestra en las listas que compartes.</li>
+<li><strong>Si inicias sesión con Google:</strong> el perfil básico que Google comparte con nosotros (tu correo y, si Google los facilita, tu nombre y foto de perfil).</li>
+<li><strong>Tus colecciones y lo que añades a ellas:</strong> títulos, estados, tus puntuaciones, tiempo de juego, progreso de temporadas y episodios, notas y fotos de portada que subes. Los guardamos para sincronizarlos entre tus dispositivos.</li>
+<li><strong>Datos técnicos necesarios para el servicio</strong>, como las horas de inicio de sesión y la dirección IP de tu dispositivo en los registros de seguridad de nuestro proveedor.</li>
+</ul>
+<p>No usamos herramientas de análisis, publicidad ni seguimiento, y no creamos perfiles sobre ti.</p>
+</section>
+
+<section class="card">
+<h2>Nombres de usuario y listas compartidas</h2>
+<p>Tus listas son privadas salvo que decidas compartir una. Cuando activas el uso compartido de una lista, cualquiera con el enlace puede ver tu nombre de usuario, el nombre de la lista, sus títulos, estados y tus puntuaciones. Tus notas solo se muestran si además activas <em>Mostrar mis notas</em> para esa lista. Tu tiempo de juego, tu progreso, tu correo y las fotos que subes nunca se muestran.</p>
+<p>Puedes dejar de compartir en cualquier momento y el enlace deja de funcionar al instante. Quien haya usado <em>Añadir a mi CollectEon</em> conserva su propia copia de los títulos, pero no tus puntuaciones, estados ni notas. Si ves una lista compartida que no debería estar ahí, usa <em>Denunciar esta lista</em> en su página o en la app, o escríbenos. Revisamos las denuncias en un plazo de 48 horas y podemos eliminar una lista o desactivar una cuenta que incumpla nuestras <a href="/terms">Condiciones de uso</a>.</p>
+</section>
+
+<section class="card">
+<h2>Cómo los usamos</h2>
+<ul>
+<li>Para que inicies sesión y tu cuenta esté protegida.</li>
+<li>Para guardar tus colecciones y sincronizarlas entre tus dispositivos.</li>
+<li>Para enviar los correos que necesita la app, como tu código de acceso. No enviamos correos de marketing.</li>
+<li>Para responderte cuando contactas con el soporte.</li>
+</ul>
+<p>Tratamos estos datos para prestar el servicio que has pedido y, en el caso de los registros de seguridad, por nuestro interés legítimo en mantener el servicio seguro.</p>
+</section>
+
+<section class="card">
+<h2>Búsqueda de títulos</h2>
+<p>Cuando buscas un título, el texto que escribes se envía a nuestro servidor, que lo busca en <a href="https://www.themoviedb.org">TMDB</a> (películas, series y anime) o en <a href="https://rawg.io">RAWG</a> (juegos). No les enviamos tu correo ni los datos de tu cuenta. Los pósteres e imágenes se cargan directamente desde los servidores de imágenes de TMDB y RAWG, así que esos servicios pueden ver la dirección IP de tu dispositivo, como con cualquier imagen de una web. Los detalles que recibimos se actualizan con regularidad y solo se guardan como parte de tus listas.</p>
+</section>
+
+<section class="card">
+<h2>Proveedores de servicios</h2>
+<p>Usamos un pequeño número de proveedores de confianza para que CollectEon funcione. Solo tratan datos en nuestro nombre y solo para ofrecer su parte del servicio:</p>
+<ul>
+<li><strong>Supabase</strong>: nuestra base de datos, el inicio de sesión y el almacenamiento de archivos. Los datos de tu cuenta se guardan en la UE (Fráncfort, Alemania).</li>
+<li><strong>Resend</strong>: envía los correos de inicio de sesión.</li>
+<li><strong>GitHub Pages</strong>: aloja la web collecteon.net.</li>
+<li><strong>TMDB y RAWG</strong>: información de títulos e imágenes, como se describe arriba.</li>
+<li><strong>Google</strong>: el inicio de sesión con Google, si lo eliges, y la fuente web que usa la app.</li>
+<li><strong>jsDelivr</strong>: entrega parte del código de la app.</li>
+</ul>
+<p>Algunos de estos proveedores pueden tratar datos fuera de tu país, incluso en Estados Unidos. En ese caso, aplican las garantías que exige la ley, como las cláusulas contractuales tipo. Solo trabajamos con proveedores que protegen tus datos al menos tan bien como describe esta política y exige la ley. Nunca vendemos tus datos personales.</p>
+</section>
+
+<section class="card">
+<h2>Cuánto tiempo los conservamos</h2>
+<p>Conservamos los datos de tu cuenta hasta que la eliminas. Cuando quitas un título, sus detalles y notas se borran de la copia de tu cuenta. Los registros de inicio de sesión que guardan nuestros proveedores se eliminan automáticamente pasado un tiempo limitado.</p>
+</section>
+
+<section class="card">
+<h2>Eliminar tu cuenta</h2>
+<p>Puedes eliminar tu cuenta en cualquier momento desde la app: <em>Ajustes → Eliminar cuenta</em>. Esto borra para siempre tu cuenta, tus colecciones, notas y fotos subidas en todos tus dispositivos. También puedes escribirnos y lo haremos por ti.</p>
+</section>
+
+<section class="card">
+<h2>Tus derechos</h2>
+<p>Según dónde vivas, tienes derecho a acceder a tus datos personales, corregirlos, exportarlos o eliminarlos, a oponerte a su uso o limitarlo, y a presentar una reclamación ante tu autoridad local de protección de datos. Para ejercer cualquiera de estos derechos, escribe a <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>. Te responderemos en un plazo de 30 días.</p>
+<p>Cuando nos basamos en tu consentimiento, puedes retirarlo en cualquier momento. Para que dejemos de usar tus datos por completo, elimina tu cuenta en <em>Ajustes → Eliminar cuenta</em>. Para dejar de compartir una lista, desactiva su uso compartido. Si iniciaste sesión con Google, también puedes quitar en cualquier momento el acceso de CollectEon a tu cuenta de Google desde la <a href="https://myaccount.google.com/connections">configuración de tu cuenta de Google</a>. Retirar el consentimiento no afecta a lo que hicimos antes.</p>
+</section>
+
+<section class="card">
+<h2>Menores</h2>
+<p>CollectEon no está dirigido a menores de 13 años, y no recopilamos a sabiendas sus datos personales. Si crees que un menor nos ha facilitado datos personales, contacta con nosotros y los eliminaremos.</p>
+</section>
+
+<section class="card">
+<h2>Seguridad</h2>
+<p>Los datos se envían mediante conexiones cifradas (HTTPS). Cada cuenta solo puede acceder a sus propios datos, y eso lo garantiza la propia base de datos. Ningún sistema es totalmente seguro, pero tomamos medidas razonables para proteger tus datos.</p>
+</section>
+
+<section class="card">
+<h2>Cambios en esta política</h2>
+<p>Si cambiamos esta política, actualizaremos la fecha de arriba y, si los cambios son importantes, te avisaremos en la app.</p>
+</section>
+</div><div data-part="foot">CollectEon · <a href="/app">Abrir la app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon usa la API de TMDB, pero no está respaldado ni certificado por TMDB. Datos de juegos de <a href="https://rawg.io">RAWG</a>.</div><div data-part="nav" data-support="Ayuda" data-privacy="Privacidad" data-terms="Condiciones" data-language="Idioma"></div></template>
+<script>
+/* Page language: ?lang=, then the language saved by the app or another page, then the browser's.
+   English is the page itself; other languages come from the templates below. */
+(function(){
+  var KEY = "ultimateCollection:lang", NAMES = {"en": "English", "uk": "Українська", "fr": "Français", "de": "Deutsch", "pt": "Português (Brasil)", "es": "Español"}, HTML_LANG = { en:"en", uk:"uk", fr:"fr", de:"de", pt:"pt-BR", es:"es" };
+  function pick(){
+    try{ var q = new URLSearchParams(location.search).get("lang"); if(q && NAMES[q]){ try{ localStorage.setItem(KEY, q); }catch(e){} return q; } }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(s && NAMES[s]) return s; }catch(e){}
+    var l = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
+    for(var i = 0; i < l.length; i++){ var b = String(l[i] || "").toLowerCase().slice(0, 2); if(NAMES[b]) return b; }
+    return "en";
+  }
+  var lang = pick();
+  window.CE_PAGE_LANG = lang;
+  document.documentElement.lang = HTML_LANG[lang];
+  var tpl = document.querySelector('template[data-lang="' + lang + '"]');
+  if(tpl){
+    var frag = tpl.content;
+    var main = frag.querySelector('[data-part="main"]'), foot = frag.querySelector('[data-part="foot"]'), nav = frag.querySelector('[data-part="nav"]');
+    if(main && document.getElementById("page-main")) document.getElementById("page-main").innerHTML = main.innerHTML;
+    if(foot && document.getElementById("page-foot")) document.getElementById("page-foot").innerHTML = foot.innerHTML;
+    if(nav){ Array.prototype.forEach.call(document.querySelectorAll("[data-nav]"), function(a){ var v = nav.getAttribute("data-" + a.getAttribute("data-nav")); if(v) a.textContent = v; }); }
+    if(tpl.getAttribute("data-title")) document.title = tpl.getAttribute("data-title");
+    var md = document.querySelector('meta[name="description"]'); if(md && tpl.getAttribute("data-desc")) md.setAttribute("content", tpl.getAttribute("data-desc"));
+  }
+  var sel = document.getElementById("lang-select");
+  if(sel){
+    Object.keys(NAMES).forEach(function(k){ var o = document.createElement("option"); o.value = k; o.textContent = NAMES[k]; if(k === lang) o.selected = true; sel.appendChild(o); });
+    if(tpl && tpl.content.querySelector('[data-part="nav"]')) sel.setAttribute("aria-label", tpl.content.querySelector('[data-part="nav"]').getAttribute("data-language"));
+    sel.addEventListener("change", function(){
+      try{ localStorage.setItem(KEY, sel.value); }catch(e){}
+      var u = new URL(location.href); u.searchParams.delete("lang"); location.replace(u.pathname + u.search + u.hash);
+    });
+  }
+})();
+</script>
 </body>
 </html>

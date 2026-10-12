@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CollectEon · Build your personal collection</title>
 <meta name="description" content="Track every movie, series, anime, game, album and book you love. Free, with no ads. On iPhone and in your browser.">
@@ -156,6 +159,8 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
 .credit a{text-decoration:underline;font-weight:600;color:var(--ink)}
 .links{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;font-weight:600}
 .links a:hover{color:var(--muted)}
+.lang{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600}
+.lang select{font:inherit;font-weight:700;color:var(--ink);height:36px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);padding:0 8px}
 
 @media (max-width:640px){
   .top nav .hide-s{display:none}
@@ -170,71 +175,72 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
   .laptop{height:190px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.wm-mark{display:inline-block;width:1.3em;height:1.3em;vertical-align:-0.3em;margin-right:.36em;border-radius:22%}
 </style>
 </head>
 <body>
 
 <header class="wrap top">
-  <a class="wordmark" href="/?about" aria-label="CollectEon home">Collect<span>Eon</span></a>
+  <a class="wordmark" href="/?about" aria-label="CollectEon home"><svg class="wm-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" rx="22.4" fill="#12131A"/><path d="M71.2 28.8A30 30 0 1 0 71.2 71.2" fill="none" stroke="#E0AA47" stroke-width="11" stroke-linecap="round"/><rect x="39" y="36" width="36" height="7" rx="3.5" fill="#3FB6C2"/><rect x="39" y="46.5" width="26" height="7" rx="3.5" fill="#E86FA5"/><rect x="39" y="57" width="36" height="7" rx="3.5" fill="#86C46F"/></svg>Collect<span>Eon</span></a>
   <nav aria-label="Site">
-    <a class="hide-s" href="#how">How it works</a>
-    <a class="hide-s" href="#sync">Phone + web</a>
-    <a class="hide-s" href="/support">Support</a>
-    <a class="pill" href="/app">Sign in</a>
+    <a class="hide-s" href="#how" data-t="How it works">How it works</a>
+    <a class="hide-s" href="#sync" data-t="Phone + web">Phone + web</a>
+    <a class="hide-s" href="/support" data-t="Support">Support</a>
+    <a class="pill" href="/app" data-t="Sign in">Sign in</a>
   </nav>
 </header>
 
 <main>
   <section class="wrap hero">
     <div class="hero-text">
-      <span class="badge">Free · No ads · No passwords</span>
-      <h1>Build your personal <span>collection</span></h1>
-      <p class="lead">Movies, series, anime, games, music and books: one place for everything you've loved, dropped or still plan to start. On your iPhone and in your browser.</p>
+      <span class="badge" data-t="Free · No ads · No passwords">Free · No ads · No passwords</span>
+      <h1 data-th="Build your personal <span>collection</span>">Build your personal <span>collection</span></h1>
+      <p class="lead" data-t="lead">Movies, series, anime, games, music and books: one place for everything you've loved, dropped or still plan to start. On your iPhone and in your browser.</p>
       <div class="ctas">
-        <a class="btn btn-primary" href="/app">Open the web app
+        <a class="btn btn-primary" href="/app"><span data-t="Open the web app">Open the web app</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <span class="btn btn-soon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Coming soon to iPhone</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><span data-t="Coming soon to iPhone">Coming soon to iPhone</span></span>
       </div>
     </div>
     <div class="fan" aria-hidden="true">
-      <div class="card c1"><b>BOOKS</b><i>Project Hail Mary</i></div>
-      <div class="card c2"><b>MUSIC</b><i>In Rainbows</i></div>
-      <div class="card c3"><b>ANIME</b><i>Frieren</i></div>
-      <div class="card c4"><b>GAMES</b><i>Balatro</i></div>
-      <div class="card c5"><b>SERIES</b><i>Severance</i></div>
-      <div class="card c6"><b>MOVIES</b><i>Past Lives</i></div>
+      <div class="card c1"><b data-t="BOOKS">BOOKS</b><i>Project Hail Mary</i></div>
+      <div class="card c2"><b data-t="MUSIC">MUSIC</b><i>In Rainbows</i></div>
+      <div class="card c3"><b data-t="ANIME">ANIME</b><i>Frieren</i></div>
+      <div class="card c4"><b data-t="GAMES">GAMES</b><i>Balatro</i></div>
+      <div class="card c5"><b data-t="SERIES">SERIES</b><i>Severance</i></div>
+      <div class="card c6"><b data-t="MOVIES">MOVIES</b><i>Past Lives</i></div>
     </div>
   </section>
 
-  <section class="strip" aria-label="What you can collect">
+  <section class="strip" aria-label="What you can collect" data-ta="What you can collect">
     <ul class="wrap" style="list-style:none;margin:0 auto">
-      <li class="cat k-movie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 8l2.5-4h13L21 8M8 4l2 4M13 4l2 4"/></svg>Movies</li>
-      <li class="cat k-series"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/></svg>Series</li>
-      <li class="cat k-anime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/><path d="M12 10.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5 2.2-.3z"/></svg>Anime</li>
-      <li class="cat k-games"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a4 4 0 0 1 4 4.5l-.6 4.2a2.4 2.4 0 0 1-4.2 1.2L14.5 15h-5l-1.7 1.9a2.4 2.4 0 0 1-4.2-1.2L3 11.5A4 4 0 0 1 7 7z"/><path d="M8 10v3M6.5 11.5h3M15.5 11h.01M17 12.5h.01"/></svg>Games</li>
-      <li class="cat k-music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>Music</li>
-      <li class="cat k-books"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg>Books</li>
+      <li class="cat k-movie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 8l2.5-4h13L21 8M8 4l2 4M13 4l2 4"/></svg><span data-t="Movies">Movies</span></li>
+      <li class="cat k-series"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/></svg><span data-t="Series">Series</span></li>
+      <li class="cat k-anime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/><path d="M12 10.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5 2.2-.3z"/></svg><span data-t="Anime">Anime</span></li>
+      <li class="cat k-games"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a4 4 0 0 1 4 4.5l-.6 4.2a2.4 2.4 0 0 1-4.2 1.2L14.5 15h-5l-1.7 1.9a2.4 2.4 0 0 1-4.2-1.2L3 11.5A4 4 0 0 1 7 7z"/><path d="M8 10v3M6.5 11.5h3M15.5 11h.01M17 12.5h.01"/></svg><span data-t="Games">Games</span></li>
+      <li class="cat k-music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg><span data-t="Music">Music</span></li>
+      <li class="cat k-books"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg><span data-t="Books">Books</span></li>
     </ul>
   </section>
 
   <section class="wrap how" id="how">
-    <h2 class="h2">Three steps from “what was that called?” to <span>saved</span>.</h2>
+    <h2 class="h2" data-th="three">Three steps from “what was that called?” to <span>saved</span>.</h2>
     <div class="steps">
       <article class="step">
         <span class="num k-movie">1</span>
-        <h3>Search or add by hand</h3>
-        <p>Find movies, series, anime and games with the details filled in for you. Add music and books yourself, your way.</p>
+        <h3 data-t="Search or add by hand">Search or add by hand</h3>
+        <p data-t="step1">Find movies, series, anime and games with the details filled in for you. Add music and books yourself, your way.</p>
       </article>
       <article class="step">
         <span class="num k-games">2</span>
-        <h3>Mark where you are</h3>
-        <p>Planned, in progress, finished or dropped. Track seasons and episodes, hours played, and give your own score.</p>
+        <h3 data-t="Mark where you are">Mark where you are</h3>
+        <p data-t="step2">Planned, in progress, finished or dropped. Track seasons and episodes, hours played, and give your own score.</p>
       </article>
       <article class="step">
         <span class="num k-books">3</span>
-        <h3>Share a list</h3>
-        <p>Send a link to any list, with or without your notes. Friends can add it to their own CollectEon in one tap.</p>
+        <h3 data-t="Share a list">Share a list</h3>
+        <p data-t="step3">Send a link to any list, with or without your notes. Friends can add it to their own CollectEon in one tap.</p>
       </article>
     </div>
   </section>
@@ -242,9 +248,9 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
   <section class="wrap sync" id="sync">
     <div class="band">
       <div class="band-text">
-        <span class="eyebrow">PHONE + WEB</span>
-        <h2 class="h2">Add it on the couch. Sort it at your desk.</h2>
-        <p>Your collection syncs between the iPhone app and collecteon.net. Sign in with a 6-digit code sent to your email, or with Google or Apple. There's no password to remember.</p>
+        <span class="eyebrow" data-t="PHONE + WEB">PHONE + WEB</span>
+        <h2 class="h2" data-t="couch">Add it on the couch. Sort it at your desk.</h2>
+        <p data-t="sync">Your collection syncs between the iPhone app and collecteon.net. Sign in with a 6-digit code sent to your email, or with Google or Apple. There's no password to remember.</p>
       </div>
       <div class="devices" aria-hidden="true">
         <div class="laptop">
@@ -260,25 +266,193 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
   </section>
 
   <section class="wrap final">
-    <h2 class="h2">Start your collection.</h2>
-    <p>Free, with no ads. It takes about a minute.</p>
-    <a class="btn btn-primary" href="/app">Open the web app</a>
+    <h2 class="h2" data-t="Start your collection.">Start your collection.</h2>
+    <p data-t="minute">Free, with no ads. It takes about a minute.</p>
+    <a class="btn btn-primary" href="/app" data-t="Open the web app">Open the web app</a>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
     <div>
-      <div class="wordmark" style="font-size:16px">Collect<span>Eon</span></div>
-      <p class="credit">Movie, series and anime details from <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>. Game details and images from <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+      <div class="wordmark" style="font-size:16px"><svg class="wm-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" rx="22.4" fill="#12131A"/><path d="M71.2 28.8A30 30 0 1 0 71.2 71.2" fill="none" stroke="#E0AA47" stroke-width="11" stroke-linecap="round"/><rect x="39" y="36" width="36" height="7" rx="3.5" fill="#3FB6C2"/><rect x="39" y="46.5" width="26" height="7" rx="3.5" fill="#E86FA5"/><rect x="39" y="57" width="36" height="7" rx="3.5" fill="#86C46F"/></svg>Collect<span>Eon</span></div>
+      <p class="credit" data-th="credit">Movie, series and anime details from <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>. Game details and images from <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
     </div>
     <nav class="links" aria-label="Legal and help">
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
-      <a href="/support">Support</a>
-      <a href="mailto:supportcollecteon@gmail.com">Contact</a>
+      <a href="/privacy" data-t="Privacy">Privacy</a>
+      <a href="/terms" data-t="Terms">Terms</a>
+      <a href="/support" data-t="Support">Support</a>
+      <a href="mailto:supportcollecteon@gmail.com" data-t="Contact">Contact</a>
+      <label class="lang"><span id="lang-label">Language</span>
+        <select id="lang-select"></select></label>
     </nav>
   </div>
 </footer>
+<script>
+/* Landing page translations. English is in the page itself. The language is shared with the app
+   (same saved setting), picked from ?lang=, then the saved choice, then the browser's languages. */
+(function(){
+  var LANG_KEY = "ultimateCollection:lang";
+  var NAMES = { en: "English", uk: "Українська", fr: "Français", de: "Deutsch", pt: "Português (Brasil)", es: "Español" };
+  var HTML_LANG = { en: "en", uk: "uk", fr: "fr", de: "de", pt: "pt-BR", es: "es" };
+  var T = {
+    uk: {
+      "title": "CollectEon · Створіть свою особисту колекцію",
+      "description": "Відстежуйте всі фільми, серіали, аніме, ігри, альбоми й книжки, які ви любите. Безкоштовно і без реклами. На iPhone і в браузері.",
+      "How it works": "Як це працює", "Phone + web": "Телефон + веб", "Support": "Підтримка", "Sign in": "Увійти",
+      "Free · No ads · No passwords": "Безкоштовно · Без реклами · Без паролів",
+      "Build your personal <span>collection</span>": "Створіть свою особисту <span>колекцію</span>",
+      "lead": "Фільми, серіали, аніме, ігри, музика й книжки: одне місце для всього, що ви полюбили, кинули чи тільки плануєте почати. На вашому iPhone і в браузері.",
+      "Open the web app": "Відкрити вебзастосунок", "Coming soon to iPhone": "Скоро на iPhone",
+      "BOOKS": "КНИЖКИ", "MUSIC": "МУЗИКА", "ANIME": "АНІМЕ", "GAMES": "ІГРИ", "SERIES": "СЕРІАЛИ", "MOVIES": "ФІЛЬМИ",
+      "What you can collect": "Що можна збирати",
+      "Movies": "Фільми", "Series": "Серіали", "Anime": "Аніме", "Games": "Ігри", "Music": "Музика", "Books": "Книжки",
+      "three": "Три кроки від «як же воно називалося?» до <span>збереженого</span>.",
+      "Search or add by hand": "Знайдіть або додайте вручну",
+      "step1": "Знаходьте фільми, серіали, аніме й ігри, а подробиці заповняться самі. Музику й книжки додавайте самостійно, як вам зручно.",
+      "Mark where you are": "Позначайте, де ви зараз",
+      "step2": "Заплановано, у процесі, завершено чи покинуто. Відстежуйте сезони й серії, години в грі та ставте власну оцінку.",
+      "Share a list": "Діліться списками",
+      "step3": "Надішліть посилання на будь-який список, з вашими нотатками чи без них. Друзі можуть додати його до свого CollectEon одним дотиком.",
+      "PHONE + WEB": "ТЕЛЕФОН + ВЕБ",
+      "couch": "Додайте на дивані. Впорядкуйте за столом.",
+      "sync": "Ваша колекція синхронізується між застосунком для iPhone і collecteon.net. Входьте за 6-значним кодом з пошти або через Google чи Apple. Жодних паролів, які треба пам’ятати.",
+      "Start your collection.": "Почніть свою колекцію.",
+      "minute": "Безкоштовно і без реклами. Займе близько хвилини.",
+      "credit": "Інформація про фільми, серіали й аніме — з <a href=\"https://www.themoviedb.org\" target=\"_blank\" rel=\"noopener\">TMDB</a>. Інформація та зображення ігор — з <a href=\"https://rawg.io\" target=\"_blank\" rel=\"noopener\">RAWG</a>. Цей продукт використовує API TMDB, але не схвалений і не сертифікований TMDB.",
+      "Privacy": "Конфіденційність", "Terms": "Умови", "Contact": "Зв’язатися", "Language": "Мова"
+    },
+    fr: {
+      "title": "CollectEon · Créez votre propre collection",
+      "description": "Suivez tous les films, séries, animés, jeux, albums et livres que vous aimez. Gratuit et sans publicité. Sur iPhone et dans votre navigateur.",
+      "How it works": "Comment ça marche", "Phone + web": "Téléphone + web", "Support": "Assistance", "Sign in": "Se connecter",
+      "Free · No ads · No passwords": "Gratuit · Sans pub · Sans mot de passe",
+      "Build your personal <span>collection</span>": "Créez votre <span>propre collection</span>",
+      "lead": "Films, séries, animés, jeux, musique et livres : un seul endroit pour tout ce que vous avez aimé, abandonné ou prévu de commencer. Sur votre iPhone et dans votre navigateur.",
+      "Open the web app": "Ouvrir l’app web", "Coming soon to iPhone": "Bientôt sur iPhone",
+      "BOOKS": "LIVRES", "MUSIC": "MUSIQUE", "ANIME": "ANIMÉS", "GAMES": "JEUX", "SERIES": "SÉRIES", "MOVIES": "FILMS",
+      "What you can collect": "Ce que vous pouvez collectionner",
+      "Movies": "Films", "Series": "Séries", "Anime": "Animés", "Games": "Jeux", "Music": "Musique", "Books": "Livres",
+      "three": "Trois étapes entre « comment ça s’appelait déjà ? » et <span>enregistré</span>.",
+      "Search or add by hand": "Cherchez ou ajoutez à la main",
+      "step1": "Trouvez films, séries, animés et jeux, et les détails se remplissent tout seuls. Ajoutez la musique et les livres vous-même, à votre façon.",
+      "Mark where you are": "Indiquez où vous en êtes",
+      "step2": "Prévu, en cours, terminé ou abandonné. Suivez les saisons et les épisodes, les heures de jeu, et donnez votre propre note.",
+      "Share a list": "Partagez une liste",
+      "step3": "Envoyez un lien vers n’importe quelle liste, avec ou sans vos notes. Vos amis peuvent l’ajouter à leur CollectEon en un geste.",
+      "PHONE + WEB": "TÉLÉPHONE + WEB",
+      "couch": "Ajoutez depuis le canapé. Rangez depuis votre bureau.",
+      "sync": "Votre collection se synchronise entre l’app iPhone et collecteon.net. Connectez-vous avec un code à 6 chiffres envoyé par e-mail, ou avec Google ou Apple. Aucun mot de passe à retenir.",
+      "Start your collection.": "Commencez votre collection.",
+      "minute": "Gratuit et sans publicité. Ça prend environ une minute.",
+      "credit": "Détails des films, séries et animés fournis par <a href=\"https://www.themoviedb.org\" target=\"_blank\" rel=\"noopener\">TMDB</a>. Détails et images des jeux fournis par <a href=\"https://rawg.io\" target=\"_blank\" rel=\"noopener\">RAWG</a>. Ce produit utilise l’API de TMDB mais n’est ni approuvé ni certifié par TMDB.",
+      "Privacy": "Confidentialité", "Terms": "Conditions", "Contact": "Contact", "Language": "Langue"
+    },
+    de: {
+      "title": "CollectEon · Bau dir deine eigene Sammlung",
+      "description": "Behalte alle Filme, Serien, Animes, Spiele, Alben und Bücher im Blick, die du liebst. Kostenlos und ohne Werbung. Auf dem iPhone und im Browser.",
+      "How it works": "So funktioniert’s", "Phone + web": "Handy + Web", "Support": "Support", "Sign in": "Anmelden",
+      "Free · No ads · No passwords": "Kostenlos · Keine Werbung · Keine Passwörter",
+      "Build your personal <span>collection</span>": "Bau dir deine eigene <span>Sammlung</span>",
+      "lead": "Filme, Serien, Animes, Spiele, Musik und Bücher: ein Ort für alles, was du geliebt, abgebrochen oder noch vor dir hast. Auf deinem iPhone und im Browser.",
+      "Open the web app": "Web-App öffnen", "Coming soon to iPhone": "Bald für iPhone",
+      "BOOKS": "BÜCHER", "MUSIC": "MUSIK", "ANIME": "ANIME", "GAMES": "SPIELE", "SERIES": "SERIEN", "MOVIES": "FILME",
+      "What you can collect": "Was du sammeln kannst",
+      "Movies": "Filme", "Series": "Serien", "Anime": "Anime", "Games": "Spiele", "Music": "Musik", "Books": "Bücher",
+      "three": "Drei Schritte von „Wie hieß das noch mal?“ bis <span>gespeichert</span>.",
+      "Search or add by hand": "Suchen oder selbst eintragen",
+      "step1": "Finde Filme, Serien, Animes und Spiele, und die Details werden für dich ausgefüllt. Musik und Bücher trägst du selbst ein, ganz wie du willst.",
+      "Mark where you are": "Halte fest, wo du stehst",
+      "step2": "Geplant, in Arbeit, fertig oder abgebrochen. Verfolge Staffeln und Folgen, gespielte Stunden und vergib deine eigene Bewertung.",
+      "Share a list": "Teile eine Liste",
+      "step3": "Schick einen Link zu jeder Liste, mit oder ohne deine Notizen. Freunde können sie mit einem Tipp in ihr eigenes CollectEon übernehmen.",
+      "PHONE + WEB": "HANDY + WEB",
+      "couch": "Auf dem Sofa hinzufügen. Am Schreibtisch sortieren.",
+      "sync": "Deine Sammlung wird zwischen der iPhone-App und collecteon.net synchronisiert. Melde dich mit einem 6-stelligen Code per E-Mail an, oder mit Google oder Apple. Kein Passwort, das du dir merken musst.",
+      "Start your collection.": "Starte deine Sammlung.",
+      "minute": "Kostenlos und ohne Werbung. Dauert etwa eine Minute.",
+      "credit": "Details zu Filmen, Serien und Animes von <a href=\"https://www.themoviedb.org\" target=\"_blank\" rel=\"noopener\">TMDB</a>. Spieldetails und Bilder von <a href=\"https://rawg.io\" target=\"_blank\" rel=\"noopener\">RAWG</a>. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.",
+      "Privacy": "Datenschutz", "Terms": "Nutzungsbedingungen", "Contact": "Kontakt", "Language": "Sprache"
+    },
+    pt: {
+      "title": "CollectEon · Monte sua própria coleção",
+      "description": "Acompanhe todos os filmes, séries, animes, jogos, álbuns e livros que você ama. Grátis e sem anúncios. No iPhone e no navegador.",
+      "How it works": "Como funciona", "Phone + web": "Celular + web", "Support": "Suporte", "Sign in": "Entrar",
+      "Free · No ads · No passwords": "Grátis · Sem anúncios · Sem senhas",
+      "Build your personal <span>collection</span>": "Monte sua <span>própria coleção</span>",
+      "lead": "Filmes, séries, animes, jogos, música e livros: um só lugar para tudo o que você amou, largou ou ainda pretende começar. No seu iPhone e no navegador.",
+      "Open the web app": "Abrir o app web", "Coming soon to iPhone": "Em breve no iPhone",
+      "BOOKS": "LIVROS", "MUSIC": "MÚSICA", "ANIME": "ANIMES", "GAMES": "JOGOS", "SERIES": "SÉRIES", "MOVIES": "FILMES",
+      "What you can collect": "O que você pode colecionar",
+      "Movies": "Filmes", "Series": "Séries", "Anime": "Animes", "Games": "Jogos", "Music": "Música", "Books": "Livros",
+      "three": "Três passos entre “como era mesmo o nome?” e <span>salvo</span>.",
+      "Search or add by hand": "Pesquise ou adicione à mão",
+      "step1": "Encontre filmes, séries, animes e jogos, e os detalhes são preenchidos para você. Adicione música e livros você mesmo, do seu jeito.",
+      "Mark where you are": "Marque onde você está",
+      "step2": "Planejado, em andamento, concluído ou abandonado. Acompanhe temporadas e episódios, horas jogadas, e dê sua própria nota.",
+      "Share a list": "Compartilhe uma lista",
+      "step3": "Envie um link de qualquer lista, com ou sem suas anotações. Seus amigos podem adicioná-la ao próprio CollectEon com um toque.",
+      "PHONE + WEB": "CELULAR + WEB",
+      "couch": "Adicione no sofá. Organize na mesa.",
+      "sync": "Sua coleção é sincronizada entre o app para iPhone e collecteon.net. Entre com um código de 6 dígitos enviado ao seu e-mail, ou com Google ou Apple. Nenhuma senha para lembrar.",
+      "Start your collection.": "Comece sua coleção.",
+      "minute": "Grátis e sem anúncios. Leva cerca de um minuto.",
+      "credit": "Detalhes de filmes, séries e animes do <a href=\"https://www.themoviedb.org\" target=\"_blank\" rel=\"noopener\">TMDB</a>. Detalhes e imagens de jogos do <a href=\"https://rawg.io\" target=\"_blank\" rel=\"noopener\">RAWG</a>. Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.",
+      "Privacy": "Privacidade", "Terms": "Termos", "Contact": "Contato", "Language": "Idioma"
+    },
+    es: {
+      "title": "CollectEon · Crea tu propia colección",
+      "description": "Lleva el control de todas las películas, series, anime, juegos, álbumes y libros que te gustan. Gratis y sin anuncios. En iPhone y en tu navegador.",
+      "How it works": "Cómo funciona", "Phone + web": "Móvil + web", "Support": "Ayuda", "Sign in": "Iniciar sesión",
+      "Free · No ads · No passwords": "Gratis · Sin anuncios · Sin contraseñas",
+      "Build your personal <span>collection</span>": "Crea tu <span>propia colección</span>",
+      "lead": "Películas, series, anime, juegos, música y libros: un solo lugar para todo lo que te encantó, dejaste a medias o aún quieres empezar. En tu iPhone y en tu navegador.",
+      "Open the web app": "Abrir la app web", "Coming soon to iPhone": "Muy pronto en iPhone",
+      "BOOKS": "LIBROS", "MUSIC": "MÚSICA", "ANIME": "ANIME", "GAMES": "JUEGOS", "SERIES": "SERIES", "MOVIES": "PELÍCULAS",
+      "What you can collect": "Qué puedes coleccionar",
+      "Movies": "Películas", "Series": "Series", "Anime": "Anime", "Games": "Juegos", "Music": "Música", "Books": "Libros",
+      "three": "Tres pasos desde «¿cómo se llamaba?» hasta <span>guardado</span>.",
+      "Search or add by hand": "Busca o añade a mano",
+      "step1": "Encuentra películas, series, anime y juegos, y los detalles se rellenan solos. Añade la música y los libros tú mismo, a tu manera.",
+      "Mark where you are": "Marca por dónde vas",
+      "step2": "Pendiente, en curso, terminado o abandonado. Sigue temporadas y episodios, horas jugadas, y pon tu propia nota.",
+      "Share a list": "Comparte una lista",
+      "step3": "Envía un enlace a cualquier lista, con o sin tus notas. Tus amigos pueden añadirla a su propio CollectEon con un toque.",
+      "PHONE + WEB": "MÓVIL + WEB",
+      "couch": "Añádelo desde el sofá. Ordénalo desde tu escritorio.",
+      "sync": "Tu colección se sincroniza entre la app para iPhone y collecteon.net. Inicia sesión con un código de 6 dígitos que te llega por correo, o con Google o Apple. Sin contraseñas que recordar.",
+      "Start your collection.": "Empieza tu colección.",
+      "minute": "Gratis y sin anuncios. Te lleva un minuto.",
+      "credit": "Detalles de películas, series y anime de <a href=\"https://www.themoviedb.org\" target=\"_blank\" rel=\"noopener\">TMDB</a>. Detalles e imágenes de juegos de <a href=\"https://rawg.io\" target=\"_blank\" rel=\"noopener\">RAWG</a>. Este producto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.",
+      "Privacy": "Privacidad", "Terms": "Condiciones", "Contact": "Contacto", "Language": "Idioma"
+    }
+  };
+  function pick(){
+    try{ var q = new URLSearchParams(location.search).get("lang"); if(q && NAMES[q]){ try{ localStorage.setItem(LANG_KEY, q); }catch(e){} return q; } }catch(e){}
+    try{ var s = localStorage.getItem(LANG_KEY); if(s && NAMES[s]) return s; }catch(e){}
+    var list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"]);
+    for(var i = 0; i < list.length; i++){ var b = String(list[i] || "").toLowerCase().slice(0, 2); if(NAMES[b]) return b; }
+    return "en";
+  }
+  var lang = pick(), d = T[lang];
+  document.documentElement.lang = HTML_LANG[lang];
+  if(d){
+    document.title = d.title;
+    var md = document.querySelector('meta[name="description"]'); if(md) md.setAttribute("content", d.description);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function(el){ var v = d[el.getAttribute("data-t")]; if(v) el.textContent = v; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-th]"), function(el){ var v = d[el.getAttribute("data-th")]; if(v) el.innerHTML = v; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-ta]"), function(el){ var v = d[el.getAttribute("data-ta")]; if(v) el.setAttribute("aria-label", v); });
+  }
+  var sel = document.getElementById("lang-select");
+  if(sel){
+    Object.keys(NAMES).forEach(function(k){ var o = document.createElement("option"); o.value = k; o.textContent = NAMES[k]; if(k === lang) o.selected = true; sel.appendChild(o); });
+    var lab = document.getElementById("lang-label"); if(lab && d) lab.textContent = d.Language;
+    sel.addEventListener("change", function(){
+      try{ localStorage.setItem(LANG_KEY, sel.value); }catch(e){}
+      var u = new URL(location.href); u.searchParams.delete("lang"); location.replace(u.pathname + u.search + u.hash);
+    });
+  }
+})();
+</script>
 </body>
 </html>
