@@ -1404,7 +1404,12 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
   function toNative(msg){ try{ window.ReactNativeWebView.postMessage(JSON.stringify(msg)); }catch(e){} }
   /* kind: "select" (a choice changed), "light" / "medium" (a tap), "success", "warning" */
   function haptic(kind){ if(NATIVE) toNative({ type: "haptic", kind: kind || "select" }); }
-  if(NATIVE) document.documentElement.classList.add("in-app");
+  if(NATIVE){
+    document.documentElement.classList.add("in-app");
+    // Errors in the page show up in the developer's terminal while testing (npm run go).
+    window.addEventListener("error", function(e){ toNative({ type: "log", text: "Page error: " + e.message + " (line " + e.lineno + ")" }); });
+    window.addEventListener("unhandledrejection", function(e){ var r = e.reason; toNative({ type: "log", text: "Unhandled: " + (r && r.message ? r.message : String(r)) }); });
+  }
 
   /* ---------- Icons ---------- */
   function svg(path){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+path+'</svg>'; }
@@ -4612,7 +4617,10 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
   }
   function friendlyAuthError(err){
     var m = String((err && (err.message || err.error_description || err.code)) || "").toLowerCase();
-    if(navigator.onLine === false || m.indexOf("failed to fetch") > -1 || m.indexOf("network") > -1) return "No connection. Check your internet and try again.";
+    // In the app, the full error also goes to the developer's terminal (npm run go), to help track problems down.
+    if(NATIVE) toNative({ type: "log", text: "Sign-in error: " + (err && err.name ? err.name + ": " : "") + String((err && (err.message || err.error_description || err.code)) || err) + (err && err.status ? " (HTTP " + err.status + ")" : "") });
+    // "Failed to fetch" is Chrome's wording for a connection that failed; Safari and iPhone say "Load failed".
+    if(navigator.onLine === false || m.indexOf("failed to fetch") > -1 || m.indexOf("load failed") > -1 || m.indexOf("network") > -1) return "No connection. Check your internet and try again.";
     if(m.indexOf("captcha") > -1) return "We couldn't confirm you're not a robot. Check your internet and try again.";
     if(m.indexOf("expired") > -1 || m.indexOf("invalid") > -1 || m.indexOf("otp") > -1 || m.indexOf("token") > -1) return "That code is incorrect or has expired. Check it, or tap Resend code.";
     var wait = /after (\d+) seconds?/.exec(m);
