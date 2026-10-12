@@ -1156,8 +1156,8 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
         <h1 class="display-xl" id="auth-title" style="margin-top:16px">Welcome back</h1>
         <p class="auth-lead" id="auth-lead">Enter your email and we'll send you a sign-in code.</p>
         <div id="auth-step-email">
-          <button class="btn btn-secondary provider-btn" id="auth-google" type="button">Continue with Google</button>
           <button class="btn btn-secondary provider-btn" id="auth-apple" type="button" hidden>Continue with Apple</button>
+          <button class="btn btn-secondary provider-btn" id="auth-google" type="button">Continue with Google</button>
           <div class="auth-divider">or use email</div>
           <form id="auth-form" novalidate>
             <label class="section-label" for="auth-email" style="display:block">Email</label>
@@ -3869,7 +3869,10 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
      Accounts + sync (Supabase). Everything works without an account;
      signing in adds a copy in the cloud that every device keeps in step with.
      ===================================================================== */
-  var APPLE_ENABLED = false; // switch on once Sign in with Apple is set up in Supabase
+  /* Set by the iPhone/Android app before this page loads (see App.js in the Expo project).
+     In the app, Google and Apple sign-in use the phone's own sign-in sheets instead of web redirects. */
+  var NATIVE = window.CE_NATIVE || null;
+  var APPLE_ENABLED = !!(NATIVE && NATIVE.apple); // native Sign in with Apple on iPhone; the website keeps Google + email
   var SITE_URL = location.origin + location.pathname;
   var SUPA = null;
   var SUPA_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";
@@ -4687,11 +4690,45 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
   });
   async function oauth(provider){
     if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
+    showAuthMsg("", "");
     try{
+      if(NATIVE && window.ReactNativeWebView){
+        // In the app: Apple uses the system sheet; Google opens in the secure sign-in sheet and
+        // comes back to the app. The answer arrives in window.__ceNativeAuth below.
+        if(provider === "apple"){ window.ReactNativeWebView.postMessage(JSON.stringify({ type: "auth-apple" })); return; }
+        var n = await SUPA.auth.signInWithOAuth({ provider: provider, options: { redirectTo: NATIVE.authCallback, skipBrowserRedirect: true } });
+        if(n.error) throw n.error;
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: "auth-oauth", url: n.data.url }));
+        return;
+      }
       var r = await SUPA.auth.signInWithOAuth({ provider: provider, options: { redirectTo: SITE_URL } });
       if(r.error) throw r.error;
     }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
   }
+  /* The app's answer after its sign-in sheet closes. Signing in here triggers onAuthStateChange,
+     which takes it from there, just like on the website. */
+  window.__ceNativeAuth = async function(res){
+    if(!res || res.type === "cancel") return;
+    try{
+      if(!SUPA) throw new Error("network");
+      if(res.type === "oauth"){
+        var u = new URL(res.url), h = new URLSearchParams(u.hash.replace(/^#/, ""));
+        var bad = u.searchParams.get("error_description") || h.get("error_description");
+        if(bad) throw new Error(bad);
+        var code = u.searchParams.get("code");
+        if(!code) throw new Error("missing code");
+        var x = await SUPA.auth.exchangeCodeForSession(code);
+        if(x.error) throw x.error;
+      }else if(res.type === "apple"){
+        var a = await SUPA.auth.signInWithIdToken({ provider: "apple", token: res.token, nonce: res.nonce });
+        if(a.error) throw a.error;
+        // Apple shares the name only on the very first sign-in, so keep it.
+        if(res.fullName) SUPA.auth.updateUser({ data: { full_name: res.fullName } }).catch(function(){});
+      }else{
+        throw new Error(res.message || "sign-in failed");
+      }
+    }catch(err){ showAuthMsg(friendlyAuthError(err), "error"); }
+  };
   document.getElementById("auth-google").addEventListener("click", function(){ oauth("google"); });
   document.getElementById("auth-apple").addEventListener("click", function(){ oauth("apple"); });
 
