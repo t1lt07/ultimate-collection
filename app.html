@@ -857,6 +857,14 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .in-app body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .in-app input,.in-app textarea,.in-app [contenteditable="true"],.in-app .share-link{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 .in-app img{-webkit-user-drag:none}
+/* Pull to refresh (app only): a small round indicator that slides down from under the status bar. */
+.ptr{position:fixed;left:50%;top:calc(var(--uc-top, 0px) + 6px);width:38px;height:38px;margin-left:-19px;border-radius:50%;
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-strong);display:flex;align-items:center;justify-content:center;
+  z-index:80;opacity:0;transform:translateY(-56px);pointer-events:none;transition:opacity .15s}
+.ptr svg{width:18px;height:18px;transition:transform .18s ease}
+.ptr.armed svg{transform:rotate(180deg)}
+.ptr .spin{width:18px;height:18px}
+.ptr [hidden]{display:none}
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://vyshzvrsitibscjfurth.supabase.co" crossorigin>
@@ -1587,7 +1595,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
       b.type = "button"; b.className = "seg-opt" + (st === current ? " is-active" : "");
       b.setAttribute("role", "radio"); b.setAttribute("aria-checked", st === current ? "true" : "false");
       b.textContent = labels[st];
-      b.addEventListener("click", function(){ if(st !== current) haptic("select"); onPick(st); });
+      b.addEventListener("click", function(){ if(st !== current) haptic("select"); onPick(st); if(st === "completed" && st !== current) maybeAskReview(); });
       el.appendChild(b);
     });
     fitSegRows(el);
@@ -2590,7 +2598,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     var item = { id: uid(), text: hit.title, done:false, status:"planned", addedAt: Date.now(), meta:{ status:"loading" } };
     col.items.push(item);
     saveCollections();
-    haptic("success");
+    haptic("success"); maybeAskReview();
     renderDetail();
     resolveById(col.id, item.id, col.theme, hit.id);
   }
@@ -2808,7 +2816,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
     var item = { id: uid(), text: text, done: false, status: "planned", addedAt: Date.now(), meta: null };
     col.items.push(item);
     saveCollections();
-    haptic("success");
+    haptic("success"); maybeAskReview();
     detailInput.value = ""; detailAddBtn.hidden = true;
     renderDetail();
     triggerLookup(col.id, item.id);
@@ -2877,6 +2885,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
         var it = findItem(sheetRef.colId, sheetRef.itemId); if(!it) return closeSheet();
         if(st !== cur) haptic("select");
         setStatus(it, st); saveCollections(); closeSheet(); refreshViews();
+        if(st === "completed" && st !== cur) maybeAskReview();
       });
       opts.appendChild(b);
     });
@@ -3706,7 +3715,7 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
 
     if(isNew) col.items.push(item);
     if(!saveCollections()) showToast("Not enough space on this device to save. Remove some photos and try again.");
-    else haptic(isNew ? "success" : "light");
+    else { haptic(isNew ? "success" : "light"); if(isNew) maybeAskReview(); }
     closeEdit();
   }
 
@@ -4783,6 +4792,76 @@ window.CE_I18N = {"uk":{"+1 episode":"+1 серія","Build your personal <span>
       }, 0);
     });
     if(linkError) setTimeout(function(){ showToast(/expired|invalid/i.test(linkError) ? "That sign-in link has expired. Please sign in again." : linkError); }, 400);
+  }
+
+  /* ---------- In the app: pull to refresh ----------
+     Pull down at the top of Home, Collections or a collection to sync with the cloud straight away.
+     Only when signed in (a guest's lists live on this phone only, so there is nothing to fetch). */
+  var ptr = { el: null, sc: null, startY: 0, active: false, armed: false, busy: false };
+  var PTR_ARM = 64;   // how far to pull (after damping) before letting go refreshes
+  function ptrEl(){
+    if(ptr.el) return ptr.el;
+    ptr.el = document.createElement("div");
+    ptr.el.className = "ptr"; ptr.el.setAttribute("aria-hidden", "true");
+    ptr.el.innerHTML = '<svg class="ptr-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg><span class="spin" hidden></span>';
+    document.body.appendChild(ptr.el);
+    return ptr.el;
+  }
+  function ptrShow(d, spinning){
+    var el = ptrEl();
+    el.style.transform = "translateY(" + (d - 56) + "px)";
+    el.style.opacity = String(Math.min(1, d / 40));
+    el.classList.toggle("armed", !spinning && d >= PTR_ARM);
+    el.querySelector(".ptr-arrow").hidden = !!spinning;
+    el.querySelector(".spin").hidden = !spinning;
+  }
+  function ptrHide(){ if(ptr.el){ ptr.el.style.transform = ""; ptr.el.style.opacity = "0"; } }
+  document.addEventListener("touchstart", function(e){
+    if(!NATIVE || !currentUser || !SUPA || ptr.busy || e.touches.length !== 1) return;
+    var sc = e.target.closest ? e.target.closest("#screen-home .scroll, #screen-mine .scroll, #screen-detail .scroll") : null;
+    if(!sc || sc.scrollTop > 0) return;
+    ptr.sc = sc; ptr.startY = e.touches[0].clientY; ptr.active = true; ptr.armed = false;
+  }, { passive: true });
+  document.addEventListener("touchmove", function(e){
+    if(!ptr.active) return;
+    var dy = e.touches[0].clientY - ptr.startY;
+    if(dy <= 0 || ptr.sc.scrollTop > 0){ ptr.active = false; ptrHide(); return; }
+    var d = Math.min(dy * 0.5, 96);   // the indicator follows the finger at half speed, like iOS
+    ptrShow(d, false);
+    if(!ptr.armed && d >= PTR_ARM){ ptr.armed = true; haptic("light"); }
+    else if(ptr.armed && d < PTR_ARM) ptr.armed = false;
+  }, { passive: true });
+  function ptrEnd(){
+    if(!ptr.active) return;
+    ptr.active = false;
+    if(!ptr.armed){ ptrHide(); return; }
+    ptr.busy = true; ptrShow(PTR_ARM, true);
+    var started = Date.now();
+    Promise.resolve(runSync()).catch(function(){}).then(function(){
+      // Keep the spinner up for a moment, so a quick sync doesn't look like a flicker.
+      setTimeout(function(){ ptrHide(); ptr.busy = false; refreshViews(); }, Math.max(0, 700 - (Date.now() - started)));
+    });
+  }
+  document.addEventListener("touchend", ptrEnd, { passive: true });
+  document.addEventListener("touchcancel", function(){ if(ptr.active){ ptr.active = false; ptrHide(); } }, { passive: true });
+
+  /* ---------- In the app: asking for an App Store rating ----------
+     Apple's own "Enjoying CollectEon?" prompt, at a happy moment: right after adding a title or
+     finishing one, once someone has used the app for a few days and has at least 10 titles.
+     Asked at most every 4 months; Apple also limits it to 3 times a year and lets people turn it off. */
+  var REVIEW_KEY = "ultimateCollection:review";
+  function reviewState(){ try{ return JSON.parse(localStorage.getItem(REVIEW_KEY)) || {}; }catch(e){ return {}; } }
+  function saveReviewState(s){ try{ localStorage.setItem(REVIEW_KEY, JSON.stringify(s)); }catch(e){} }
+  if(NATIVE){ var rs0 = reviewState(); if(!rs0.firstRun){ rs0.firstRun = Date.now(); saveReviewState(rs0); } }
+  function maybeAskReview(){
+    if(!NATIVE) return;
+    var s = reviewState(), now = Date.now(), DAY = 24 * 3600 * 1000;
+    if(!s.firstRun || now - s.firstRun < 3 * DAY) return;           // used for at least a few days
+    if(s.askedAt && now - s.askedAt < 120 * DAY) return;            // not again for 4 months
+    var titles = 0; state.collections.forEach(function(c){ titles += c.items.length; });
+    if(titles < 10) return;                                          // they've really made it theirs
+    s.askedAt = now; saveReviewState(s);
+    setTimeout(function(){ toNative({ type: "review" }); }, 1200);  // after the add/finish animation settles
   }
 
   /* ---------- Boot ---------- */
