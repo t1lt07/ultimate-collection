@@ -63,11 +63,18 @@ a{color:var(--accent);font-weight:700}
 .t-note::before{content:var(--note-label,"Note");display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .state{padding:40px 0;text-align:center;color:var(--muted)}
 .report{display:block;margin-top:26px;text-align:center;font-size:13px;color:var(--muted);font-weight:600}
-.credit{margin-top:22px;font-size:13px;color:var(--muted);text-align:center}
-.credit a{color:var(--muted)}
+.site-foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
+.site-foot .links{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 14px;font-size:13px;font-weight:700}
+.site-foot .links a{color:var(--muted);text-decoration:none}
+.site-foot .links a:hover{text-decoration:underline}
+.site-foot .fine{margin:8px 0 0;font-size:11px;line-height:1.5;color:var(--muted);opacity:.75}
+.site-foot .fine a{color:inherit}
 .top{flex-wrap:wrap}
 .right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.lang-pick select{font:inherit;font-size:14px;font-weight:700;color:var(--ink);height:36px;border-radius:999px;border:none;background:var(--chip);padding:0 10px}
+.lang-pick{position:relative;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 10px;border-radius:999px;background:var(--chip);font-size:14px;font-weight:700;color:var(--ink)}
+.lang-pick svg{width:16px;height:16px}
+.lang-pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit}
+.lang-pick:focus-within{outline:2px solid var(--accent);outline-offset:2px}
 .wm-mark{display:inline-block;width:1.3em;height:1.3em;vertical-align:-0.3em;margin-right:.36em;border-radius:22%}
 </style>
 <script>
@@ -76,7 +83,6 @@ a{color:var(--accent);font-weight:700}
   var KEY = "ultimateCollection:lang";
   var NAMES = { en: "English", uk: "Українська", fr: "Français", de: "Deutsch", pt: "Português (Brasil)", es: "Español" };
   var HTML_LANG = { en: "en", uk: "uk", fr: "fr", de: "de", pt: "pt-BR", es: "es" };
-  var MAIL = '<a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a>', RAWG = '<a href="https://rawg.io">RAWG</a>';
   var TMDB_LINK = '<a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>', RAWG_LINK = '<a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>';
   var T = {
     uk: {
@@ -90,7 +96,7 @@ a{color:var(--accent);font-weight:700}
       "Couldn't load this list. Check your internet connection and try again.": "Не вдалося завантажити список. Перевірте з’єднання з інтернетом і спробуйте ще раз.",
       "games_credit": "Інформація та зображення ігор — з " + RAWG_LINK + ".",
       "tmdb_credit": "Інформація та зображення — з " + TMDB_LINK + ". Цей продукт використовує API TMDB, але не схвалений і не сертифікований TMDB.",
-      "foot": 'CollectEon · <a href="/app">Відкрити застосунок</a> · ' + MAIL + '<br>CollectEon використовує API TMDB, але не схвалений і не сертифікований TMDB. Дані про ігри — з ' + RAWG + '.',
+      "Open the app": "Відкрити застосунок",
       "titles": { one: "{n} назва", few: "{n} назви", many: "{n} назв", other: "{n} назви" },
       "themes": {"movie":["Фільми","Заплановано","У процесі","Переглянуто","Покинуто"],"series":["Серіали","Заплановано","У процесі","Переглянуто","Покинуто"],"anime":["Аніме","Заплановано","Дивлюся","Переглянуто","Покинуто"],"games":["Ігри","Заплановано","У процесі","Пройдено","Покинуто"],"music":["Музика","Заплановано","Слухаю","Прослухано","Покинуто"],"books":["Книжки","Заплановано","Читаю","Прочитано","Покинуто"]}
     },
@@ -105,7 +111,7 @@ a{color:var(--accent);font-weight:700}
       "Couldn't load this list. Check your internet connection and try again.": "Impossible de charger cette liste. Vérifiez votre connexion Internet et réessayez.",
       "games_credit": "Détails et images des jeux fournis par " + RAWG_LINK + ".",
       "tmdb_credit": "Détails et images fournis par " + TMDB_LINK + ". Ce produit utilise l’API de TMDB mais n’est ni approuvé ni certifié par TMDB.",
-      "foot": 'CollectEon · <a href="/app">Ouvrir l’app</a> · ' + MAIL + '<br>CollectEon utilise l’API de TMDB mais n’est ni approuvé ni certifié par TMDB. Données des jeux fournies par ' + RAWG + '.',
+      "Open the app": "Ouvrir l’app",
       "titles": { one: "{n} titre", other: "{n} titres" },
       "themes": {"movie":["Films","Prévu","En cours","Vu","Abandonné"],"series":["Séries","Prévu","En cours","Vu","Abandonné"],"anime":["Animés","Prévu","En cours","Vu","Abandonné"],"games":["Jeux","Prévu","En cours","Terminé","Abandonné"],"music":["Musique","Prévu","En écoute","Écouté","Abandonné"],"books":["Livres","Prévu","En lecture","Lu","Abandonné"]}
     },
@@ -120,7 +126,7 @@ a{color:var(--accent);font-weight:700}
       "Couldn't load this list. Check your internet connection and try again.": "Die Liste konnte nicht geladen werden. Prüfe deine Internetverbindung und versuch es noch einmal.",
       "games_credit": "Spieldetails und Bilder von " + RAWG_LINK + ".",
       "tmdb_credit": "Details und Bilder von " + TMDB_LINK + ". Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.",
-      "foot": 'CollectEon · <a href="/app">App öffnen</a> · ' + MAIL + '<br>CollectEon nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert. Spieldaten von ' + RAWG + '.',
+      "Open the app": "App öffnen",
       "titles": { one: "{n} Titel", other: "{n} Titel" },
       "themes": {"movie":["Filme","Geplant","In Arbeit","Gesehen","Abgebrochen"],"series":["Serien","Geplant","In Arbeit","Gesehen","Abgebrochen"],"anime":["Anime","Geplant","Am Schauen","Gesehen","Abgebrochen"],"games":["Spiele","Geplant","In Arbeit","Durchgespielt","Abgebrochen"],"music":["Musik","Geplant","Am Hören","Gehört","Abgebrochen"],"books":["Bücher","Geplant","Am Lesen","Gelesen","Abgebrochen"]}
     },
@@ -135,7 +141,7 @@ a{color:var(--accent);font-weight:700}
       "Couldn't load this list. Check your internet connection and try again.": "Não foi possível carregar esta lista. Verifique sua conexão com a internet e tente de novo.",
       "games_credit": "Detalhes e imagens de jogos do " + RAWG_LINK + ".",
       "tmdb_credit": "Detalhes e imagens do " + TMDB_LINK + ". Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.",
-      "foot": 'CollectEon · <a href="/app">Abrir o app</a> · ' + MAIL + '<br>O CollectEon usa a API do TMDB, mas não é endossado nem certificado pelo TMDB. Dados de jogos do ' + RAWG + '.',
+      "Open the app": "Abrir o app",
       "titles": { one: "{n} título", other: "{n} títulos" },
       "themes": {"movie":["Filmes","Planejado","Em andamento","Assistido","Abandonado"],"series":["Séries","Planejado","Em andamento","Assistido","Abandonado"],"anime":["Animes","Planejado","Assistindo","Assistido","Abandonado"],"games":["Jogos","Planejado","Em andamento","Concluído","Abandonado"],"music":["Música","Planejado","Ouvindo","Ouvido","Abandonado"],"books":["Livros","Planejado","Lendo","Lido","Abandonado"]}
     },
@@ -150,7 +156,7 @@ a{color:var(--accent);font-weight:700}
       "Couldn't load this list. Check your internet connection and try again.": "No se ha podido cargar esta lista. Comprueba tu conexión a internet y vuelve a intentarlo.",
       "games_credit": "Detalles e imágenes de juegos de " + RAWG_LINK + ".",
       "tmdb_credit": "Detalles e imágenes de " + TMDB_LINK + ". Este producto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.",
-      "foot": 'CollectEon · <a href="/app">Abrir la app</a> · ' + MAIL + '<br>CollectEon usa la API de TMDB, pero no está respaldado ni certificado por TMDB. Datos de juegos de ' + RAWG + '.',
+      "Open the app": "Abrir la app",
       "titles": { one: "{n} título", other: "{n} títulos" },
       "themes": {"movie":["Películas","Pendiente","En curso","Visto","Abandonado"],"series":["Series","Pendiente","En curso","Visto","Abandonado"],"anime":["Anime","Pendiente","Viendo","Visto","Abandonado"],"games":["Juegos","Pendiente","En curso","Completado","Abandonado"],"music":["Música","Pendiente","Escuchando","Escuchado","Abandonado"],"books":["Libros","Pendiente","Leyendo","Leído","Abandonado"]}
     }
@@ -181,9 +187,9 @@ a{color:var(--accent);font-weight:700}
       document.title = window.CE_T("Shared list · CollectEon");
       Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function(el){ if(el.textContent === el.getAttribute("data-t")) el.textContent = window.CE_T(el.getAttribute("data-t")); });
       var sb = document.getElementById("shared-by"); if(sb) sb.textContent = window.CE_T("Shared by");
-      var f = document.getElementById("page-foot"); if(f && D.foot) f.innerHTML = D.foot;
       document.documentElement.style.setProperty("--note-label", JSON.stringify(window.CE_T("Note")));
     }
+    var code = document.getElementById("lang-code"); if(code) code.textContent = lang.toUpperCase();
     var sel = document.getElementById("lang-select");
     if(sel){
       Object.keys(NAMES).forEach(function(k){ var o = document.createElement("option"); o.value = k; o.textContent = NAMES[k]; if(k === lang) o.selected = true; sel.appendChild(o); });
@@ -200,7 +206,7 @@ a{color:var(--accent);font-weight:700}
 <div class="wrap">
 <header class="top">
   <a class="wordmark" href="/"><svg class="wm-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><rect width="100" height="100" rx="22.4" fill="#12131A"/><path d="M71.2 28.8A30 30 0 1 0 71.2 71.2" fill="none" stroke="#E0AA47" stroke-width="11" stroke-linecap="round"/><rect x="39" y="36" width="36" height="7" rx="3.5" fill="#3FB6C2"/><rect x="39" y="46.5" width="26" height="7" rx="3.5" fill="#E86FA5"/><rect x="39" y="57" width="36" height="7" rx="3.5" fill="#86C46F"/></svg>Collect<span>Eon</span></a>
-  <div class="right"><nav class="nav" aria-label="Pages"><a data-t="Support" href="/support">Support</a><a data-t="Privacy" href="/privacy">Privacy</a><a data-t="Terms" href="/terms">Terms</a></nav><label class="lang-pick"><select id="lang-select" aria-label="Language"></select></label></div>
+  <label class="lang-pick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/></svg><span id="lang-code">EN</span><span aria-hidden="true">▾</span><select id="lang-select" aria-label="Language"></select></label>
 </header>
 <main>
 
@@ -216,7 +222,6 @@ a{color:var(--accent);font-weight:700}
     <a class="btn btn-ghost" href="/app" data-t="Open CollectEon">Open CollectEon</a>
   </div>
   <div class="grid" id="grid"></div>
-  <p class="credit" id="credit"></p>
   <a class="report" id="report" href="#" data-t="Report this list">Report this list</a>
 </div>
 <script>
@@ -310,7 +315,7 @@ a{color:var(--accent);font-weight:700}
       grid.appendChild(t);
     });
     if(!items.length) grid.appendChild(el("p", "muted", CE_T("This list is empty for now.")));
-    var credit = document.getElementById("credit");
+    var credit = document.getElementById("data-credit");
     if(list.theme === "games"){ credit.innerHTML = CE_T("games_credit"); }
     else if(list.theme === "movie" || list.theme === "series" || list.theme === "anime"){ credit.innerHTML = CE_T("tmdb_credit"); }
     document.getElementById("report").href = "mailto:supportcollecteon@gmail.com?subject=" + encodeURIComponent("Report a shared list") + "&body=" + encodeURIComponent("I'd like to report this list: " + location.href + "\n\nReason: ");
@@ -320,7 +325,10 @@ a{color:var(--accent);font-weight:700}
 })();
 </script>
 </main>
-<p class="foot" id="page-foot">CollectEon · <a href="/">Open the app</a> · <a href="mailto:supportcollecteon@gmail.com">supportcollecteon@gmail.com</a><br>CollectEon uses the TMDB API but is not endorsed or certified by TMDB. Game data from <a href="https://rawg.io">RAWG</a>.</p>
+<footer class="site-foot">
+  <nav class="links" aria-label="Pages"><a data-t="Open the app" href="/app">Open the app</a><a data-t="Support" href="/support">Support</a><a data-t="Privacy" href="/privacy">Privacy</a><a data-t="Terms" href="/terms">Terms</a></nav>
+  <p class="fine" id="data-credit"></p>
+</footer>
 </div>
 </body>
 </html>
