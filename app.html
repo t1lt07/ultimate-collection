@@ -3937,7 +3937,7 @@ window.CE_I18N = {"uk":{"My score: {n}":"Моя оцінка: {n}","Rename":"П�
   function searchRematch(){
     var col = rematchRef && findCollection(rematchRef.colId), item = col && findItem(col.id, rematchRef.itemId);
     var q = rematchInput.value.trim();
-    if(!item || !q){ rematchResults.innerHTML = ""; rematchNote.hidden = true; return; }
+    if(!item || q.length < 2){ rematchSeq++; rematchResults.innerHTML = ""; rematchNote.hidden = true; return; }   // same 2-letter minimum as the add search
     var my = ++rematchSeq;
     rematchMessage(tr("Searching…"));
     runSuggest(col.theme, q).then(function(results){
