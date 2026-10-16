@@ -383,11 +383,14 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .mine-box input::placeholder{color:var(--muted);font-weight:700}
 .mine-unit{font-size:13px;font-weight:700;color:var(--muted);flex:0 0 auto}
 .mine-static{font-size:16px;font-weight:800;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
-.date-box input{font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;min-height:24px;text-align:left}
-.date-box input::-webkit-date-and-time-value{text-align:left}
-.date-box:not(.has-date) input{color:var(--muted)}
-.date-clear{width:30px;height:30px;flex:0 0 auto;border:none;border-radius:50%;background:var(--chip);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;padding:0}
-.date-clear svg{width:14px;height:14px}
+/* Date watched: our own text (same style as Date added) with the real date input invisibly on top, so a tap opens the picker */
+.date-box{position:relative;cursor:pointer}
+.date-shown{flex:1;min-width:0;font-size:16px;font-weight:800;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.date-box:not(.has-date) .date-shown{color:var(--muted)}
+.date-box input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;padding:0;border:none;font-size:16px;cursor:pointer;-webkit-appearance:none;appearance:none}
+.date-label{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:20px}
+.date-clear{width:20px;height:20px;flex:0 0 auto;border:none;border-radius:50%;background:var(--surface);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.date-clear svg{width:11px;height:11px}
 .date-clear[hidden]{display:none}
 .mine-select{position:relative;display:block}
 .mine-select select{width:100%;height:48px;border:1.5px solid transparent;border-radius:14px;background:var(--surface);color:var(--ink);padding:0 34px 0 14px;font-family:inherit;font-size:15px;font-weight:700;appearance:none;-webkit-appearance:none;cursor:pointer}
@@ -1203,14 +1206,16 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
               <span class="mine-label" id="item-status-lab">Status</span>
               <button class="pick-trigger" id="item-status" type="button" aria-haspopup="dialog" aria-labelledby="item-status-lab item-status"><span class="pt-label"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
             </div>
-            <!-- Movies only: when it was added (automatic) and when you watched it (filled in when marked Watched, editable) -->
+            <!-- Movies only: when it was added (automatic) and when you watched it (filled in when marked Watched, editable).
+                 Both show the same 16.10.2026 style; the phone's date picker sits invisibly over the watched date. -->
             <div class="mine-field" id="item-added-field" hidden>
               <span class="mine-label">Date added</span>
               <span class="mine-box mine-static" id="item-added"></span>
             </div>
             <label class="mine-field" id="item-watched-field" hidden>
-              <span class="mine-label">Date watched</span>
-              <span class="mine-box date-box"><input id="item-watched" type="date" min="1888-01-01" autocomplete="off"><button class="date-clear" id="item-watched-clear" type="button" aria-label="Clear date" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span>
+              <!-- The clear button sits by the label so the date keeps the box's full width, like Date added -->
+              <span class="mine-label date-label"><span>Date watched</span><button class="date-clear" id="item-watched-clear" type="button" aria-label="Clear date" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span>
+              <span class="mine-box date-box"><span class="date-shown" id="item-watched-shown">–</span><input id="item-watched" type="date" min="1888-01-01" autocomplete="off" aria-label="Date watched"></span>
             </label>
             <div class="mine-prog" id="item-progress" hidden>
               <div class="mine-field">
@@ -1777,17 +1782,16 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
   /* ---------- Item status ---------- */
   var STATUS_ORDER = ["planned", "progress", "completed", "dropped"];
   function getStatus(item){ return item.status || (item.done ? "completed" : "planned"); }
-  /* Returns true when it also filled in the movie's Date watched, so an Undo can take that back too. */
+  /* For movies it also keeps Date watched in step: marking one Watched fills in today (if it has no date),
+     and moving it away from Watched removes the date. */
   function setStatus(item, st, col){
     var was = getStatus(item);
     if(st !== "completed") item.prevStatus = st;
     if(was !== st) item.statusAt = Date.now();
     item.status = st; item.done = (st === "completed");
-    if(st === "completed" && was !== "completed" && !mineOf(item).watched && tracksWatchDate(col || collectionOf(item))){
-      setWatchDate(item, localDay(Date.now()));
-      return true;
-    }
-    return false;
+    if(was === st || !tracksWatchDate(col || collectionOf(item))) return;
+    if(st === "completed" && !mineOf(item).watched) setWatchDate(item, localDay(Date.now()));
+    else if(was === "completed" && mineOf(item).watched) setWatchDate(item, "");
   }
   /* Movies keep the day you watched them (in "mine", so it syncs and is never shared). It is filled in with
      today when a movie is marked Watched without a date; you can change or clear it on the movie's page. */
@@ -1799,6 +1803,13 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
   function localDay(ms){
     var d = new Date(ms), p = function(n){ return (n < 10 ? "0" : "") + n; };
     return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+  /* Date added and Date watched both show as 16.10.2026 (in the app language's own order and separators).
+     Takes a timestamp or a "2026-10-16" day (read as that local day, so it never shifts across midnight). */
+  function shortDate(v){
+    var m = typeof v === "string" && /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+    var d = m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date(v);
+    return isFinite(d) ? d.toLocaleDateString(LOCALE, { day: "2-digit", month: "2-digit", year: "numeric" }) : "–";
   }
   function cleanDay(v){
     v = String(v || "").trim();
@@ -2721,10 +2732,11 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
   }
   function finishFromHome(colId, itemId){
     var col = findCollection(colId), it = findItem(colId, itemId); if(!col || !it) return;
-    var before = getStatus(it), beforeAt = it.statusAt;
-    var dated = setStatus(it, "completed", col);
+    var before = getStatus(it), beforeAt = it.statusAt, beforeWatched = mineOf(it).watched || "";
+    setStatus(it, "completed", col);
     haptic("success"); saveCollections(); renderHome(); maybeAskReview();
-    pendingDelete = { type: "run", run: function(){ setStatus(it, before); it.statusAt = beforeAt; if(dated) setWatchDate(it, ""); saveCollections(); refreshViews(); } };
+    // Undo puts the status and the movie's Date watched back exactly as they were
+    pendingDelete = { type: "run", run: function(){ setStatus(it, before); it.statusAt = beforeAt; if(tracksWatchDate(col)) setWatchDate(it, beforeWatched); saveCollections(); refreshViews(); } };
     showToast(tr("{title} · {status}", { title: displayTitle(it), status: THEMES[col.theme].statusLabels.completed }), true);
   }
   function lastActivity(it){
@@ -3504,10 +3516,13 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
   function showWatchClear(){
     var v = document.getElementById("item-watched").value;
     document.getElementById("item-watched-clear").hidden = !v;
+    document.getElementById("item-watched-shown").textContent = v ? shortDate(v) : "–";
     document.getElementById("item-watched").parentNode.classList.toggle("has-date", !!v);
   }
   document.getElementById("item-watched").addEventListener("input", showWatchClear);
   document.getElementById("item-watched").addEventListener("change", showWatchClear);
+  // Computers: open the calendar wherever the box is clicked (phones open their picker on a tap anyway)
+  document.getElementById("item-watched").addEventListener("click", function(){ try{ if(this.showPicker) this.showPicker(); }catch(e){} });
   document.getElementById("item-watched-clear").addEventListener("click", function(e){
     e.preventDefault();   // it sits inside the field's label; don't open the date picker
     var el = document.getElementById("item-watched");
@@ -3847,8 +3862,7 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
     document.getElementById("item-watched-field").hidden = !dated;
     if(dated){
       var at = addedAt(item);
-      // Numeric (16.10.2026), like the Date watched box, so it fits the narrow column on one line
-      document.getElementById("item-added").textContent = at ? new Date(at).toLocaleDateString(LOCALE, { day: "2-digit", month: "2-digit", year: "numeric" }) : "–";
+      document.getElementById("item-added").textContent = at ? shortDate(at) : "–";
       var wIn = document.getElementById("item-watched");
       wIn.max = localDay(Date.now());
       if(document.activeElement !== wIn) wIn.value = mine.watched || "";
