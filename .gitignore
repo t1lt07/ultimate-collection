@@ -1,0 +1,4 @@
+# Local secrets. This repo is public and served as collecteon.net, so never commit these.
+.env
+.env.*
+!.env.example
