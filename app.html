@@ -4722,10 +4722,16 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
     }
     return out;
   }
+  /* Each change is stamped with the time its save started, and saves can finish out of order: one stamped
+     a moment earlier can land after we've already read past it. So every pull also re-reads the last two
+     minutes. Rows we already have are recognised and skipped. */
+  var PULL_OVERLAP_MS = 2 * 60 * 1000;
   async function pullChanges(){
     var since = sync.lastPull || "1970-01-01T00:00:00Z";
-    var cols = await fetchChanged("collections", since);
-    var items = await fetchChanged("items", since);
+    var sinceMs = Date.parse(since);
+    var askFrom = isFinite(sinceMs) && sinceMs > PULL_OVERLAP_MS ? new Date(sinceMs - PULL_OVERLAP_MS).toISOString() : since;
+    var cols = await fetchChanged("collections", askFrom);
+    var items = await fetchChanged("items", askFrom);
     var latest = since, changed = false;
     function later(t){ if(t && t > latest) latest = t; }
     cols.forEach(function(row){ later(row.updated_at); if(applyRemoteCollection(row)) changed = true; });
