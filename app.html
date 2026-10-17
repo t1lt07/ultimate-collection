@@ -4581,10 +4581,12 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
     if(syncRunning){ syncAgain = true; return; }
     syncRunning = true; setSyncStatus("syncing");
     try{
-      await pushChanges();
+      var coverFailures = await pushChanges();
       await pullChanges();
       lastSyncedAt = Date.now();
-      setSyncStatus("idle");
+      // Everything else synced; a photo still waiting to upload keeps the "couldn't sync" status
+      // (and the warning on sign-out) so nobody loses it without knowing.
+      setSyncStatus(coverFailures ? "error" : "idle");
     }catch(e){
       setSyncStatus(navigator.onLine === false ? "offline" : "error");
     }finally{
@@ -4602,7 +4604,10 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
       catch(e){ resolve(null); }
     });
   }
-  /* Upload a cover the first time it's seen (or after it changes); remember which local photo it came from. */
+  /* Upload a cover the first time it's seen (or after it changes); remember which local photo it came from.
+     A photo that fails to upload is tried again after 1 minute (often just a brief hiccup), then every
+     10 minutes; it never holds up the rest of the sync. */
+  var COVER_RETRY_FIRST_MS = 60 * 1000, COVER_RETRY_MS = 10 * 60 * 1000, coverRetryAt = {}, coverFailCount = {};
   async function syncCoverUp(item, oldPaths){
     var ref = item.posterImg || null;
     if(!ref){
@@ -4610,21 +4615,41 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
       return false;
     }
     if(item.posterFor === ref && item.posterPath) return false;
+    if(coverRetryAt[ref] > Date.now()) throw new Error("cover_retry_later");   // failed recently: still waiting
     var blob = await getImageBlob(ref);
     if(!blob) return false;
+    // iPhone web views can refuse to send a photo straight from the device's photo storage
+    // ("TypeError: Load failed"), so upload a fresh in-memory copy of its bytes instead.
+    var type = blob.type || "image/jpeg";
+    var copy = new Blob([await blob.arrayBuffer()], { type: type });
     var path = currentUser.id + "/" + item.id + "/" + Date.now() + ".jpg";
-    var up = await SUPA.storage.from("covers").upload(path, blob, { contentType: blob.type || "image/jpeg", upsert: false });
+    var up = await SUPA.storage.from("covers").upload(path, copy, { contentType: type, upsert: false });
     if(up.error) throw up.error;
     if(item.posterPath) oldPaths.push(item.posterPath);
     item.posterPath = path; item.posterFor = ref;
+    delete coverRetryAt[ref]; delete coverFailCount[ref];
     return true;
   }
+  /* Returns how many photos are still waiting to upload (the rest of the changes are pushed either way). */
   async function pushChanges(){
     var uidv = currentUser.id;
-    var oldPaths = [], coversChanged = false;
+    var oldPaths = [], coversChanged = false, coverFailures = 0;
     for(var a=0;a<state.collections.length;a++){
       var its = state.collections[a].items;
-      for(var b=0;b<its.length;b++){ if(await syncCoverUp(its[b], oldPaths)) coversChanged = true; }
+      for(var b=0;b<its.length;b++){
+        try{ if(await syncCoverUp(its[b], oldPaths)) coversChanged = true; }
+        catch(e){
+          coverFailures++;
+          var ref = its[b].posterImg;
+          if(ref && !(coverRetryAt[ref] > Date.now())){
+            coverFailCount[ref] = (coverFailCount[ref] || 0) + 1;
+            coverRetryAt[ref] = Date.now() + (coverFailCount[ref] === 1 ? COVER_RETRY_FIRST_MS : COVER_RETRY_MS);
+            // In the app, say why in the developer's terminal (npm run go); users see nothing
+            if(NATIVE) toNative({ type: "log", text: "Cover upload failed (" + String(ref).slice(0, 4) + "): " +
+              ((e && (e.name || "")) + " " + (e && (e.message || e.error || e.statusCode)) || String(e)) + (e && e.statusCode ? " [" + e.statusCode + "]" : "") });
+          }
+        }
+      }
     }
     if(coversChanged || oldPaths.length) saveLocalOnly();
 
@@ -4651,7 +4676,7 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
     });
     var delC = Object.keys(sync.cols).filter(function(id){ return !seenC[id]; });
     var delI = Object.keys(sync.items).filter(function(id){ return !seenI[id]; });
-    if(!colRows.length && !itemRows.length && !delC.length && !delI.length) return;
+    if(!colRows.length && !itemRows.length && !delC.length && !delI.length) return coverFailures;
 
     var now = new Date().toISOString(), i, r;
     var cc = chunks(colRows, 200);
@@ -4668,6 +4693,7 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
     delC.forEach(function(id){ delete sync.cols[id]; });
     saveSync();
     if(oldPaths.length){ SUPA.storage.from("covers").remove(oldPaths).catch(function(){}); }
+    return coverFailures;
   }
   async function fetchChanged(table, since){
     var out = [], from = 0, page = 500;
