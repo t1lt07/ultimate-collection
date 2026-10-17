@@ -4646,9 +4646,33 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     delete coverRetryAt[ref]; delete coverFailCount[ref];
     return true;
   }
+  /* Photos of titles deleted here wait a minute on a "trash" list before their files are removed from the
+     server, so Undo (or a title put back) still finds its photo. The list lives in the sync record, so
+     closing the app doesn't forget it. */
+  var TRASH_AFTER_MS = 60 * 1000;
+  function syncedPosterPath(key){ try{ return JSON.parse(key).pp || null; }catch(e){ return null; } }
+  async function emptyTrash(){
+    var trash = sync.trash || {}, paths = Object.keys(trash);
+    if(!paths.length) return;
+    var inUse = {};
+    state.collections.forEach(function(c){ c.items.forEach(function(it){ if(it.posterPath) inUse[it.posterPath] = true; }); });
+    var due = [];
+    paths.forEach(function(p){
+      if(inUse[p]) delete trash[p];                                   // the title came back: keep its photo
+      else if(Date.now() - trash[p] > TRASH_AFTER_MS) due.push(p);
+    });
+    if(due.length){
+      try{
+        var r = await SUPA.storage.from("covers").remove(due);
+        if(!r || !r.error) due.forEach(function(p){ delete trash[p]; });   // otherwise try again next sync
+      }catch(e){ /* try again next sync */ }
+    }
+    sync.trash = trash; saveSync();
+  }
   /* Returns how many photos are still waiting to upload (the rest of the changes are pushed either way). */
   async function pushChanges(){
     var uidv = currentUser.id;
+    await emptyTrash();
     var oldPaths = [], coversChanged = false, coverFailures = 0;
     for(var a=0;a<state.collections.length;a++){
       var its = state.collections[a].items;
@@ -4705,7 +4729,11 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     for(i=0;i<dc.length;i++){ r = await SUPA.from("collections").update({ deleted_at: now }).eq("user_id", uidv).in("id", dc[i]); if(r.error) throw r.error; }
 
     done.forEach(function(d){ if(d[0] === "c") sync.cols[d[1]] = d[2]; else sync.items[d[1]] = d[2]; });
-    delI.forEach(function(id){ delete sync.items[id]; });
+    delI.forEach(function(id){
+      var p = syncedPosterPath(sync.items[id]);                      // its photo goes on the trash list
+      if(p){ sync.trash = sync.trash || {}; sync.trash[p] = Date.now(); }
+      delete sync.items[id];
+    });
     delC.forEach(function(id){ delete sync.cols[id]; });
     saveSync();
     if(oldPaths.length){ SUPA.storage.from("covers").remove(oldPaths).catch(function(){}); }
