@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- Never usable inside another site's frame ("clickjacking"): the page hides itself and tries to open on its own.
+     The phone app shows this page as its own top-level page, so it isn't affected. -->
+<script>if(window.top!==window.self){document.documentElement.style.display="none";try{window.top.location.replace(window.location.href);}catch(e){}}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -4498,6 +4501,10 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
   var SITE_URL = location.origin + location.pathname;
   var SUPA = null;
   var SUPA_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";
+  /* The library's fingerprint: the browser refuses the file if the CDN ever serves anything else (it then
+     behaves like being offline, "Sign-in unavailable"). When SUPA_LIB changes, recompute it:
+     openssl dgst -sha384 -binary supabase.js | openssl base64 -A  (scripts/fetch-vendor.js keeps the same file) */
+  var SUPA_LIB_SRI = "sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o";
   var supaState = "loading"; // loading | ready | failed
   /* The sign-in library loads in the background so the app appears straight away, even on a slow connection. */
   function loadSupabase(){
@@ -4506,6 +4513,7 @@ window.CE_I18N = {"uk":{"Date added":"Дата додавання","Date watched
     if(window.supabase && window.supabase.createClient){ setTimeout(supaReady, 0); return; }
     var tag = document.createElement("script");
     tag.src = SUPA_LIB; tag.async = true;
+    tag.integrity = SUPA_LIB_SRI; tag.crossOrigin = "anonymous";
     tag.onload = supaReady;
     tag.onerror = function(){ supaState = "failed"; tag.remove(); refreshAccountViews(); };
     document.head.appendChild(tag);
