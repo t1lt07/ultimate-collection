@@ -571,7 +571,6 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .new-preview-ic svg{width:22px;height:22px}
 .new-preview-text{min-width:0;display:flex;flex-direction:column;gap:2px}
 .new-preview-text strong{font-size:15px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.new-preview-text strong.is-empty{color:var(--muted)}
 .new-preview-text span{font-size:12.5px;color:var(--muted)}
 .select-option.is-disabled{opacity:.42;cursor:not-allowed}
 .select-option.is-disabled:hover{background:transparent}
@@ -1240,7 +1239,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
             <div class="mine-card">
             <label class="mine-field">
               <span class="mine-label">My score</span>
-              <span class="mine-box score-box"><input id="item-score" type="number" min="0" max="10" step="0.5" inputmode="decimal" placeholder="–" autocomplete="off"><span class="mine-unit">/10</span></span>
+              <span class="mine-box score-box"><input id="item-score" type="text" inputmode="decimal" maxlength="4" placeholder="–" autocomplete="off"><span class="mine-unit">/10</span></span>
             </label>
             <div class="mine-field" id="item-status-field">
               <span class="mine-label" id="item-status-lab">Status</span>
@@ -1261,13 +1260,13 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
             <div class="mode-note" id="item-mode-note" hidden></div>
             <label class="mine-field" id="item-playtime-field" hidden>
               <span class="mine-label">My playtime</span>
-              <span class="mine-box"><input id="item-playtime" type="number" min="0" max="99999" step="1" inputmode="numeric" placeholder="0" autocomplete="off"><span class="mine-unit">hours</span></span>
+              <span class="mine-box"><input id="item-playtime" type="text" inputmode="decimal" maxlength="7" placeholder="0" autocomplete="off"><span class="mine-unit">hours</span></span>
             </label>
             </div>
           </section>
         </div>
         <!-- Every category: when it was added (automatic) and when you finished it (filled in when marked Watched/Completed/Read/Listened, editable).
-             A strip under both columns, so the Yours card stays short and the Official tiles never stretch. The phone's date picker sits invisibly over the finished date. -->
+             A strip under both columns, so the Yours card stays short and the Official tiles never stretch (movies move them into the Yours card). The phone's date picker sits invisibly over the finished date. -->
         <div class="date-strip" id="item-dates" hidden>
           <div class="mine-field date-card" id="item-added-field" hidden>
             <span class="mine-label">Date added</span>
@@ -3015,11 +3014,10 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
 
   /* ---------- New Collection ---------- */
   /* Category tiles: one per category in its own colours, saying whether details fill in or are typed by hand.
-     The name fills in to match ("My movies") until the person types their own, and the preview shows the list. */
+     The name box shows an example to match ("My movies"), used if nothing is typed, and the preview shows the list. */
   var catTiles = document.getElementById("new-cat-tiles");
   var DEFAULT_COLLECTION_NAMES = { movie:"My movies", series:"My series", anime:"My anime", games:"My games", music:"My music", books:"My books" };
   function defaultCollectionName(key){ return tr(DEFAULT_COLLECTION_NAMES[key] || "My movies"); }
-  var nameIsAuto = true;   // true while the name is ours (empty or the default), so picking another category may replace it
 
   Object.keys(THEMES).forEach(function(key){
     var t = THEMES[key];
@@ -3036,10 +3034,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
 
   var nameInput = document.getElementById("new-name");
   var createBtn = document.getElementById("new-create");
-  nameInput.addEventListener("input", function(){
-    nameIsAuto = !nameInput.value.trim() || (!!pendingTheme && nameInput.value === defaultCollectionName(pendingTheme));
-    validateNewForm();
-  });
+  nameInput.addEventListener("input", validateNewForm);
   nameInput.addEventListener("keydown", function(e){ if(e.key === "Enter" && !createBtn.disabled) createCollection(); });
   document.getElementById("new-back").addEventListener("click", function(){ if(newBackTarget === "home") goHome(); else goCollections(); });
   createBtn.addEventListener("click", createCollection);
@@ -3062,7 +3057,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
   });
   function openNew(preset, backTo, fill){
     newBackTarget = backTo || "mine";
-    pendingTheme = null; nameInput.value = ""; nameIsAuto = true;
+    pendingTheme = null; nameInput.value = "";
     setFill("auto");
     selectTheme(typeof preset === "string" && THEMES[preset] ? preset : "movie");
     showScreen("new");
@@ -3074,16 +3069,15 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       b.classList.toggle("is-on", on); b.setAttribute("aria-checked", on ? "true" : "false");
       b.tabIndex = on ? 0 : -1;
     });
-    if(nameIsAuto) nameInput.value = defaultCollectionName(key);
+    nameInput.placeholder = defaultCollectionName(key);   // just an example; it becomes the name if you type nothing
     validateNewForm();
   }
   function renderNewPreview(){
-    var key = pendingTheme || "movie", t = THEMES[key], name = nameInput.value.trim();
+    var key = pendingTheme || "movie", t = THEMES[key];
     var ic = document.getElementById("new-preview-ic"), nm = document.getElementById("new-preview-name");
     setCat(document.getElementById("new-preview"), key);
     ic.innerHTML = t.icon;
-    nm.textContent = name || tr("Collection name");
-    nm.classList.toggle("is-empty", !name);
+    nm.textContent = newCollectionName();
     document.getElementById("new-preview-sub").textContent = t.manual ? tr("You type in the details") : tr("Details fill in automatically");
   }
   /* Arrow keys move between the tiles, like any radio group */
@@ -3094,10 +3088,11 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     var next = keys[(i + step + keys.length) % keys.length];
     selectTheme(next); catTiles.querySelector('[data-theme="' + next + '"]').focus();
   });
-  function validateNewForm(){ createBtn.disabled = !(pendingTheme && nameInput.value.trim().length); renderNewPreview(); }
+  function newCollectionName(){ return nameInput.value.trim() || defaultCollectionName(pendingTheme || "movie"); }
+  function validateNewForm(){ createBtn.disabled = !pendingTheme; renderNewPreview(); }
   function createCollection(){
     if(createBtn.disabled) return;
-    var col = { id: uid(), name: nameInput.value.trim(), theme: pendingTheme, createdAt: Date.now(), items: [],
+    var col = { id: uid(), name: newCollectionName(), theme: pendingTheme, createdAt: Date.now(), items: [],
       fillMode: canAutofill(pendingTheme) ? "auto" : "manual" };
     state.collections.unshift(col); saveCollections();
     haptic("success");
@@ -3954,14 +3949,14 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     v = String(v == null ? "" : v).trim().replace(",", ".");
     if(v === "") return "";
     var n = parseFloat(v); if(!isFinite(n)) return "";
-    n = Math.min(10, Math.max(0, Math.round(n * 2) / 2));
+    n = Math.min(10, Math.max(0, Math.round(n * 10) / 10));   // one decimal, like 6.7
     return String(n);
   }
   function cleanHours(v){
     v = String(v == null ? "" : v).trim().replace(",", ".");
     if(v === "") return "";
     var n = parseFloat(v); if(!isFinite(n) || n < 0) return "";
-    return String(Math.min(99999, Math.round(n)));
+    return String(Math.min(99999, Math.round(n * 10) / 10));   // one decimal, like 40.2 hours
   }
   function renderItemDetail(){
     if(!currentItemRef) return;
@@ -4010,7 +4005,16 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     // Date added (automatic) and the finished date (filled in on Watched/Completed/Read/Listened; yours to change).
     // Multiplayer games and single songs have nothing to finish, so they only show Date added.
     var dated = tracksWatchDate(col);
-    document.getElementById("item-dates").hidden = !dated;
+    // Movies keep the two dates inside the Yours card (they fit there); the other categories show them in the
+    // strip under both columns, so long cards like a series' episodes don't stretch the Official tiles.
+    var datesInCard = col.theme === "movie", dateStrip = document.getElementById("item-dates");
+    var mineCard = document.querySelector("#item-cols .mine-card");
+    ["item-added-field", "item-watched-field"].forEach(function(id){
+      var f = document.getElementById(id);
+      f.classList.toggle("date-card", !datesInCard);
+      (datesInCard ? mineCard : dateStrip).appendChild(f);
+    });
+    dateStrip.hidden = !dated || datesInCard;
     document.getElementById("item-added-field").hidden = !dated;
     document.getElementById("item-watched-field").hidden = !dated || free;
     if(dated){
