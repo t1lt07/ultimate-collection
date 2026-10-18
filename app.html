@@ -277,7 +277,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .coll-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .coll-kind{font-size:12.5px;font-weight:600;color:var(--deep)}
 .bar{height:6px;border-radius:4px;background:var(--track);overflow:hidden;display:block}
-.bar > span{display:block;height:100%;border-radius:4px;background:var(--bar);transition:width .25s ease}
+.bar > span{display:block;height:100%;border-radius:4px;background:var(--bar);transition:width .5s cubic-bezier(.2,.8,.2,1)}
 .coll-progress{font-size:12.5px;color:var(--muted)}
 .coll-open > svg{width:16px;height:16px;color:var(--muted);flex:0 0 auto}
 
@@ -716,6 +716,15 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .imported-tag svg{width:12px;height:12px;flex:0 0 auto}
 #screen-detail .topbar .itb-side{display:flex;gap:8px}
 
+/* ---------- Motion (Oct 2026): short animations; all of them stop under Reduce Motion (rule below, and calmMotion() in the script) ---------- */
+.item-row.just-added,.tile.just-added .cover{outline:2.5px solid transparent;animation:justAdded 1.3s ease-out}
+@keyframes justAdded{0%,35%{outline-color:var(--bar)}100%{outline-color:transparent}}
+.is-ghost{pointer-events:none;overflow:hidden}
+/* Loading shimmer: a soft light sweeping over the spot where the poster or details will appear */
+.shimmer,.cover.shimmer{background:linear-gradient(90deg,var(--chip) 0%,color-mix(in srgb,var(--chip) 35%,var(--surface)) 50%,var(--chip) 100%);background-size:200% 100%;animation:shimmer 1.3s linear infinite}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+.skel{display:flex;flex-direction:column;gap:8px;justify-content:center}
+.skel-line{display:block;height:10px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ---------- Computer layout: sidebar + wide content (screens 1000px and wider) ---------- */
@@ -1812,6 +1821,90 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     el.classList.add(catClass(key));
   }
 
+  /* ---------- Motion (Oct 2026) ----------
+     Short, decorative animations: screens slide, new titles drop in, statuses pop, progress bars glide,
+     deleted rows fold away, messages slide up. Everything is skipped when Reduce Motion is on. */
+  var MOTION_EASE = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+  function calmMotion(){ return !document.documentElement.animate || !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  function animateSafe(el, frames, opts){ if(!el || calmMotion()) return null; try{ return el.animate(frames, opts); }catch(e){ return null; } }
+  function byItemId(root, id){ return root.querySelector('[data-item-id="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]'); }
+  /* Screens: going deeper slides in from the right, going back from the left, switching tabs just fades.
+     The title page keeps its own grow / shrink animation, and is a side panel on computers. */
+  var SCREEN_DEPTH = { welcome:0, home:0, mine:0, profile:0, auth:1, username:1, detail:1, "new":1, settings:1, homeprefs:2, item:2, edit:3 };
+  function slideScreen(from, to){
+    if(!from || from === to) return;
+    if(to === "item" && from !== "edit") return;
+    if(from === "item" && to !== "edit") return;
+    if(isDesk() && (from === "item" || to === "item")) return;
+    var el = document.getElementById("screen-" + to), d = (SCREEN_DEPTH[to] || 0) - (SCREEN_DEPTH[from] || 0);
+    if(d === 0) animateSafe(el, [{ opacity: 0 }, { opacity: 1 }], { duration: 160, easing: "ease-out" });
+    else animateSafe(el, [{ opacity: 0, transform: "translateX(" + (d > 0 ? 28 : -20) + "px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: MOTION_EASE });
+  }
+  /* A little bounce when something changes in place, like a status */
+  function popEl(el){ animateSafe(el, [{ transform: "scale(1)" }, { transform: "scale(1.12)", offset: 0.4 }, { transform: "scale(1)" }], { duration: 320, easing: "ease-out" }); }
+  /* What the next render of a collection should animate: a title just added, a status just changed, a row just deleted */
+  var motionNext = { added: null, popped: null, fold: null };
+  var recentAdds = {};   // item id -> when it was added, for the drop-in and highlight
+  function playDetailMotion(col){
+    var m = motionNext;
+    // The list is often rebuilt again right away (the lookup starting, a sync), so a new title's drop-in and
+    // highlight continue from where they were rather than being lost or starting over.
+    if(m.added) recentAdds[m.added] = Date.now();
+    Object.keys(recentAdds).forEach(function(id){
+      var age = Date.now() - recentAdds[id];
+      if(age > 1300){ delete recentAdds[id]; return; }
+      var el = byItemId(itemListEl, id);
+      if(!el || calmMotion()) return;
+      if(age < 320) animateSafe(el, [{ opacity: 0, transform: "translateY(-10px)" }, { opacity: 1, transform: "none" }], { duration: 320, delay: -age, easing: MOTION_EASE });
+      var ring = el.classList.contains("tile") ? el.querySelector(".cover") : el;
+      el.classList.add("just-added"); if(ring) ring.style.animationDelay = (-age) + "ms";
+      setTimeout(function(){ el.classList.remove("just-added"); if(ring) ring.style.animationDelay = ""; }, 1300 - age);
+    });
+    if(m.popped){ var row = byItemId(itemListEl, m.popped); if(row) popEl(row.querySelector(".st-pill")); }
+    if(m.fold && m.fold.colId === col.id && itemListEl.className) foldGhost(m.fold);
+    motionNext = { added: null, popped: null, fold: null };
+  }
+  /* Deleting: a copy of the row slides out where it was, then the gap closes */
+  function foldGhost(f){
+    var g = f.ghost;
+    g.removeAttribute("data-item-id"); g.setAttribute("aria-hidden", "true");
+    g.classList.add("is-ghost"); g.classList.remove("is-current", "just-added");
+    itemListEl.insertBefore(g, itemListEl.children[f.index] || null);
+    var grid = itemListEl.classList.contains("item-grid");
+    var out = animateSafe(g, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: grid ? "scale(0.9)" : "translateX(32px)" }],
+      { duration: 200, delay: f.delay || 0, easing: "ease-in", fill: "both" });
+    if(!out){ g.remove(); return; }
+    out.onfinish = function(){
+      if(grid || !g.parentNode){ g.remove(); return; }
+      var hgt = g.offsetHeight, gap = parseFloat(getComputedStyle(itemListEl).rowGap) || 0;
+      var fold = animateSafe(g, [{ height: hgt + "px", marginBottom: "0px", opacity: 0 }, { height: "0px", marginBottom: (-gap) + "px", opacity: 0 }],
+        { duration: 220, easing: MOTION_EASE, fill: "forwards" });
+      if(fold) fold.onfinish = function(){ g.remove(); }; else g.remove();
+    };
+  }
+  /* Progress bars: the ones that stay on screen glide by CSS; the ones rebuilt on every render (marked data-k)
+     glide from the width they had last time, or fill up from empty the first time they appear. */
+  var barWidths = {};
+  function glideBar(s){
+    var k = s.getAttribute("data-k"), to = s.style.width, from = barWidths[k];
+    barWidths[k] = to;
+    if(from !== to) animateSafe(s, [{ width: from || "0%" }, { width: to }], { duration: 600, easing: MOTION_EASE });
+  }
+  if(window.MutationObserver) new MutationObserver(function(list){
+    list.forEach(function(m){
+      Array.prototype.forEach.call(m.addedNodes, function(n){
+        if(n.nodeType !== 1) return;
+        if(n.matches && n.matches(".bar > span[data-k]")) glideBar(n);
+        if(n.querySelectorAll) Array.prototype.forEach.call(n.querySelectorAll(".bar > span[data-k]"), glideBar);
+      });
+    });
+  }).observe(document.body, { childList: true, subtree: true });
+  /* A bar that now shows a different list or title jumps to its value instead of gliding from the old one */
+  function setBarWidth(el, pct, key){
+    if(el.dataset.for !== key){ el.dataset.for = key; el.style.transition = "none"; el.style.width = pct + "%"; void el.offsetWidth; el.style.transition = ""; }
+    else el.style.width = pct + "%";
+  }
+
   /* ---------- Item status ---------- */
   var STATUS_ORDER = ["planned", "progress", "completed", "dropped"];
   function getStatus(item){ return item.status || (item.done ? "completed" : "planned"); }
@@ -2082,10 +2175,9 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
   function variantFor(item){ var s = String(item.id || ""); var n = 0; for(var i=0;i<s.length;i++) n = (n + s.charCodeAt(i)) % 3; return "v" + (n + 1); }
   function coverHtml(item, themeKey, extraClass){
     var src = posterSrc(item);
-    var inner = src ? posterMarkup(src, /thumb-s/.test(extraClass || "") ? "s" : "m")
-      : (item.meta && item.meta.status === "loading") ? '<span class="spin"></span>'
-      : THEMES[themeKey].icon;
-    return '<span class="cover '+variantFor(item)+' '+(extraClass||"")+'">'+inner+'</span>';
+    var loading = !src && !!(item.meta && item.meta.status === "loading");
+    var inner = src ? posterMarkup(src, /thumb-s/.test(extraClass || "") ? "s" : "m") : loading ? "" : THEMES[themeKey].icon;
+    return '<span class="cover '+variantFor(item)+(loading ? " shimmer" : "")+' '+(extraClass||"")+'">'+inner+'</span>';
   }
 
   /* ---------- Supabase (Edge Function proxy — keeps TMDB/RAWG keys server-side) ---------- */
@@ -2197,6 +2289,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     return null;
   }
   function showScreen(name){
+    var prevScreen = currentScreen();
     SCREENS.forEach(function(n){ document.getElementById("screen-"+n).hidden = (n !== name); });
     var tab = TAB_FOR[name];
     tabbar.hidden = !tab;
@@ -2226,6 +2319,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     var sc = document.querySelector("#screen-"+name+" .scroll");
     if(sc && name !== "detail") sc.scrollTop = 0;
     markCurrentItem();
+    slideScreen(prevScreen, name);
   }
   placeTabbar();
   function onDeskChange(){ placeTabbar(); placeHomeActions(); var cur = currentScreen(); if(cur) showScreen(cur); if(cur === "home") renderHome(); if(cur === "detail" || cur === "item") renderDetail(); }
@@ -2489,7 +2583,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       var p = progressOf(col);
       var b = document.createElement("button");
       b.type = "button"; b.className = "pin-card " + catClass(col.theme);
-      b.innerHTML = THEMES[col.theme].icon + '<span class="pc-name"></span><span class="bar"><span style="width:'+(p.total ? Math.round(p.done/p.total*100) : 0)+'%"></span></span><span class="pc-prog"></span>';
+      b.innerHTML = THEMES[col.theme].icon + '<span class="pc-name"></span><span class="bar"><span data-k="pin-'+col.id+'" style="width:'+(p.total ? Math.round(p.done/p.total*100) : 0)+'%"></span></span><span class="pc-prog"></span>';
       b.querySelector(".pc-name").textContent = col.name;
       b.querySelector(".pc-prog").textContent = col.items.length ? progressText(col) : tr("No items yet");
       b.addEventListener("click", function(){ openDetail(col.id, "home"); });
@@ -2569,7 +2663,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     st.cats.forEach(function(c){
       var row = document.createElement("div");
       row.className = "cat-bar " + catClass(c.key);
-      row.innerHTML = THEMES[c.key].icon + '<span class="cb-main"><span class="cb-name"></span><span class="bar"><span style="width:'+Math.round(c.done/c.total*100)+'%"></span></span></span><span class="cb-num tabular"></span>';
+      row.innerHTML = THEMES[c.key].icon + '<span class="cb-main"><span class="cb-name"></span><span class="bar"><span data-k="cat-'+c.key+'" style="width:'+Math.round(c.done/c.total*100)+'%"></span></span></span><span class="cb-num tabular"></span>';
       row.querySelector(".cb-name").textContent = THEMES[c.key].plural;
       row.querySelector(".cb-num").textContent = c.done + " / " + c.total;
       cats.appendChild(row);
@@ -3078,6 +3172,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     col.items.push(item);
     saveCollections();
     haptic("success"); maybeAskReview();
+    motionNext.added = item.id;
     renderDetail();
     resolveById(col.id, item.id, col.theme, hit.id);
   }
@@ -3115,7 +3210,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
 
     requestAnimationFrame(sizeDetailBand);
     var prog = progressOf(col);
-    document.getElementById("detail-progress-fill").style.width = (prog.total ? Math.round((prog.done/prog.total)*100) : 0) + "%";
+    setBarWidth(document.getElementById("detail-progress-fill"), prog.total ? Math.round((prog.done/prog.total)*100) : 0, col.id);
     document.getElementById("detail-progress-count").textContent = progressText(col);
 
     var manualCol = isManualCol(col);
@@ -3223,6 +3318,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       document.getElementById("filters-clear").addEventListener("click", function(){ statusFilter = "all"; playFilter = "any"; renderDetail(); });
     }
     markCurrentItem();
+    playDetailMotion(col);
   }
   /* Computer layout: outline the title whose details are open in the side panel */
   function markCurrentItem(){
@@ -3313,6 +3409,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     saveCollections();
     haptic("success"); maybeAskReview();
     detailInput.value = ""; detailAddBtn.hidden = true;
+    motionNext.added = item.id;
     renderDetail();
     triggerLookup(col.id, item.id);
   }
@@ -3322,6 +3419,9 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     var idx = col.items.findIndex(function(i){ return i.id === itemId; });
     if(idx === -1) return;
     var item = col.items[idx];
+    var rowEl = byItemId(itemListEl, itemId);
+    motionNext.fold = rowEl && !calmMotion() ? { colId: colId, ghost: rowEl.cloneNode(true), index: Array.prototype.indexOf.call(itemListEl.children, rowEl),
+      delay: currentScreen() === "item" && !isDesk() ? 300 : 0 } : null;   // from the title page, wait for it to close first
     col.items.splice(idx, 1);
     saveCollections();
     if(currentScreen() === "item" && currentItemRef && currentItemRef.itemId === itemId) leaveItem();
@@ -3379,7 +3479,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       b.addEventListener("click", function(){
         var it = findItem(sheetRef.colId, sheetRef.itemId); if(!it) return closeSheet();
         if(st !== cur) haptic("select");
-        setStatus(it, st); saveCollections(); closeSheet(); refreshViews();
+        setStatus(it, st); saveCollections(); closeSheet(); motionNext.popped = it.id; refreshViews();
         if(st === "completed" && st !== cur) maybeAskReview();
       });
       opts.appendChild(b);
@@ -3687,7 +3787,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     var labels = THEMES[col.theme].statusLabels;
     openPicker({ title: tr("Status"), cat: col.theme, current: getStatus(it),
       options: STATUS_ORDER.map(function(st){ return { value: st, label: labels[st], mark: '<span class="dot st-' + st + '"></span>' }; }),
-      onPick: function(st){ var x = findItem(ref.collectionId, ref.itemId); if(!x) return; setStatus(x, st); saveCollections(); renderItemDetail(); } });
+      onPick: function(st){ var x = findItem(ref.collectionId, ref.itemId); if(!x) return; setStatus(x, st); saveCollections(); renderItemDetail(); popEl(document.getElementById("item-status")); } });
   });
 
   /* ---------- Season and episode progress (series, and anime shows) ---------- */
@@ -3741,7 +3841,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     document.getElementById("prog-sum").textContent = sum;
     document.getElementById("prog-meta").hidden = !se;
     document.getElementById("prog-bar-wrap").hidden = !total;
-    document.getElementById("prog-bar").style.width = pct + "%";
+    setBarWidth(document.getElementById("prog-bar"), pct, item.id);
     var nx = nextEpisodeOf(item), nextBtn = document.getElementById("prog-next");
     nextBtn.disabled = !nx;
     nextBtn.lastChild.textContent = !se ? tr("Start") : nx ? tr("Next episode") : tr("Last episode");
@@ -3875,7 +3975,9 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
 
     var cov = document.getElementById("item-cover");
     var src = posterSrc(item);
-    cov.innerHTML = src ? posterMarkup(src, "l") : (item.meta && item.meta.status === "loading") ? '<span class="spin" style="width:28px;height:28px;border-width:3px"></span>' : theme.icon;
+    var covLoading = !src && !!(item.meta && item.meta.status === "loading");
+    cov.innerHTML = src ? posterMarkup(src, "l") : covLoading ? "" : theme.icon;
+    cov.classList.toggle("shimmer", covLoading);
     cov.classList.toggle("has-img", !!src);
     if(src){
       var heroW = Math.min(320, (cov.parentElement && cov.parentElement.clientWidth) || 320);
@@ -3940,7 +4042,8 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     var editHint = " " + tr("Tap the pencil at the top to fill them in yourself.");
     if(meta && meta.status === "found") html = infoGrid(col.theme, item);
     else if(theme.manual || item.edited) html = '<div class="notice">' + tr("No details yet. Tap the pencil at the top to add them.") + '</div>';
-    else if(!meta || meta.status === "loading") html = '<div class="notice">' + tr("Fetching official info…") + '</div>';
+    else if(!meta || meta.status === "loading") html = '<div class="skel-wrap" role="status" aria-label="' + escapeHtml(tr("Fetching official info…")) + '" style="display:contents">' +
+      [[45, 70], [35, 55], [50, 80]].map(function(w){ return '<div class="stat-card skel"><span class="skel-line shimmer" style="width:' + w[0] + '%"></span><span class="skel-line shimmer" style="width:' + w[1] + '%"></span></div>'; }).join("") + '</div>';
     else if(meta.status === "nokey") html = '<div class="notice">' + tr("Automatic details aren’t set up for this category yet.") + editHint + '</div>';
     else if(meta.status === "notfound") html = '<div class="notice">' + tr('No match found for "{title}". Check the spelling, or it may not be listed.', { title: escapeHtml(item.text) }) + editHint + '</div>';
     else if(meta.status === "error") html = '<div class="notice">' + tr('Couldn’t reach the database just now. <a href="#" id="item-retry">Try again</a>, or tap the pencil at the top to fill them in yourself.') + '</div>';
@@ -4244,7 +4347,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     setStatus(item, editState.status || "planned", col);
     if(THEMES[col.theme].notesInForm) item.notes = clampNotes(document.getElementById("edit-notes").value);
 
-    if(isNew) col.items.push(item);
+    if(isNew){ col.items.push(item); motionNext.added = item.id; }
     if(!saveCollections()) showToast("Not enough space on this device to save. Remove some photos and try again.");
     else { haptic(isNew ? "success" : "light"); if(isNew) maybeAskReview(); }
     closeEdit();
@@ -4317,7 +4420,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       if(!nCov) covers = '<span class="cover v1 thumb-s">'+theme.icon+'</span>';
       card.innerHTML = '<button class="coll-open" type="button"><span class="stack-covers" aria-hidden="true">'+covers+'</span>'+
         '<span class="coll-meta"><span class="coll-name"></span><span class="coll-kind"></span>'+
-        '<span class="bar"><span style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
+        '<span class="bar"><span data-k="col-'+col.id+'" style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
         '<span class="coll-progress"></span></span>' + iconHtml("chev") + '</button>' +
         '<button class="coll-more" type="button" aria-label="'+tr("Options for this collection")+'"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>';
       var nameEl = card.querySelector(".coll-name");
@@ -4483,7 +4586,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     if(pendingDelete.type === "run") pendingDelete.run();
     else if(pendingDelete.type === "item"){
       var col = findCollection(pendingDelete.collectionId);
-      if(col){ col.items.splice(Math.min(pendingDelete.index, col.items.length), 0, pendingDelete.item); saveCollections(); refreshViews(); }
+      if(col){ col.items.splice(Math.min(pendingDelete.index, col.items.length), 0, pendingDelete.item); saveCollections(); motionNext.added = pendingDelete.item.id; refreshViews(); }
     } else if(pendingDelete.type === "collection"){
       state.collections.splice(Math.min(pendingDelete.index, state.collections.length), 0, pendingDelete.collection);
       saveCollections(); refreshViews();
@@ -4494,11 +4597,22 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
   function showToast(text, withUndo){
     toastText.textContent = tr(text);
     document.getElementById("toast-undo").hidden = !withUndo;
+    if(toastHideAnim){ toastHideAnim.cancel(); toastHideAnim = null; }
+    var wasHidden = toastEl.hidden;
     toastEl.hidden = false;
+    if(wasHidden) animateSafe(toastEl, [{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: MOTION_EASE });
     if(toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ pendingDelete = null; hideToast(); }, 4500);
   }
-  function hideToast(){ toastEl.hidden = true; }
+  /* The message slides down and out; if a new one comes in meanwhile, it simply stays */
+  var toastHideAnim = null;
+  function hideToast(){
+    if(toastEl.hidden) return;
+    var a = animateSafe(toastEl, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(16px)" }], { duration: 160, easing: "ease-in", fill: "forwards" });
+    if(!a){ toastEl.hidden = true; return; }
+    toastHideAnim = a;
+    a.onfinish = function(){ if(toastHideAnim === a){ toastHideAnim = null; toastEl.hidden = true; a.cancel(); } };
+  }
 
 
   /* ---------- Settings: language ---------- */
