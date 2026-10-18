@@ -2582,7 +2582,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       var p = progressOf(col);
       var b = document.createElement("button");
       b.type = "button"; b.className = "pin-card " + catClass(col.theme);
-      b.innerHTML = THEMES[col.theme].icon + '<span class="pc-name"></span><span class="bar"><span data-k="pin-'+col.id+'" style="width:'+(p.total ? Math.round(p.done/p.total*100) : 0)+'%"></span></span><span class="pc-prog"></span>';
+      b.innerHTML = THEMES[col.theme].icon + '<span class="pc-name"></span><span class="bar"><span data-k="pin-'+escapeHtml(col.id)+'" style="width:'+(p.total ? Math.round(p.done/p.total*100) : 0)+'%"></span></span><span class="pc-prog"></span>';
       b.querySelector(".pc-name").textContent = col.name;
       b.querySelector(".pc-prog").textContent = col.items.length ? progressText(col) : tr("No items yet");
       b.addEventListener("click", function(){ openDetail(col.id, "home"); });
@@ -2662,7 +2662,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
     st.cats.forEach(function(c){
       var row = document.createElement("div");
       row.className = "cat-bar " + catClass(c.key);
-      row.innerHTML = THEMES[c.key].icon + '<span class="cb-main"><span class="cb-name"></span><span class="bar"><span data-k="cat-'+c.key+'" style="width:'+Math.round(c.done/c.total*100)+'%"></span></span></span><span class="cb-num tabular"></span>';
+      row.innerHTML = THEMES[c.key].icon + '<span class="cb-main"><span class="cb-name"></span><span class="bar"><span data-k="cat-'+escapeHtml(c.key)+'" style="width:'+Math.round(c.done/c.total*100)+'%"></span></span></span><span class="cb-num tabular"></span>';
       row.querySelector(".cb-name").textContent = THEMES[c.key].plural;
       row.querySelector(".cb-num").textContent = c.done + " / " + c.total;
       cats.appendChild(row);
@@ -4432,7 +4432,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
       if(!nCov) covers = '<span class="cover v1 thumb-s">'+theme.icon+'</span>';
       card.innerHTML = '<button class="coll-open" type="button"><span class="stack-covers" aria-hidden="true">'+covers+'</span>'+
         '<span class="coll-meta"><span class="coll-name"></span><span class="coll-kind"></span>'+
-        '<span class="bar"><span data-k="col-'+col.id+'" style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
+        '<span class="bar"><span data-k="col-'+escapeHtml(col.id)+'" style="width:'+(prog.total ? Math.round(prog.done/prog.total*100) : 0)+'%"></span></span>'+
         '<span class="coll-progress"></span></span>' + iconHtml("chev") + '</button>' +
         '<button class="coll-more" type="button" aria-label="'+tr("Options for this collection")+'"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>';
       var nameEl = card.querySelector(".coll-name");
