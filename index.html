@@ -94,20 +94,24 @@ h1{margin:0;font-size:clamp(46px, 7vw, 76px);font-weight:800;letter-spacing:-0.0
 h1 span,.h2 span{color:var(--accent)}
 .lead{margin:0;font-size:19px;line-height:1.55;color:var(--muted);max-width:520px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
-.fan{flex:1 1 420px;height:440px;position:relative;min-width:0}
-.card{position:absolute;width:190px;height:285px;border-radius:22px;box-shadow:var(--lift);padding:18px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s ease}
-.card b{font-size:12px;font-weight:800;letter-spacing:.06em}
-.card i{font-style:normal;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1}
-.c1{left:2%;top:110px;transform:rotate(-14deg);background:var(--books-2);color:var(--books-d)}
-.c2{left:16%;top:60px;transform:rotate(-8deg);background:var(--music-2);color:var(--music-d)}
-.c3{left:30%;top:30px;transform:rotate(-2deg);background:var(--anime-2);color:var(--anime-d)}
-.c4{left:44%;top:40px;transform:rotate(5deg);background:var(--games-2);color:var(--games-d)}
-.c5{left:56%;top:80px;transform:rotate(11deg);background:var(--series-2);color:var(--series-d)}
-.c6{left:38%;top:150px;transform:rotate(1deg);background:var(--movie-2);color:var(--movie-d)}
-@media (hover:hover) and (prefers-reduced-motion:no-preference){
-  .fan:hover .c1{transform:rotate(-17deg) translateX(-10px)}
-  .fan:hover .c5{transform:rotate(14deg) translateX(10px)}
-}
+/* Hero shelf: a sample shelf; hover or tap a spine to pull it out */
+.shelf{flex:1 1 420px;height:440px;position:relative;min-width:0;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.shelf-row{position:absolute;left:0;right:0;bottom:21px;display:flex;align-items:flex-end;justify-content:center;gap:2px}
+.sp{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);border-radius:4px 4px 2px 2px;box-shadow:inset -1px 0 0 rgba(0,0,0,.12);font-weight:800;text-transform:uppercase;letter-spacing:.02em;line-height:1;white-space:nowrap;overflow:hidden;padding:14px 0;cursor:pointer;transition:translate .6s cubic-bezier(.16,1,.3,1)}
+.sp i{position:absolute;left:0;right:0;bottom:0;height:9%;background:currentColor;opacity:.85}
+.sp:hover{translate:0 -6px}
+.sp.on{translate:0 calc(var(--up) * -1)}
+.plank{position:absolute;left:0;right:0;bottom:0;height:22px;background:var(--surface);border:1px solid var(--line);border-bottom:6px solid var(--edge);border-radius:6px;box-shadow:var(--shadow)}
+.peek{position:absolute;top:0;left:0;z-index:2;width:230px;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--lift);padding:16px 18px 18px;pointer-events:none;transition:left .5s cubic-bezier(.16,1,.3,1),top .5s cubic-bezier(.16,1,.3,1)}
+.peek::after{content:"";position:absolute;bottom:-8px;left:var(--ax,40px);width:14px;height:14px;background:var(--surface);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg);border-radius:2px}
+.peek b{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--pk)}
+.peek i{display:block;font-style:normal;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin:6px 0 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.peek .st{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.peek .st span{display:inline-flex;align-items:center;gap:6px;background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 10px}
+.peek .st em{font-style:normal}
+.peek .st span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pk)}
+.peek .bar{height:6px;border-radius:3px;background:var(--bg);margin-top:12px;overflow:hidden}
+.peek .bar s{display:block;height:100%;background:var(--accent);border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
 
 /* Category strip */
 .strip{background:var(--surface);border-top:1px solid var(--tab-border);border-bottom:1px solid var(--tab-border)}
@@ -166,11 +170,9 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
   .top nav .hide-s{display:none}
   .hero{padding-top:28px;gap:36px}
   .ctas .btn{width:100%;justify-content:center}
-  .fan{height:300px;flex-basis:100%}
-  .card{width:128px;height:192px;padding:12px;border-radius:16px}
-  .card i{font-size:16px}
-  .card b{font-size:10.5px}
-  .c1{top:70px}.c2{top:36px}.c3{top:14px}.c4{top:22px}.c5{top:50px}.c6{top:100px}
+  .shelf{height:330px;flex-basis:100%}
+  .peek{width:200px;padding:12px 14px 14px;border-radius:18px}
+  .peek i{font-size:18px;margin:4px 0 8px}
   .devices{gap:12px}
   .laptop{height:190px}
 }
@@ -203,13 +205,10 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><span data-t="Coming soon to iPhone">Coming soon to iPhone</span></span>
       </div>
     </div>
-    <div class="fan" aria-hidden="true">
-      <div class="card c1"><b data-t="BOOKS">BOOKS</b><i>Project Hail Mary</i></div>
-      <div class="card c2"><b data-t="MUSIC">MUSIC</b><i>In Rainbows</i></div>
-      <div class="card c3"><b data-t="ANIME">ANIME</b><i>Frieren</i></div>
-      <div class="card c4"><b data-t="GAMES">GAMES</b><i>Balatro</i></div>
-      <div class="card c5"><b data-t="SERIES">SERIES</b><i>Severance</i></div>
-      <div class="card c6"><b data-t="MOVIES">MOVIES</b><i>Past Lives</i></div>
+    <div class="shelf" id="shelf" aria-hidden="true">
+      <div class="peek" id="peek"><b></b><i></i><div class="st"><span></span><em></em></div><div class="bar"><s></s></div></div>
+      <div class="shelf-row" id="shelf-row"></div>
+      <div class="plank"></div>
     </div>
   </section>
 
@@ -306,6 +305,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Open the web app": "Відкрити вебзастосунок", "Coming soon to iPhone": "Скоро на iPhone",
       "BOOKS": "КНИЖКИ", "MUSIC": "МУЗИКА", "ANIME": "АНІМЕ", "GAMES": "ІГРИ", "SERIES": "СЕРІАЛИ", "MOVIES": "ФІЛЬМИ",
       "What you can collect": "Що можна збирати",
+      "Planned": "Заплановано", "In progress": "У процесі", "Watched": "Переглянуто", "Completed": "Пройдено", "Dropped": "Покинуто",
       "Movies": "Фільми", "Series": "Серіали", "Anime": "Аніме", "Games": "Ігри", "Music": "Музика", "Books": "Книжки",
       "three": "Три кроки від «як же воно називалося?» до <span>збереженого</span>.",
       "Search or add by hand": "Знайдіть або додайте вручну",
@@ -332,6 +332,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Open the web app": "Ouvrir l’app web", "Coming soon to iPhone": "Bientôt sur iPhone",
       "BOOKS": "LIVRES", "MUSIC": "MUSIQUE", "ANIME": "ANIMÉS", "GAMES": "JEUX", "SERIES": "SÉRIES", "MOVIES": "FILMS",
       "What you can collect": "Ce que vous pouvez collectionner",
+      "Planned": "Prévu", "In progress": "En cours", "Watched": "Vu", "Completed": "Terminé", "Dropped": "Abandonné",
       "Movies": "Films", "Series": "Séries", "Anime": "Animés", "Games": "Jeux", "Music": "Musique", "Books": "Livres",
       "three": "Trois étapes entre « comment ça s’appelait déjà ? » et <span>enregistré</span>.",
       "Search or add by hand": "Cherchez ou ajoutez à la main",
@@ -358,6 +359,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Open the web app": "Web-App öffnen", "Coming soon to iPhone": "Bald für iPhone",
       "BOOKS": "BÜCHER", "MUSIC": "MUSIK", "ANIME": "ANIME", "GAMES": "SPIELE", "SERIES": "SERIEN", "MOVIES": "FILME",
       "What you can collect": "Was du sammeln kannst",
+      "Planned": "Geplant", "In progress": "In Arbeit", "Watched": "Gesehen", "Completed": "Durchgespielt", "Dropped": "Abgebrochen",
       "Movies": "Filme", "Series": "Serien", "Anime": "Anime", "Games": "Spiele", "Music": "Musik", "Books": "Bücher",
       "three": "Drei Schritte von „Wie hieß das noch mal?“ bis <span>gespeichert</span>.",
       "Search or add by hand": "Suchen oder selbst eintragen",
@@ -384,6 +386,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Open the web app": "Abrir o app web", "Coming soon to iPhone": "Em breve no iPhone",
       "BOOKS": "LIVROS", "MUSIC": "MÚSICA", "ANIME": "ANIMES", "GAMES": "JOGOS", "SERIES": "SÉRIES", "MOVIES": "FILMES",
       "What you can collect": "O que você pode colecionar",
+      "Planned": "Planejado", "In progress": "Em andamento", "Watched": "Assistido", "Completed": "Concluído", "Dropped": "Abandonado",
       "Movies": "Filmes", "Series": "Séries", "Anime": "Animes", "Games": "Jogos", "Music": "Música", "Books": "Livros",
       "three": "Três passos entre “como era mesmo o nome?” e <span>salvo</span>.",
       "Search or add by hand": "Pesquise ou adicione à mão",
@@ -410,6 +413,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Open the web app": "Abrir la app web", "Coming soon to iPhone": "Muy pronto en iPhone",
       "BOOKS": "LIBROS", "MUSIC": "MÚSICA", "ANIME": "ANIME", "GAMES": "JUEGOS", "SERIES": "SERIES", "MOVIES": "PELÍCULAS",
       "What you can collect": "Qué puedes coleccionar",
+      "Planned": "Pendiente", "In progress": "En curso", "Watched": "Visto", "Completed": "Completado", "Dropped": "Abandonado",
       "Movies": "Películas", "Series": "Series", "Anime": "Anime", "Games": "Juegos", "Music": "Música", "Books": "Libros",
       "three": "Tres pasos desde «¿cómo se llamaba?» hasta <span>guardado</span>.",
       "Search or add by hand": "Busca o añade a mano",
@@ -435,6 +439,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
     return "en";
   }
   var lang = pick(), d = T[lang];
+  window.CE_LANDING_T = d || {};
   document.documentElement.lang = HTML_LANG[lang];
   if(d){
     document.title = d.title;
@@ -452,6 +457,81 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       var u = new URL(location.href); u.searchParams.delete("lang"); location.replace(u.pathname + u.search + u.hash);
     });
   }
+})();
+</script>
+<script>
+/* Hero shelf: a sample shelf drawn from data. Hovering (mouse) or tapping a spine pulls it out and
+   shows its card. Titles are names that stay the same in every language; labels come from the translations above. */
+(function(){
+  var shelf = document.getElementById("shelf"), row = document.getElementById("shelf-row"), peek = document.getElementById("peek");
+  if(!shelf || !row || !peek) return;
+  var T = window.CE_LANDING_T || {}, tr = function(k){ return T[k] || k; };
+  // format: [height mm, thickness mm]
+  var F = { book:[198,30], pb:[178,22], cd:[125,10], dvd:[190,15], box:[190,32], bd:[148,13], game:[170,14] };
+  var CAT = { books:"BOOKS", music:"MUSIC", movie:"MOVIES", series:"SERIES", anime:"ANIME", games:"GAMES" };
+  // title, category, format, shade (1 light / 2 deeper), status, done, total
+  var S = [
+    ["Project Hail Mary","books","book",2,"In progress",212,476],
+    ["Dune","books","pb",1,"Planned"],
+    ["In Rainbows","music","cd",2,"Planned"],
+    ["Kid A","music","cd",1,"Planned"],
+    ["Past Lives","movie","dvd",2,"Watched"],
+    ["Parasite","movie","dvd",1,"Watched"],
+    ["Severance","series","box",2,"In progress",6,10],
+    ["Arcane","series","dvd",1,"Watched"],
+    ["Shōgun","series","dvd",2,"Planned"],
+    ["Frieren","anime","bd",2,"In progress",14,28],
+    ["Cowboy Bebop","anime","bd",1,"Watched"],
+    ["Balatro","games","game",2,"In progress"],
+    ["Elden Ring","games","game",1,"Dropped"],
+    ["Hades II","games","game",2,"Planned"],
+    ["Celeste","games","game",1,"Completed"]
+  ];
+  var DONE = { "Watched":1, "Completed":1 }, open = -1, timer = 0;
+  var fine = window.matchMedia && matchMedia("(hover:hover) and (pointer:fine)").matches;
+  function build(){
+    var W = shelf.clientWidth, H = shelf.clientHeight, cardH = W < 480 ? 116 : 136;
+    var nat = S.reduce(function(a, s){ return a + F[s[2]][1] * 1.7 + 2; }, 0);
+    var u = Math.min((W - 8) / nat, (H - 22 - cardH - 40) / (198 * 1.3));
+    row.innerHTML = "";
+    S.forEach(function(s, i){
+      var f = F[s[2]], h = f[0] * u, w = f[1] * u * 1.7, el = document.createElement("div");
+      el.className = "sp";
+      el.style.cssText = "height:" + h + "px;width:" + w + "px;--up:" + (h * 0.3) + "px;background:var(--" + s[1] + "-" + s[3] + ");color:var(--" + s[1] + "-d);font-size:" + Math.max(7, Math.min(w * 0.5, 13, (h - 26) / (s[0].length * 0.7))) + "px";
+      if(w >= 11) el.appendChild(document.createTextNode(s[0]));
+      if(s[2] === "bd" || s[2] === "game"){ el.appendChild(document.createElement("i")); }
+      el.addEventListener("click", function(){ pull(i); });
+      if(fine){
+        el.addEventListener("mouseenter", function(){ clearTimeout(timer); timer = setTimeout(function(){ pull(i); }, 150); });
+        el.addEventListener("mouseleave", function(){ clearTimeout(timer); });
+      }
+      row.appendChild(el);
+    });
+    var keep = open < 0 ? 9 : open; open = -1; pull(keep);
+  }
+  function pull(i){
+    if(i === open) return;
+    var spines = row.children, s = S[i];
+    if(open >= 0 && spines[open]) spines[open].classList.remove("on");
+    open = i; spines[i].classList.add("on");
+    peek.style.setProperty("--pk", "var(--" + s[1] + "-d)");
+    peek.querySelector("b").textContent = tr(CAT[s[1]]);
+    peek.querySelector("i").textContent = s[0];
+    peek.querySelector(".st span").textContent = tr(s[4]);
+    peek.querySelector(".st em").textContent = s[6] ? s[5] + " / " + s[6] : "";
+    peek.querySelector(".bar s").style.width = (s[6] ? s[5] / s[6] : DONE[s[4]] ? 1 : s[4] === "In progress" ? 0.45 : s[4] === "Dropped" ? 0.3 : 0) * 100 + "%";
+    var el = spines[i], up = parseFloat(el.style.getPropertyValue("--up")) || 0;
+    var sr = shelf.getBoundingClientRect(), rr = row.getBoundingClientRect();
+    var cx = el.getBoundingClientRect().left + el.offsetWidth / 2 - sr.left;
+    var pw = peek.offsetWidth, ph = peek.offsetHeight;
+    var left = Math.max(0, Math.min(sr.width - pw, cx - pw / 2));
+    var top = rr.bottom - sr.top - el.offsetHeight - up - ph - 16;
+    peek.style.left = left + "px"; peek.style.top = Math.max(0, top) + "px";
+    peek.style.setProperty("--ax", Math.max(18, Math.min(pw - 32, cx - left - 7)) + "px");
+  }
+  build();
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+  var rz = 0; window.addEventListener("resize", function(){ clearTimeout(rz); rz = setTimeout(build, 120); });
 })();
 </script>
 </body>
