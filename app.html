@@ -5258,7 +5258,7 @@ window.CE_I18N = {"uk":{"Some of your latest changes or photos haven't reached y
      signing in adds a copy in the cloud that every device keeps in step with.
      ===================================================================== */
   /* In the app, Google and Apple sign-in use the phone's own sign-in sheets instead of web redirects (NATIVE: see the top). */
-  var APPLE_ENABLED = !!(NATIVE && NATIVE.apple); // native Sign in with Apple on iPhone; the website keeps Google + email
+  var APPLE_ENABLED = NATIVE ? !!NATIVE.apple : true; // iPhone app: Apple's own sheet; website: Apple's sign-in page, like Google; Android app: no Apple
   var SITE_URL = location.origin + location.pathname;
   var SUPA = null;
   var SUPA_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";
