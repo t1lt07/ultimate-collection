@@ -1024,13 +1024,12 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .sr-ic{width:36px;height:36px;border-radius:12px;background:var(--t1);color:var(--deep);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .sr-ic svg{width:18px;height:18px}
 .prof-sec .home-sec-head{margin-bottom:10px}
-/* Profile: Settings row near the top, Sign out at the bottom */
+/* Profile: Settings and Sign out rows near the top, in one card */
 .prof-links{margin-top:20px}
 .prof-links .sr-ic{background:var(--chip);color:var(--ink)}
 .prof-links .sr-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.prof-out{margin-top:28px}
-.prof-out .set-row{cursor:pointer}
-.prof-out .set-row:disabled{opacity:.6}
+.prof-out{cursor:pointer}
+.prof-out:disabled{opacity:.6}
 /* ==================== Premium look, Oct 2026: cover art first, fewer frames (computer layout) ==================== */
 @media (min-width:1000px){
   /* Wider canvas for Home and Collections */
@@ -5926,19 +5925,20 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
         '<button class="btn btn-secondary" id="prof-signin" type="button">' + escapeHtml(tr("Sign in")) + '</button></div></div>';
     }
     var chev = '<svg class="sr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
-    // Settings as a full row, easier to find than the gear alone
+    // Settings as a full row, easier to find than the gear alone; Sign out right below it
     h += '<div class="set-list prof-links"><button class="set-row" id="prof-settings" type="button"><span class="sr-ic">' +
       svg('<path d="M10.3 4.3c.4-1.7 3-1.7 3.4 0a1.7 1.7 0 0 0 2.6 1.1c1.5-.9 3.3.8 2.4 2.4a1.7 1.7 0 0 0 1 2.5c1.8.4 1.8 3 0 3.4a1.7 1.7 0 0 0-1 2.6c.9 1.5-.9 3.3-2.4 2.4a1.7 1.7 0 0 0-2.6 1c-.4 1.8-3 1.8-3.4 0a1.7 1.7 0 0 0-2.5-1c-1.6.9-3.3-.9-2.4-2.4a1.7 1.7 0 0 0-1.1-2.6c-1.7-.4-1.7-3 0-3.4a1.7 1.7 0 0 0 1.1-2.5c-.9-1.6.8-3.3 2.4-2.4a1.7 1.7 0 0 0 2.5-1.1z"/><circle cx="12" cy="12" r="3"/>') + '</span>' +
-      '<span class="sr-text"><span class="sr-name">' + escapeHtml(tr("Settings")) + '</span><span class="sr-sub">' + escapeHtml(tr("Account, appearance, language")) + '</span></span>' + chev + '</button></div>';
+      '<span class="sr-text"><span class="sr-name">' + escapeHtml(tr("Settings")) + '</span><span class="sr-sub">' + escapeHtml(tr("Account, appearance, language")) + '</span></span>' + chev + '</button>';
+    if(user){
+      h += '<button class="set-row prof-out" id="prof-signout" type="button"><span class="sr-ic">' +
+        svg('<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/>') +
+        '</span><span class="sr-text"><span class="sr-name">' + escapeHtml(tr("Sign out")) + '</span></span></button>';
+    }
+    h += '</div>';
     h += '<section class="prof-sec"><div class="home-sec-head"><h2>' + escapeHtml(tr("Your stats")) + '</h2></div>' +
       (titles ? '<div class="soft-card stats-card" id="prof-stats"></div>' : '<p class="prof-sub">' + escapeHtml(tr("Add titles to your collections to see your stats here.")) + '</p>') + '</section>';
     if(user && shared.length){
       h += '<section class="prof-sec"><div class="home-sec-head"><h2>' + escapeHtml(tr("Shared lists")) + '</h2></div><div class="set-list" id="prof-shared"></div></section>';
-    }
-    if(user){
-      h += '<div class="set-list prof-links prof-out"><button class="set-row" id="prof-signout" type="button"><span class="sr-ic">' +
-        svg('<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/>') +
-        '</span><span class="sr-text"><span class="sr-name">' + escapeHtml(tr("Sign out")) + '</span></span></button></div>';
     }
     body.innerHTML = h;
     document.getElementById("prof-settings").addEventListener("click", function(){ openSettings("profile"); });
