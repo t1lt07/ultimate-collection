@@ -5725,6 +5725,7 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
     var first = !currentUser || currentUser.id !== user.id;
     currentUser = user; renderSideFoot();
     if(!first){ scheduleSync(0); return; }
+    authEmail.value = "";                          // so it isn't still there after signing out or deleting
     if(appleDeleteReturn) setTimeout(resumeAppleDelete, 0);   // back from Apple's page while deleting the account
     var merged = false;
     if(sync.userId === user.id){ /* same account as before: carry on */ }
@@ -5810,7 +5811,9 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
       setSignOutBusy(false);
     }
   }
+  var deletingAccount = false;
   async function deleteAccount(){
+    if(deletingAccount){ showToast("Deleting your account…"); return; }   // still working on the last tap
     var ok = await askConfirm("Delete your account?", "This permanently deletes your account and all your collections, items and photos on every device. It can't be undone.", "Delete account");
     if(!ok) return;
     deleteWithApple();
@@ -5868,6 +5871,8 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
     else deleteWithApple();
   }
   async function finishDelete(body, appleLeft){
+    if(deletingAccount) return;
+    deletingAccount = true;
     showToast("Deleting your account…");
     try{
       var res = await SUPA.functions.invoke("delete-account", { method: "POST", body: body });
@@ -5875,12 +5880,14 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
     }catch(e){
       var info = null;
       try{ if(e && e.context && typeof e.context.json === "function") info = await e.context.json(); }catch(x){}
+      deletingAccount = false;
       if(info && info.error === "apple_revoke_failed") return appleFailed();
       showToast("Couldn't delete your account right now. Check your connection and try again.");
       return;
     }
     appleTries = 0;
     try{ await SUPA.auth.signOut(); }catch(e){}
+    deletingAccount = false;
     stopRealtime(); currentUser = null;
     clearLocalData(); sync = emptySync(null); saveSync(); setEntry(null);
     renderAccount(); openWelcome();
@@ -6478,7 +6485,9 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
     if(token.length < 6){ showAuthMsg("Enter the full code from the email.", "error", codeMsg); codeInput.focus(); return; }
     codeSubmit.disabled = true; codeSubmit.textContent = tr("Checking…"); showAuthMsg("", "", codeMsg);
     try{
-      var r = await SUPA.auth.verifyOtp({ email: codeEmail, token: token, type: "email" });
+      function check(){ return SUPA.auth.verifyOtp({ email: codeEmail, token: token, type: "email" }); }
+      var r = await check();
+      if(r.error && isTimeoutError(r.error)) r = await check();   // one more try, as in sendCode
       if(r.error) throw r.error;
       // Signed in: onAuthStateChange takes it from here and leaves this screen.
     }catch(err){
@@ -6492,7 +6501,10 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
     try{ await sendCode(codeEmail); startResendWait(); showAuthMsg(tr("We sent a new code to {email}.", { email: codeEmail }), "info", codeMsg); codeInput.value = ""; codeSubmit.disabled = true; codeInput.focus(); }
     catch(err){ resendBtn.disabled = false; showAuthMsg(friendlyAuthError(err), "error", codeMsg); }
   });
+  var oauthAt = 0;
   async function oauth(provider){
+    if(Date.now() - oauthAt < 1500) return;   // a double tap opens one sign-in sheet, not two
+    oauthAt = Date.now();
     if(!SUPA){ showAuthMsg(supaState === "loading" ? "Still connecting. Please try again in a moment." : "Sign-in needs an internet connection.", "error"); if(supaState === "failed") loadSupabase(); return; }
     showAuthMsg("", "");
     try{
