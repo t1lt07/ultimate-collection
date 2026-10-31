@@ -361,6 +361,7 @@ textarea.field{resize:vertical;min-height:96px;line-height:1.45}
 .item-cover > svg{max-width:40px}
 .item-cover.has-img{background:var(--surface);transition:width .2s ease,height .2s ease}
 .item-name{margin:20px 0 0;font-family:var(--font-display);font-size:27px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;text-wrap:balance}
+.item-hero.wide-cover .item-name{margin-top:36px}
 .item-subline{margin-top:4px;font-size:14px;color:var(--muted)}
 /* Two columns: official info on the left, your own score, status and playtime on the right */
 .item-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px;align-items:stretch;text-align:left}
@@ -4136,6 +4137,19 @@ window.CE_I18N = {"uk":{"Account, appearance, language":"Акаунт, вигл�
   /* ---------- Item detail ---------- */
   var itemScreen = document.getElementById("screen-item");
   var itemNotes = document.getElementById("item-notes");
+  /* Wide game covers end above the header's bottom edge, which would put the name across it:
+     the header then ends just below the cover. Tall posters hang over the edge as before. */
+  (function(){
+    var band = itemScreen.querySelector(".item-band"), cov = document.getElementById("item-cover"), hero = cov.parentElement;
+    function fitItemBand(){
+      band.style.height = "";
+      var bottom = hero.offsetTop + cov.offsetTop + cov.offsetHeight + 16;
+      var wide = cov.offsetHeight > 0 && bottom < band.offsetHeight;
+      hero.classList.toggle("wide-cover", wide);
+      if(wide) band.style.height = bottom + "px";
+    }
+    if(window.ResizeObserver) new ResizeObserver(fitItemBand).observe(cov);
+  })();
   function openItemDetail(colId, itemId, backTo, originEl){
     currentItemRef = { collectionId: colId, itemId: itemId };
     itemBackTarget = backTo || "detail";
