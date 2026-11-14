@@ -83,7 +83,8 @@ a{color:inherit;text-decoration:none}
 .btn:active{transform:scale(.97)}
 .btn svg{width:18px;height:18px;flex:0 0 auto}
 .btn-primary{background:var(--btn);color:var(--on-btn)}
-.btn-soon{background:var(--surface);border:1.5px solid var(--edge);color:var(--muted);cursor:default}
+.btn-store{background:var(--surface);border:1.5px solid var(--edge);color:var(--ink)}
+.btn-store:hover{border-color:var(--ink)}
 
 /* Hero */
 .hero{display:flex;flex-wrap:wrap;align-items:center;gap:48px;padding-top:56px;padding-bottom:72px}
@@ -200,8 +201,8 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       <div class="ctas">
         <a class="btn btn-primary" href="/app"><span data-t="Open the web app">Open the web app</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <span class="btn btn-soon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><span data-t="Coming soon to iPhone">Coming soon to iPhone</span></span>
+        <a class="btn btn-store" href="https://apps.apple.com/app/collecteon/id6825424432" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><span data-t="Download for iPhone">Download for iPhone</span></a>
       </div>
     </div>
     <div class="shelf" id="shelf" aria-hidden="true">
@@ -301,7 +302,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Free · No ads · No passwords": "Безкоштовно · Без реклами · Без паролів",
       "Build your personal <span>collection</span>": "Створіть свою особисту <span>колекцію</span>",
       "lead": "Фільми, серіали, аніме, ігри, музика й книжки: одне місце для всього, що ви полюбили, кинули чи тільки плануєте почати. На вашому iPhone і в браузері.",
-      "Open the web app": "Відкрити вебзастосунок", "Coming soon to iPhone": "Скоро на iPhone",
+      "Open the web app": "Відкрити вебзастосунок", "Download for iPhone": "Завантажити для iPhone",
       "BOOKS": "КНИЖКИ", "MUSIC": "МУЗИКА", "ANIME": "АНІМЕ", "GAMES": "ІГРИ", "SERIES": "СЕРІАЛИ", "MOVIES": "ФІЛЬМИ",
       "What you can collect": "Що можна збирати",
       "Planned": "Заплановано", "In progress": "У процесі", "Watched": "Переглянуто", "Completed": "Пройдено", "Dropped": "Покинуто",
@@ -328,7 +329,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Free · No ads · No passwords": "Gratuit · Sans pub · Sans mot de passe",
       "Build your personal <span>collection</span>": "Créez votre <span>propre collection</span>",
       "lead": "Films, séries, animés, jeux, musique et livres : un seul endroit pour tout ce que vous avez aimé, abandonné ou prévu de commencer. Sur votre iPhone et dans votre navigateur.",
-      "Open the web app": "Ouvrir l’app web", "Coming soon to iPhone": "Bientôt sur iPhone",
+      "Open the web app": "Ouvrir l’app web", "Download for iPhone": "Télécharger pour iPhone",
       "BOOKS": "LIVRES", "MUSIC": "MUSIQUE", "ANIME": "ANIMÉS", "GAMES": "JEUX", "SERIES": "SÉRIES", "MOVIES": "FILMS",
       "What you can collect": "Ce que vous pouvez collectionner",
       "Planned": "Prévu", "In progress": "En cours", "Watched": "Vu", "Completed": "Terminé", "Dropped": "Abandonné",
@@ -355,7 +356,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Free · No ads · No passwords": "Kostenlos · Keine Werbung · Keine Passwörter",
       "Build your personal <span>collection</span>": "Bau dir deine eigene <span>Sammlung</span>",
       "lead": "Filme, Serien, Animes, Spiele, Musik und Bücher: ein Ort für alles, was du geliebt, abgebrochen oder noch vor dir hast. Auf deinem iPhone und im Browser.",
-      "Open the web app": "Web-App öffnen", "Coming soon to iPhone": "Bald für iPhone",
+      "Open the web app": "Web-App öffnen", "Download for iPhone": "Für iPhone laden",
       "BOOKS": "BÜCHER", "MUSIC": "MUSIK", "ANIME": "ANIME", "GAMES": "SPIELE", "SERIES": "SERIEN", "MOVIES": "FILME",
       "What you can collect": "Was du sammeln kannst",
       "Planned": "Geplant", "In progress": "In Arbeit", "Watched": "Gesehen", "Completed": "Durchgespielt", "Dropped": "Abgebrochen",
@@ -382,7 +383,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Free · No ads · No passwords": "Grátis · Sem anúncios · Sem senhas",
       "Build your personal <span>collection</span>": "Monte sua <span>própria coleção</span>",
       "lead": "Filmes, séries, animes, jogos, música e livros: um só lugar para tudo o que você amou, largou ou ainda pretende começar. No seu iPhone e no navegador.",
-      "Open the web app": "Abrir o app web", "Coming soon to iPhone": "Em breve no iPhone",
+      "Open the web app": "Abrir o app web", "Download for iPhone": "Baixar para iPhone",
       "BOOKS": "LIVROS", "MUSIC": "MÚSICA", "ANIME": "ANIMES", "GAMES": "JOGOS", "SERIES": "SÉRIES", "MOVIES": "FILMES",
       "What you can collect": "O que você pode colecionar",
       "Planned": "Planejado", "In progress": "Em andamento", "Watched": "Assistido", "Completed": "Concluído", "Dropped": "Abandonado",
@@ -409,7 +410,7 @@ footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;ju
       "Free · No ads · No passwords": "Gratis · Sin anuncios · Sin contraseñas",
       "Build your personal <span>collection</span>": "Crea tu <span>propia colección</span>",
       "lead": "Películas, series, anime, juegos, música y libros: un solo lugar para todo lo que te encantó, dejaste a medias o aún quieres empezar. En tu iPhone y en tu navegador.",
-      "Open the web app": "Abrir la app web", "Coming soon to iPhone": "Muy pronto en iPhone",
+      "Open the web app": "Abrir la app web", "Download for iPhone": "Descargar para iPhone",
       "BOOKS": "LIBROS", "MUSIC": "MÚSICA", "ANIME": "ANIME", "GAMES": "JUEGOS", "SERIES": "SERIES", "MOVIES": "PELÍCULAS",
       "What you can collect": "Qué puedes coleccionar",
       "Planned": "Pendiente", "In progress": "En curso", "Watched": "Visto", "Completed": "Completado", "Dropped": "Abandonado",
